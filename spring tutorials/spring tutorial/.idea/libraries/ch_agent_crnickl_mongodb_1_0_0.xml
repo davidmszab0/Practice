@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="ch.agent:crnickl-mongodb:1.0.0" type="repository">
+    <properties maven-id="ch.agent:crnickl-mongodb:1.0.0" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/ch/agent/crnickl-mongodb/1.0.0/crnickl-mongodb-1.0.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/ch/agent/crnickl/1.2.0/crnickl-1.2.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/ch/agent/t2/1.1.7/t2-1.1.7.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/mongodb/mongo-java-driver/2.9.0/mongo-java-driver-2.9.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/ch/agent/crnickl-mongodb/1.0.0/crnickl-mongodb-1.0.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/ch/agent/crnickl/1.2.0/crnickl-1.2.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/ch/agent/t2/1.1.7/t2-1.1.7.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/mongodb/mongo-java-driver/2.9.0/mongo-java-driver-2.9.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
