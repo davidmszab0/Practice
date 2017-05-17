@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+	<body ng-app="client">
+	<script src="controller.js"></script>
+	<script src="service.js"></script>
+	<script src="directive.js"></script>
+		<div ng-controller="ChildModalController as vm">
+			 <ref-view></ref-view> 
+			<!-- directive: ref-app-organization-view -->
+			<p>My first expression: {{ vm.name }}</p>
+			{{ 40 + 50 }}
+			<button ng-click = "vm.printFunc()">X<sup>2</sup></button>
+		</div>
+	</body>
+</html>
