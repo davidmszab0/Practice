@@ -1,0 +1,10 @@
+c:\users\root\documents\visual studio 2015\Projects\Assignement4\Assignement4\bin\Debug\Assignement4.exe.config
+C:\Users\root\documents\visual studio 2015\Projects\Assignement4\Assignement4\obj\Debug\Assignement4.csprojResolveAssemblyReference.cache
+C:\Users\root\documents\visual studio 2015\Projects\Assignement4\Assignement4\obj\Debug\Assignement4.MainForm.resources
+C:\Users\root\documents\visual studio 2015\Projects\Assignement4\Assignement4\obj\Debug\Assignement4.Properties.Resources.resources
+C:\Users\root\documents\visual studio 2015\Projects\Assignement4\Assignement4\obj\Debug\Assignement4.csproj.GenerateResource.Cache
+C:\Users\root\documents\visual studio 2015\Projects\Assignement4\Assignement4\bin\Debug\Assignement4.exe
+C:\Users\root\documents\visual studio 2015\Projects\Assignement4\Assignement4\bin\Debug\Assignement4.pdb
+C:\Users\root\documents\visual studio 2015\Projects\Assignement4\Assignement4\obj\Debug\Assignement4.exe
+C:\Users\root\documents\visual studio 2015\Projects\Assignement4\Assignement4\obj\Debug\Assignement4.pdb
+C:\Users\root\documents\visual studio 2015\Projects\Assignement4\Assignement4\obj\Debug\Assignement4.AboutBox1.resources
