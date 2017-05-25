@@ -1,0 +1,9 @@
+c:\users\root\documents\visual studio 2015\Projects\Assignement3\Assignement3\bin\Debug\Assignement3.exe.config
+C:\Users\root\Documents\Visual Studio 2015\Projects\Assignement3\Assignement3\bin\Debug\Assignement3.exe
+C:\Users\root\Documents\Visual Studio 2015\Projects\Assignement3\Assignement3\bin\Debug\Assignement3.pdb
+C:\Users\root\Documents\Visual Studio 2015\Projects\Assignement3\Assignement3\obj\Debug\Assignement3.csprojResolveAssemblyReference.cache
+C:\Users\root\Documents\Visual Studio 2015\Projects\Assignement3\Assignement3\obj\Debug\Assignement3.MainForm.resources
+C:\Users\root\Documents\Visual Studio 2015\Projects\Assignement3\Assignement3\obj\Debug\Assignement3.Properties.Resources.resources
+C:\Users\root\Documents\Visual Studio 2015\Projects\Assignement3\Assignement3\obj\Debug\Assignement3.csproj.GenerateResource.Cache
+C:\Users\root\Documents\Visual Studio 2015\Projects\Assignement3\Assignement3\obj\Debug\Assignement3.exe
+C:\Users\root\Documents\Visual Studio 2015\Projects\Assignement3\Assignement3\obj\Debug\Assignement3.pdb
