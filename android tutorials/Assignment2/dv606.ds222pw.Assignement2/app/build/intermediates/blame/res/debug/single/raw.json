@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/build/intermediates/res/merged/debug/raw/richard_dawkins_2.mp3",
+        "source": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/src/main/res/raw/richard_dawkins_2.mp3"
+    },
+    {
+        "merged": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/build/intermediates/res/merged/debug/raw/richard_dawkins_1.mp3",
+        "source": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/src/main/res/raw/richard_dawkins_1.mp3"
+    },
+    {
+        "merged": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/build/intermediates/res/merged/debug/raw/richard_dawkins_3.mp3",
+        "source": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/src/main/res/raw/richard_dawkins_3.mp3"
+    }
+]

@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "root.assign2"
+        minSdkVersion 22
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    //all xml layout files need to be in a layout folder if you create subfolders
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            assets.srcDirs = ['src/main/assets']
+            res.srcDirs =
+                    [
+                            'src/main/res/layouts/mp3Player',
+                            'src/main/res/layouts/alarmClock',
+                            'src/main/res/layouts/mainList',
+                            'src/main/res/layouts/myCountries',
+                            'src/main/res/layouts',
+                            'src/main/res'
+                    ]
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:design:24.2.0'
+}

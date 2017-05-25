@@ -1,0 +1,34 @@
+<!-- To build up this folder structure in layouts:
+    - modify the build.gradle file in the project structure
+    - create a layout resource directory called layout, paste the xml layout files in it
+    - create a directory called anything and move the layout resource directory in it
+
+build.gradle now
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            assets.srcDirs = ['src/main/assets']
+            res.srcDirs =
+                    [
+                            'src/main/res/layouts/mp3Player',
+                            'src/main/res/layouts/alarmClock',
+                            'src/main/res/layouts/mainList',
+                            'src/main/res/layouts/myCountries',
+                            'src/main/res/layouts',
+                            'src/main/res'
+                    ]
+        }
+    }
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"  >
+    </ListView>
+
+</LinearLayout>

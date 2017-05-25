@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="root.assign2"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="22"
+        android:targetSdkVersion="22" />
+
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="root.assign2.MainList"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="root.assign2.myCountries.MyCountries"
+            android:parentActivityName="root.assign2.MainList" />
+        <activity
+            android:name="root.assign2.myCountries.Read_Country"
+            android:parentActivityName="root.assign2.myCountries.MyCountries" />
+        <activity android:name="root.assign2.myCountries.preferences.SimplePreferenceActivity" />
+        <activity
+            android:name="root.assign2.alarmClock.Alarm_Clock"
+            android:parentActivityName="root.assign2.MainList"
+            android:theme="@style/AppTheme.NoActionBarAppCompat" />
+
+        <receiver android:name="root.assign2.alarmClock.AlarmReceiver" />
+
+        <service
+            android:name="root.assign2.alarmClock.RingtonePlayingService"
+            android:enabled="true" />
+
+        <activity
+            android:name="root.assign2.mp3Player.MP3Player"
+            android:parentActivityName="root.assign2.MainList"
+            android:theme="@style/AppTheme.NoActionBarAppCompat" />
+
+        <service
+            android:name="root.assign2.mp3Player.MusicService"
+            android:description="@string/music_service_description" />
+    </application>
+
+</manifest>

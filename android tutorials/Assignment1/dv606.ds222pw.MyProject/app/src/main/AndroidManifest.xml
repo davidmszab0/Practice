@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="root.assign1"
+    android:versionCode="1"
+    android:versionName="1.0">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainList"
+            android:label="Main Lists" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Random" android:label="Random Number Gen" android:parentActivityName=".MainList"/>
+        <activity android:name=".BMI" android:parentActivityName=".MainList" android:theme="@style/Theme.AppCompat.Light"/>
+        <activity android:name=".MyCountries" android:parentActivityName=".MainList"/>
+        <activity android:name=".Read_Country" android:parentActivityName=".MainList"/>
+        <activity android:name=".BeerPager" android:parentActivityName=".MainList" android:theme="@style/Theme.AppCompat.Light"/>
+        <activity android:name=".VaxjoWeather" android:parentActivityName=".MainList"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+    </application>
+
+</manifest>

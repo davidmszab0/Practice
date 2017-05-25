@@ -1,0 +1,7 @@
+#Sat Jan 21 17:28:17 CET 2017
+base.0=/Users/grace/Documents/Android for Javaprogrammers/Assignement 1/dv606.ds222pw.MyProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_5b6e46243f277d0adc8d8c032c6c8602d1ba1882
+renamed.1=classes.dex
+renamed.0=classes2.dex
+file.1=/Users/grace/Documents/Android for Javaprogrammers/Assignement 1/dv606.ds222pw.MyProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_ba60ee282ca9ac59ee7c8ce74732e866a72a7872/classes.dex
+base.1=/Users/grace/Documents/Android for Javaprogrammers/Assignement 1/dv606.ds222pw.MyProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_ba60ee282ca9ac59ee7c8ce74732e866a72a7872
+file.0=/Users/grace/Documents/Android for Javaprogrammers/Assignement 1/dv606.ds222pw.MyProject/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_5b6e46243f277d0adc8d8c032c6c8602d1ba1882/classes.dex

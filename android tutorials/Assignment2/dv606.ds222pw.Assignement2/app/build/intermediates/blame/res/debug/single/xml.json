@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/build/intermediates/res/merged/debug/xml/simple_prefs.xml",
+        "source": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/src/main/res/xml/simple_prefs.xml"
+    },
+    {
+        "merged": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/build/intermediates/res/merged/debug/xml/preference_headers.xml",
+        "source": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/src/main/res/xml/preference_headers.xml"
+    }
+]

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="root.assign1"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="22"
+        android:targetSdkVersion="22" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="root.assign1.MainList"
+            android:label="Main Lists" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="root.assign1.Random"
+            android:label="Random Number Gen"
+            android:parentActivityName="root.assign1.MainList" />
+        <activity
+            android:name="root.assign1.BMI"
+            android:parentActivityName="root.assign1.MainList"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name="root.assign1.MyCountries"
+            android:parentActivityName="root.assign1.MainList" />
+        <activity
+            android:name="root.assign1.Read_Country"
+            android:parentActivityName="root.assign1.MainList" />
+        <activity
+            android:name="root.assign1.BeerPager"
+            android:parentActivityName="root.assign1.MainList"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name="root.assign1.VaxjoWeather"
+            android:parentActivityName="root.assign1.MainList"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+    </application>
+
+</manifest>

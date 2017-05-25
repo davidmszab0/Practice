@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="checkbox_preference"
+        android:title="Checkbox Toast Message"
+        android:defaultValue="true"
+        android:summary="Check it on, check it off and you get a toast" />
+    <CheckBoxPreference
+        android:key="checkbox_preference_color"
+        android:title="Checkbox Color Settings"
+        android:defaultValue="true"
+        android:summary="Check it on, check it off and the background color changes" />
+    <RingtonePreference
+        android:key="ringtone"
+        android:title="Ringtone Preference"
+        android:showDefault="true"
+        android:showSilent="true"
+        android:summary="Pick a tone, any tone" />
+
+</PreferenceScreen>

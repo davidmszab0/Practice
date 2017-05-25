@@ -1,0 +1,67 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="80dp"
+    android:padding="5dp"
+    android:longClickable="false">
+
+    <ImageView
+        android:id="@+id/weather_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="40dp"
+        android:contentDescription="weather Icon"
+        android:src="@drawable/cloud"
+        android:layout_marginLeft="60dp" />
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_toRightOf="@+id/weather_icon">
+
+    <TextView
+        android:id="@+id/firstLine"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:gravity="center_vertical"
+        android:text="first line"
+        android:textSize="12sp"
+        android:layout_toEndOf="@+id/weather_icon" />
+
+    <TextView
+        android:id="@+id/secondLine"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:text="second line"
+        android:textSize="12sp"
+        android:layout_below="@+id/firstLine"
+        android:layout_alignStart="@+id/firstLine" />
+
+    <TextView
+        android:id="@+id/thirdLine"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/secondLine"
+        android:layout_toRightOf="@id/weather_icon"
+        android:text="third Line"
+        android:textSize="12sp"
+        android:layout_alignStart="@+id/weather_icon"
+         />
+
+    <TextView
+        android:id="@+id/fourthLine"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/thirdLine"
+        android:layout_toRightOf="@id/weather_icon"
+        android:text="fourth line"
+        android:textSize="12sp"
+        android:minHeight="23dip"
+        android:layout_alignStart="@+id/weather_icon" />
+    </LinearLayout>
+</RelativeLayout>

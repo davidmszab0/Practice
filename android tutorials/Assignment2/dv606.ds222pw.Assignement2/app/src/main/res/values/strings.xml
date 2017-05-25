@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Assign2</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="dawkins_sounds">
+        <item>Pick a Random Dawkins quote</item>
+        <item>"Religion is the root of quite a lot of evil …"</item>
+        <item>"I yield to no one in my capacity to be moved …"</item>
+        <item>On Kurt Wise</item>
+    </string-array>
+
+    <string name="country_prompt">Choose a country</string>
+    <string name="pick_time">Pick Time</string>
+
+    <string name="nosd">Media storage is not available</string>
+    <string name="error">Player crashed</string>
+    <string name="stop_playback">Stop playback</string>
+    <string name="music_service_description">Music Service</string>
+
+</resources>

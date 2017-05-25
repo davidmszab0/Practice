@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="x86_64,x86"
+    api-level="22"
+    density="xxhdpi"
+    format="8"
+    plugin-version="2.2.1"
+    timestamp="44783914730715"
+    token="-969186615214457864"
+    verifier="FULL_BUILD_REQUESTED" >
+
+    <task
+        name="javac"
+        duration="0" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="0" />
+    <task
+        name="verifier"
+        duration="0" />
+
+    <artifact
+        location="/Users/grace/Documents/Android for Javaprogrammers/Assignement 1/dv606.ds222pw.MyProject/app/build/outputs/apk/app-debug.apk"
+        type="MAIN" />
+
+    <build
+        timestamp="44783914730715"
+        verifier="FULL_BUILD_REQUESTED" >
+        <artifact
+            location="/Users/grace/Documents/Android for Javaprogrammers/Assignement 1/dv606.ds222pw.MyProject/app/build/outputs/apk/app-debug.apk"
+            type="MAIN" />
+    </build>
+
+</instant-run>

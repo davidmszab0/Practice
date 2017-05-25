@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/build/intermediates/res/merged/debug/menu/action_menu.xml",
+        "source": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/src/main/res/menu/action_menu.xml"
+    },
+    {
+        "merged": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/build/intermediates/res/merged/debug/menu/menu_mp3_player.xml",
+        "source": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/src/main/res/menu/menu_mp3_player.xml"
+    },
+    {
+        "merged": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/build/intermediates/res/merged/debug/menu/menu_main_list.xml",
+        "source": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/src/main/res/menu/menu_main_list.xml"
+    },
+    {
+        "merged": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/build/intermediates/res/merged/debug/menu/alarm_menu.xml",
+        "source": "/Users/grace/Documents/Android for Javaprogrammers/Assignement 2/app/src/main/res/menu/alarm_menu.xml"
+    }
+]
