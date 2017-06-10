@@ -50,7 +50,7 @@ public class OutputFrame extends JFrame {
 	    
         // Setting properties for frame
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setIconImage(new ImageIcon(getClass().getResource("/pics/ff_icon.png")).getImage());
+        setIconImage(new ImageIcon("/pics/ff_icon.png").getImage());
         setLayout();
         setResizable(false);
         pack();
@@ -449,7 +449,7 @@ public class OutputFrame extends JFrame {
 			searchLabel.setAlignmentX(CENTER_ALIGNMENT);
 			searchField.setAlignmentX(CENTER_ALIGNMENT);
 			searchLabel.setHorizontalTextPosition(SwingConstants.LEFT);
-			searchLabel.setIcon(new ImageIcon(getClass().getResource("/pics/search.png"))); 
+			searchLabel.setIcon(new ImageIcon("/pics/search.png"));
 			searchPanel.add(searchLabel);
 			searchPanel.add(searchField);
 
@@ -500,11 +500,11 @@ public class OutputFrame extends JFrame {
 			
 			JLabel lblMale = new JLabel("");
 			lblMale.setBounds(99, 35, 24, 23);
-			lblMale.setIcon(new ImageIcon(getClass().getResource("/pics/gender_male.png")));
+			lblMale.setIcon(new ImageIcon("/pics/gender_male.png"));
 			panelGA.add(lblMale);
 			
 			JLabel lblFemale = new JLabel("");
-			lblFemale.setIcon(new ImageIcon(getClass().getResource("/pics/gender_female.png")));
+			lblFemale.setIcon(new ImageIcon("/pics/gender_female.png"));
 			lblFemale.setBounds(159, 35, 24, 23);
 			panelGA.add(lblFemale);
 			

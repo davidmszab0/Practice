@@ -8,9 +8,9 @@ import java.util.GregorianCalendar;
 /** Class for interacting with the database */
 public class Database {
 
-	private final static String DB_URL = "jdbc:mysql://127.0.0.1:3306/friendfinder";
-	private final static String DB_USER = "input_user";
-	private final static String DB_PASSWORD = "input_user";
+	private final static String DB_URL = "jdbc:mysql://127.0.0.1:3306/friendfinder?useSSL=false";
+	private final static String DB_USER = "root";
+	private final static String DB_PASSWORD = "";
 	private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
 	
 	/** Method to connect to database */
