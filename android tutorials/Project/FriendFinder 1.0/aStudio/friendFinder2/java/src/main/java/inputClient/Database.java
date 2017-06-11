@@ -11,7 +11,7 @@ public class Database {
 	private final static String DB_URL = "jdbc:mysql://127.0.0.1:3306/friendfinder?useSSL=false";
 	private final static String DB_USER = "root";
 	private final static String DB_PASSWORD = "";
-	private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
+	private final static String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
 	
 	/** Method to connect to database */
 	public static Connection getConnection() throws ClassNotFoundException, SQLException {

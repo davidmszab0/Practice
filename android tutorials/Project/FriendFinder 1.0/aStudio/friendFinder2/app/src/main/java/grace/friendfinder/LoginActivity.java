@@ -58,8 +58,10 @@ public class LoginActivity extends Activity {
                 try {
                         // Store user details in MySql Database
                         DatabaseHandler db = new DatabaseHandler();
-                        if (db.checkUser(email, password))
+                        if (db.checkUser(email, password)) {
                             loginErrorMsg.setText("Correct password and user name");
+                        }
+                            loginErrorMsg.setText("Password or user name is incorrect");
 
                         // Launch Dashboard Screen
     /*                            Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);

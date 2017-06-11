@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class DatabaseHandler {
 
-    private final static String DB_URL = "jdbc:mysql://127.0.0.1:3306/friendfinder?useSSL=false";
+    private final static String DB_URL = "jdbc:mysql://127.0.0.1:3306/friendfinder2?useSSL=false";
     private final static String DB_USER = "root";
     private final static String DB_PASSWORD = "";
     private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
@@ -42,7 +42,7 @@ public class DatabaseHandler {
             statement.close();
             connection.close();
         } catch (Exception e) {
-            System.out.println("getAllPrograms error: " + e);
+            System.out.println("checkUser error: " + e);
         }
         return check;
     }
