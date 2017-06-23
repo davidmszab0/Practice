@@ -13,13 +13,19 @@ import java.util.ArrayList;
 
 public class DatabaseHandler {
 
-    private final static String DB_URL = "jdbc:mysql://127.0.0.1:3306/friendfinder2?useSSL=false";
+    // docker container ip
+    //private final static String DB_URL = "jdbc:mysql://172.17.0.2:3306/friendfinder2?useSSL=false";
+    // host machine ip - 192.168.1.3
+    //private final static String DB_URL = "jdbc:mysql://10.159.90.252:3306/friendfinder2?useSSL=false";
+    // host computer from emulator, localhost
+    private final static String DB_URL = "jdbc:mysql://10.0.2.2:3307/friendfinder2?useSSL=false";
+    //private final static String DB_URL = "jdbc:mysql://192.168.1.3/:3307/friendfinder2?useSSL=false";
     private final static String DB_USER = "root";
     private final static String DB_PASSWORD = "";
     private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
 
     /** Method to connect to database */
-    public static Connection getConnection() throws ClassNotFoundException, SQLException {
+    public Connection getConnection() throws ClassNotFoundException, SQLException {
         Class.forName(DB_DRIVER);
         Connection c = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
         return c;
