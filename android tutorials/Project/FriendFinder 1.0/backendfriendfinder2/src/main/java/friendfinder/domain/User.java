@@ -1,14 +1,12 @@
 package friendfinder.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by grace on 23/06/17.
  */
 @Entity // This tells Hibernate to make a table out of this class
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -16,7 +14,18 @@ public class User {
 
     private String name;
 
-    private String email;
+    private String gender;
+
+    public User () {}
+
+    public User(int id) {
+        this.id = id;
+    }
+
+    public User(String name, String gender) {
+        this.name = name;
+        this.gender = gender;
+    }
 
     public Integer getId() {
         return id;
@@ -34,13 +43,12 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getGender() {
+        return gender;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
-
 
 }
