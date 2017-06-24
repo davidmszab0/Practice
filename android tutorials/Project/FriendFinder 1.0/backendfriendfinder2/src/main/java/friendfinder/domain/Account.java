@@ -8,11 +8,10 @@ import java.sql.Date;
  * Created by grace on 24/06/17.
  */
 @Entity // This tells Hibernate to make a table out of this class
-@Table(name = "account")
+@Table(name = "accounts")
 public class Account {
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
+
+    private Integer accountId;
 
     @NotNull
     private String email;
@@ -24,14 +23,24 @@ public class Account {
 
     private Date modifiedAt;
 
+    private User user;
+
     public Account () {}
 
     public Account (String email, String password) {
         this.email = email;
         this.password = password;
     }
-    public Integer getId() {
-        return id;
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name="account_id")
+    public Integer getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 
     public Date getModifiedAt() {
@@ -64,6 +73,17 @@ public class Account {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    // @JoinColumn annotation is used only on the owning side of the relationship
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

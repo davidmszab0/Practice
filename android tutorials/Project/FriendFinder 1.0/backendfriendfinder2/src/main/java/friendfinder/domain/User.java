@@ -1,38 +1,44 @@
 package friendfinder.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by grace on 23/06/17.
  */
 @Entity // This tells Hibernate to make a table out of this class
-@Table(name = "user")
-public class User {
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
+@Table(name = "users")
+public class User implements Serializable {
+
+    private Integer userId;
 
     private String name;
 
     private String gender;
 
+    private Account account;
+
     public User () {}
 
-    public User(int id) {
-        this.id = id;
+    public User(int userId) {
+        this.userId = userId;
     }
 
-    public User(String name, String gender) {
+    public User(String name, String gender, Account account) {
         this.name = name;
         this.gender = gender;
+        this.account = account;
     }
 
-    public Integer getId() {
-        return id;
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name="user_id")
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer id) {
+        this.userId = id;
     }
 
     public String getName() {
@@ -49,6 +55,15 @@ public class User {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    @OneToOne(fetch=FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "user")
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
 }
