@@ -3,7 +3,9 @@ package grace.friendfinder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +35,8 @@ public class LoginActivity extends Activity {
     private static String KEY_EMAIL = "email";
     private static String KEY_CREATED_AT = "created_at";
 
+    String url = "http://10.0.2.2:8080/demo/all";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +62,15 @@ public class LoginActivity extends Activity {
                 try {
                         // Store user details in MySql Database
                         DatabaseHandler db = new DatabaseHandler();
+                        Log.d("GET", "Before");
+                        AsyncTask bufferTask = new HTTpTask().execute(url);
+                        //db.sendGet();
+                        Log.d("GET", "After");
 
-                        if (db.checkUser(email, password)) {
+                        /*if (db.checkUser(email, password)) {
                             loginErrorMsg.setText("Correct password and user name");
                         }
-                            loginErrorMsg.setText("Password or user name is incorrect");
+                            loginErrorMsg.setText("Password or user name is incorrect");*/
 
                         // Launch Dashboard Screen
     /*                            Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
