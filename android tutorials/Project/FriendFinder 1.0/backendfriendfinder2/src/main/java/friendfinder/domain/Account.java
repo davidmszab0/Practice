@@ -2,7 +2,7 @@ package friendfinder.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by grace on 24/06/17.
@@ -11,6 +11,9 @@ import java.sql.Date;
 @Table(name = "accounts")
 public class Account {
 
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name="account_id")
     private Integer accountId;
 
     @NotNull
@@ -19,22 +22,23 @@ public class Account {
     @NotNull
     private String password;
 
+    @Column(name="created_at")
     private Date createdAt;
 
+    @Column(name="modified_at")
     private Date modifiedAt;
 
-    private User user;
+    //@OneToOne(fetch=FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
+//    private User user;
 
     public Account () {}
 
     public Account (String email, String password) {
         this.email = email;
         this.password = password;
+        this.createdAt = new Date();
     }
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name="account_id")
     public Integer getAccountId() {
         return accountId;
     }
@@ -74,10 +78,7 @@ public class Account {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    // @JoinColumn annotation is used only on the owning side of the relationship
-    @OneToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="user_id")
+/*
     public User getUser() {
         return user;
     }
@@ -85,5 +86,5 @@ public class Account {
     public void setUser(User user) {
         this.user = user;
     }
-
+*/
 }

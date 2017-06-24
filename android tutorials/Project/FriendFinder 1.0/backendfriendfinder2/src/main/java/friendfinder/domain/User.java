@@ -10,13 +10,18 @@ import java.io.Serializable;
 @Table(name = "users")
 public class User implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name="user_id")
     private Integer userId;
 
     private String name;
 
     private String gender;
 
-    private Account account;
+    //@OneToOne(fetch=FetchType.LAZY)
+    //@JoinColumn(name="user_id")
+    //private Account account;
 
     public User () {}
 
@@ -27,12 +32,9 @@ public class User implements Serializable {
     public User(String name, String gender, Account account) {
         this.name = name;
         this.gender = gender;
-        this.account = account;
+  //      this.account = account;
     }
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name="user_id")
     public Integer getUserId() {
         return userId;
     }
@@ -57,13 +59,12 @@ public class User implements Serializable {
         this.gender = gender;
     }
 
-    @OneToOne(fetch=FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "user")
-    public Account getAccount() {
+   /* public Account getAccount() {
         return account;
     }
 
     public void setAccount(Account account) {
         this.account = account;
     }
-
+*/
 }
