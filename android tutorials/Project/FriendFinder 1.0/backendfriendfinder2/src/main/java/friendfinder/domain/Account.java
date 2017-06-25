@@ -30,7 +30,7 @@ public class Account {
 
     @OneToOne(fetch=FetchType.LAZY)
     //@JoinColumn(name="account_user_id") // foreign key will be here
-    @MapsId
+    @MapsId // for shared primary key
     private User user;
 
     public Account () {}
@@ -47,6 +47,7 @@ public class Account {
 
     public void setAccountId(Integer accountId) {
         this.accountId = accountId;
+        this.modifiedAt = new Date();
     }
 
     public Date getModifiedAt() {
@@ -71,6 +72,7 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+        this.modifiedAt = new Date();
     }
 
     public String getEmail() {
@@ -79,6 +81,7 @@ public class Account {
 
     public void setEmail(String email) {
         this.email = email;
+        this.modifiedAt = new Date();
     }
 
     public User getUser() {
@@ -87,6 +90,7 @@ public class Account {
 
     public void setUser(User user) {
         this.user = user;
+        this.modifiedAt = new Date();
     }
 
 }
