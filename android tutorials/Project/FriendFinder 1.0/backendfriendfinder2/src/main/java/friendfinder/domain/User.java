@@ -2,6 +2,7 @@ package friendfinder.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Created by grace on 23/06/17.
@@ -22,6 +23,9 @@ public class User implements Serializable {
     // mappedBy maps the Entity of this class and not the table
     @OneToOne(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private Account account;
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<MovieGenres> movies;
 
     public User () {}
 
@@ -66,5 +70,14 @@ public class User implements Serializable {
     public void setAccount(Account account) {
         this.account = account;
     }
+
+    public Set<MovieGenres> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(Set<MovieGenres> movies) {
+        this.movies = movies;
+    }
+
 
 }
