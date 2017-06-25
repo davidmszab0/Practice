@@ -43,6 +43,24 @@ public class DBTests {
         account1.setUser(user1);
         Assert.assertNotNull(user1);
 
+        accountRepository.save(account1);
+        userRepository.save(user1);
+
+        Assert.assertEquals(accountRepository.count(),1);
+        Assert.assertEquals(userRepository.count(),1);
+    }
+
+    @Test
+    public void testFindQueries() {
+        Assert.assertEquals(accountRepository.count(),0);
+        Assert.assertEquals(userRepository.count(),0);
+
+        Account account1 = new Account("david@szabo.com", "empty");
+        Assert.assertNotNull(account1);
+        User user1 = new User("David Szabo", "male", account1);
+        account1.setUser(user1);
+        Assert.assertNotNull(user1);
+
         Account savedAccount = accountRepository.save(account1);
         User savedUser = userRepository.save(user1);
 
@@ -54,10 +72,5 @@ public class DBTests {
         Assert.assertNotNull(newUser);
         Assert.assertEquals("David Szabo", newUser.getName());
         Assert.assertEquals("david@szabo.com", newAccount.getEmail());
-    }
-
-    @Test
-    public void testFindAllAccounts() {
-
     }
 }
