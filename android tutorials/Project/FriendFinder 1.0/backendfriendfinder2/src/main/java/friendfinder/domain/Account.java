@@ -12,7 +12,7 @@ import java.util.Date;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    //@GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name="account_id")
     private Integer accountId;
 
@@ -28,8 +28,10 @@ public class Account {
     @Column(name="modified_at")
     private Date modifiedAt;
 
-    //@OneToOne(fetch=FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
-//    private User user;
+    @OneToOne(fetch=FetchType.LAZY)
+    //@JoinColumn(name="account_user_id") // foreign key will be here
+    @MapsId
+    private User user;
 
     public Account () {}
 
@@ -78,7 +80,7 @@ public class Account {
     public void setEmail(String email) {
         this.email = email;
     }
-/*
+
     public User getUser() {
         return user;
     }
@@ -86,5 +88,5 @@ public class Account {
     public void setUser(User user) {
         this.user = user;
     }
-*/
+
 }

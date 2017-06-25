@@ -12,35 +12,35 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name="user_id")
-    private Integer userId;
+    @Column(name="id")
+    private Integer id;
 
     private String name;
 
     private String gender;
 
-    //@OneToOne(fetch=FetchType.LAZY)
-    //@JoinColumn(name="user_id")
-    //private Account account;
+    // mappedBy maps the Entity of this class and not the table
+    @OneToOne(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    private Account account;
 
     public User () {}
 
-    public User(int userId) {
-        this.userId = userId;
+    public User(int id) {
+        this.id = id;
     }
 
     public User(String name, String gender, Account account) {
         this.name = name;
         this.gender = gender;
-  //      this.account = account;
+        this.account = account;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setUserId(Integer id) {
-        this.userId = id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -59,12 +59,12 @@ public class User implements Serializable {
         this.gender = gender;
     }
 
-   /* public Account getAccount() {
+    public Account getAccount() {
         return account;
     }
 
     public void setAccount(Account account) {
         this.account = account;
     }
-*/
+
 }
