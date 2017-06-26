@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  mysqldb:
+    image: mysql
+    volumes:
+      - /Users/grace/Documents/Android\ for\ Javaprogrammers/Project/mysql_persistent:/var/lib/mysql
+    restart: always
+    ports:
+      - '3307:3306'
+    environment:
+      MYSQL_DATABASE: db_example
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+
+  java_app:
+    image: backendfriendfinder-img
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - mysqldb
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:mysql://mysqldb:3306/db_example?useSSL=false'
+      SPRING_PROFILES_ACTIVE: 'mysql'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
