@@ -27,6 +27,9 @@ public class User implements Serializable {
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private Set<MovieGenres> movies;
 
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<MusicGenres> music;
+
     public User () {}
 
     public User(int id) {
@@ -77,6 +80,14 @@ public class User implements Serializable {
 
     public void setMovies(Set<MovieGenres> movies) {
         this.movies = movies;
+    }
+
+    public Set<MusicGenres> getMusic() {
+        return music;
+    }
+
+    public void setMusic(Set<MusicGenres> music) {
+        this.music = music;
     }
 
 
