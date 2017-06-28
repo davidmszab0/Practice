@@ -2,13 +2,11 @@ package friendfinder.services.controller;
 
 import friendfinder.domain.Account;
 import friendfinder.domain.User;
+import friendfinder.exceptions.HttpUnprocessableEntityException;
 import friendfinder.persistence.AccountRepository;
-import friendfinder.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * Created by grace on 23/06/17.
@@ -28,27 +26,47 @@ public class AccountController {
         return accountRepository.findAll();
     }
 
-    @GetMapping(path="/getByEmail")
-    public String getAccount (@RequestParam(value = "email") String email) {
-        System.out.println("Getting the account by email");
+    @GetMapping
+    public String loginAccount (@RequestParam(value = "email") String email,
+                              @RequestParam(value = "password") String password) {
+        System.out.println("Getting the account by email and password");
         String accountId = "";
         try {
-            Account serchedAccount = accountRepository.findByEmail(email);
+            if (isBlank(email) || isBlank(password)) {
+                throw new HttpUnprocessableEntityException("Email or password is blank.");
+            }
+            Account serchedAccount = accountRepository.findByEmailAndPassword(email, password);
+
+            if (serchedAccount == null) {
+                System.out.println("Account does not exist.");
+                return "Account does not exist.";
+            }
             accountId = String.valueOf(serchedAccount.getAccountId());
         } catch (Exception ex) {
-            System.out.println("Error getting the Account: " + ex.toString());
+            ex.printStackTrace();
+            return "Error getting the Account: " + ex.toString();
         }
-        return "The account id is: " + accountId;
+        return "The account id is: " + accountId + " ";
     }
 
     @PostMapping
-    public String postAccount (@RequestBody Account entity) {
+    public String registerAccount (@RequestBody Account entity) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
-        System.out.println("Creating an account");
 
         String accountId = "";
         try {
+            if (entity == null || isBlank(entity.getEmail()) || isBlank(entity.getPassword())) {
+                throw new HttpUnprocessableEntityException("Entity, email or password is blank.");
+            }
+            Account newAccount = accountRepository.findByEmail(entity.getEmail());
+
+            if (newAccount != null) {
+                System.out.println("Account already registered.");
+                return "Account already registered.";
+            }
+            System.out.println("Creating an account");
+
             User usr = new User(entity);
             entity.setUser(usr);
             accountRepository.save(entity);
@@ -57,7 +75,7 @@ public class AccountController {
             ex.printStackTrace();
             return "Error creating the account: " + ex.toString();
         }
-        return "Account successfully created with id = " + accountId;
+        return "Account successfully created with id = " + accountId + " ";
     }
 
     @PutMapping(value = "/{accountId}")
