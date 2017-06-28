@@ -1,7 +1,9 @@
 package friendfinder.services.controller;
 
 import friendfinder.domain.Account;
+import friendfinder.domain.User;
 import friendfinder.persistence.AccountRepository;
+import friendfinder.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +22,14 @@ public class AccountController {
 
     @GetMapping(path="/all")
     public Iterable<Account> getAllAccounts() {
-        // This returns a JSON or XML with the users
+        // This returns a JSON with the accounts
         System.out.println("Getting all accounts");
 
         return accountRepository.findAll();
     }
 
     @GetMapping(path="/getByEmail")
-    public String getAccount (@RequestParam String email) {
+    public String getAccount (@RequestParam(value = "email") String email) {
         System.out.println("Getting the account by email");
         String accountId = "";
         try {
@@ -39,31 +41,36 @@ public class AccountController {
         return "The account id is: " + accountId;
     }
 
-    // TODO need to have a user when I create an account?!
     @PostMapping
-    public String postAccount (@RequestBody String email, String password) {
+    public String postAccount (@RequestBody Account entity) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
         System.out.println("Creating an account");
 
         String accountId = "";
         try {
-            Account acc = new Account(email,password);
-            accountRepository.save(acc);
-            accountId = String.valueOf(acc.getAccountId());
+            User usr = new User(entity);
+            entity.setUser(usr);
+            accountRepository.save(entity);
+            accountId = String.valueOf(entity.getAccountId());
         } catch (Exception ex) {
+            ex.printStackTrace();
             return "Error creating the account: " + ex.toString();
         }
         return "Account successfully created with id = " + accountId;
     }
 
     @PutMapping(value = "/{accountId}")
-    public Account upateAccount (@PathVariable(value = "accountId") Integer accountId,
+    public Account updateAccount (@PathVariable(value = "accountId") Integer accountId,
                                  @RequestBody Account entity) {
         System.out.println("Updating an account");
         try {
+            Account entityBefore = accountRepository.findByAccountId(accountId);
+            entity.setAccountId(accountId);
+            entity.setCreatedAt(entityBefore.getCreatedAt());
             accountRepository.save(entity);
         } catch (Exception ex) {
+            ex.printStackTrace();
             System.out.println("Error updating the Account: " + ex.toString());
         }
         return entity;

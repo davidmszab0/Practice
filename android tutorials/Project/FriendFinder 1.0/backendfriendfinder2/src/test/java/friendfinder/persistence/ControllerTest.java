@@ -9,12 +9,15 @@ import org.junit.runner.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
@@ -26,6 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
+@AutoConfigureMockMvc
 public class ControllerTest {
 
     private MockMvc mockMvc;
@@ -73,5 +77,14 @@ public class ControllerTest {
 
         verify(accountRepository, times(1)).findAll();
         verifyNoMoreInteractions(accountRepository);
+    }
+
+    // TODO No mapping found for HTTP request with URI [/all] in DispatcherServlet with name
+    @Test
+    public void getHello() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/all")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo(accountRepository.findAll())));
     }
 }

@@ -1,5 +1,8 @@
 package friendfinder.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -22,6 +25,7 @@ public class User implements Serializable {
 
     // mappedBy maps the Entity of this class and not the table
     @OneToOne(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Account account;
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
@@ -32,9 +36,10 @@ public class User implements Serializable {
 
     public User () {}
 
-    public User(int id) {
-        this.id = id;
+    public User(Account account) {
+        this.account = account;
     }
+
 
     public User(String name, String gender, Account account) {
         this.name = name;

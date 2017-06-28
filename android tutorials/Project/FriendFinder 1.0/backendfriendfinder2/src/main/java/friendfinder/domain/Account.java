@@ -1,5 +1,8 @@
 package friendfinder.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -31,6 +34,7 @@ public class Account {
     @OneToOne(fetch=FetchType.LAZY)
     //@JoinColumn(name="account_user_id") // foreign key will be here
     @MapsId // for shared primary key
+    @JsonIgnore
     private User user;
 
     public Account () {}
@@ -38,7 +42,16 @@ public class Account {
     public Account (String email, String password) {
         this.email = email;
         this.password = password;
-        this.createdAt = new Date();
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        modifiedAt = new Date();
     }
 
     public Integer getAccountId() {
@@ -47,7 +60,6 @@ public class Account {
 
     public void setAccountId(Integer accountId) {
         this.accountId = accountId;
-        this.modifiedAt = new Date();
     }
 
     public Date getModifiedAt() {
@@ -72,7 +84,6 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
-        this.modifiedAt = new Date();
     }
 
     public String getEmail() {
@@ -81,7 +92,6 @@ public class Account {
 
     public void setEmail(String email) {
         this.email = email;
-        this.modifiedAt = new Date();
     }
 
     public User getUser() {
@@ -90,7 +100,6 @@ public class Account {
 
     public void setUser(User user) {
         this.user = user;
-        this.modifiedAt = new Date();
     }
 
 }
