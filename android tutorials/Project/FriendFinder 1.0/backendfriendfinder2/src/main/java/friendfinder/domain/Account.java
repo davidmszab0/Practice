@@ -39,6 +39,8 @@ public class Account {
 
     public Account () {}
 
+    public Account (User usr) {this.user = usr;}
+
     public Account (String email, String password) {
         this.email = email;
         this.password = password;

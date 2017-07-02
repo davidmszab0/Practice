@@ -1,8 +1,6 @@
 package friendfinder.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -95,5 +93,8 @@ public class User implements Serializable {
         this.music = music;
     }
 
-
+    @Override
+    public String toString() {
+        return "[id= "+ id + ", name= " + name + ", gender= " + gender + "]";
+    }
 }
