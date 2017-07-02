@@ -6,6 +6,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Created by grace on 29/06/17.
@@ -23,10 +25,10 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         Root<User> root = cq.from(User.class); // called to set the query root
         cq.select(root); // set the result list type
 
-        if(name!=null) {
+        if(isNotBlank(name)) {
             cq.where(cb.equal(root.get("name"), name));
         }
-        if(gender!=null) {
+        if(isNotBlank(gender)) {
             cq.where(cb.equal(root.get("gender"), gender));
         }
         TypedQuery<User> q = em.createQuery(cq); // prepare a query for execution and specifying the type of the query result

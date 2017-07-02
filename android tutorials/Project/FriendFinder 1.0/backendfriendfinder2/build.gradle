@@ -34,4 +34,5 @@ dependencies {
     // Use MySQL Connector-J
     compile 'mysql:mysql-connector-java:6.0.6'
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.8.0'
 }

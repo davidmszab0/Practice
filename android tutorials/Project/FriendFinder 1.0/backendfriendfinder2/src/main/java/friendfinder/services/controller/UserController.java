@@ -25,7 +25,7 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @GetMapping
+    @GetMapping(path="/nameGender")
     public String getEntity (@RequestParam(value = "name") String name,
                               @RequestParam(value = "gender") String gender) {
         System.out.println("Getting the user by name and gender");
@@ -35,9 +35,6 @@ public class UserController {
                 return "User not found";
             }
             User serchedEntity = userRepository.findUserByNameAndGender(name, gender);
-            List<User> usr = userRepository.findByQuery(name, gender);
-
-            System.out.println("finbyQuery: " + usr);
 
             if (serchedEntity == null) {
                 System.out.println("Entity does not exist.");
@@ -51,13 +48,16 @@ public class UserController {
         return "The user id is: " + id + " ";
     }
 
-    @GetMapping
+    @GetMapping(path="/search")
     public String searchEntitys (@RequestParam(value = "name") String name,
                              @RequestParam(value = "gender") String gender) {
         System.out.println("Getting the users by name and gender");
         List<User> usr;
         try {
-             usr = userRepository.findByQuery(name, gender);
+            System.out.println("name: " + name);
+            System.out.println("gender: " + gender);
+
+            usr = userRepository.findByQuery(name, gender);
 
             System.out.println("findbyQuery: " + usr);
 

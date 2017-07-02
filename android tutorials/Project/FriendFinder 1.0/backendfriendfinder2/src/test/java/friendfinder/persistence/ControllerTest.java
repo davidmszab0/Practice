@@ -1,64 +1,77 @@
 package friendfinder.persistence;
 
+import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.http.ContentType;
 import friendfinder.Application;
 import friendfinder.domain.Account;
 import friendfinder.domain.User;
-import friendfinder.services.controller.AccountController;
 import org.junit.*;
 import org.junit.runner.*;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.*;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.Arrays;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import static com.jayway.restassured.RestAssured.given;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by grace on 25/06/17.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-@AutoConfigureMockMvc
+@SpringBootTest(classes=Application.class)
 public class ControllerTest {
 
-    private MockMvc mockMvc;
-
-    @InjectMocks
-    AccountController acccountController;
-
-    @Mock
+    @Autowired
     private AccountRepository accountRepository;
 
-    @Mock
+    @Autowired
     private UserRepository userRepository;
-
 
     @Before
     public void setup() {
+        String baseHost = System.getProperty("server.host");
+        if(baseHost==null){
+            baseHost = "http://localhost";
+        }
+        RestAssured.baseURI = baseHost;
+
+        String port = System.getProperty("server.port");
+        if (port == null) {
+            RestAssured.port = Integer.valueOf(8080);
+        }
+        else{
+            RestAssured.port = Integer.valueOf(port);
+        }
+
+        String basePath = System.getProperty("server.base");
+        if(basePath==null){
+            basePath = "/";
+        }
+        RestAssured.basePath = basePath;
+
+
         accountRepository.deleteAll();
         userRepository.deleteAll();
-
-        // this must be called for the @Mock annotations above to be processed
-        // and for the mock service to be injected into the controller under
-        // test.
-        MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(acccountController).build();
     }
 
-    // TODO fix this JUnit test
+    // Start the application before you run the tests
     @Test
-    public void findAllAccounts() throws Exception {
+    public void testCreateAccount() throws Exception {
+        Account account1 = new Account("david@szabo.com", "empty");
+
+        given().
+                body(account1).
+                contentType("application/json").
+                accept("application/json").
+                when().
+                post("account").
+                then().
+                statusCode(200);
+        assertEquals(1, accountRepository.count());
+    }
+
+    @Test
+    public void testGetAll() throws Exception {
         Account account1 = new Account("david@szabo.com", "empty");
         User user1 = new User("David Szabo", "male", account1);
         account1.setUser(user1);
@@ -66,25 +79,68 @@ public class ControllerTest {
         Account savedAccount = accountRepository.save(account1);
         User savedUser = userRepository.save(user1);
 
-        //AccountRepository mockAccRep = org.mockito.Mockito.mock(AccountRepository.class);
-
-        when(accountRepository.findAll()).thenReturn(Arrays.asList(account1));
-
-        mockMvc.perform(get("http://localhost:8080/account/all"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.account.email").value("david@szabo.com"));
-
-        verify(accountRepository, times(1)).findAll();
-        verifyNoMoreInteractions(accountRepository);
+        given().
+                accept("application/json").
+                when().
+                get("account/all").
+                then().
+                statusCode(200);
     }
 
-    // TODO No mapping found for HTTP request with URI [/all] in DispatcherServlet with name
     @Test
-    public void getHello() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/all")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(equalTo(accountRepository.findAll())));
+    public void testSearch() throws Exception {
+
+        given().
+                contentType("application/json").
+                accept("application/json").
+                body(new Account("david@szabo.com", "empty")).
+                when().
+                post("account").
+                then().
+                statusCode(200);
+
+        Account postedAcc = accountRepository.findByEmail("david@szabo.com");
+
+        given().
+                body(new User("David", "male")).
+                contentType(ContentType.JSON).
+                accept("application/json").
+                when().
+                put("user/" + Integer.toString(postedAcc.getAccountId())).
+                then().
+                statusCode(200);
+
+        given().log().all().
+                accept("application/json").
+                contentType(ContentType.JSON).
+                when().
+                get("user/search?name=David&gender=male").
+                then().
+                statusCode(200);
+
+        given().
+                accept("application/json").
+                contentType(ContentType.JSON).
+                when().
+                get("user/search?name=&gender=male").
+                then().
+                statusCode(200);
+
+        given().
+                accept("application/json").
+                contentType(ContentType.JSON).
+                when().
+                get("user/search?name=David&gender=").
+                then().
+                statusCode(200);
+
+        given().
+                accept("application/json").
+                contentType(ContentType.JSON).
+                when().
+                get("user/search?name=&gender=").
+                then().
+                statusCode(200);
     }
+
 }

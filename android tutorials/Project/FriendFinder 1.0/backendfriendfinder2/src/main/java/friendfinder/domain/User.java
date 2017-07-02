@@ -38,6 +38,10 @@ public class User implements Serializable {
         this.account = account;
     }
 
+    public User(String name, String gender) {
+        this.name = name;
+        this.gender=gender;
+    }
 
     public User(String name, String gender, Account account) {
         this.name = name;
