@@ -88,7 +88,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testSearch() throws Exception {
+    public void testUserSearch() throws Exception {
 
         given().
                 contentType("application/json").

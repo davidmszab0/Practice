@@ -25,7 +25,7 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @GetMapping(path="/nameGender")
+    @GetMapping(path="/getUserByNameAndGender")
     public String getEntity (@RequestParam(value = "name") String name,
                               @RequestParam(value = "gender") String gender) {
         System.out.println("Getting the user by name and gender");
