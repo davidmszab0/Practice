@@ -1,2 +1,18 @@
 spring\ tutorials/spring\ tutorial/.idea/**
 spring\ tutorials/spring\ tutorial/lib/**
+*.DS_Store
+
+# Build Artifacts
+
+.gradle/
+build/
+target/
+bin/
+dependency-reduced-pom.xml
+
+# IntelliJ IDEA Files
+
+*.iml
+*.ipr
+*.iws
+*.idea
