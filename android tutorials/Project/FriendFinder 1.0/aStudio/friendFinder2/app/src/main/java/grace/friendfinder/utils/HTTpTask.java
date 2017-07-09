@@ -1,7 +1,6 @@
-package grace.friendfinder;
+package grace.friendfinder.utils;
 
 import android.os.AsyncTask;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -28,12 +27,17 @@ public class HTTpTask extends AsyncTask<String, Object, Object> {
 
     static InputStream is = null;
 
+    // TODO how to do a GET -> HttpGet
+    // TODO how to do a POST -> HttpPost
+    // TODO how to do a PUT
+    // TODO how to do a DELETE
+
     @Override
     protected Object doInBackground(String... params) {
         String line = "";
         try {
             System.out.println("Establishing a connection! ");
-            String url = "http://10.0.2.2:8080/demo/all";
+            String url = "http://10.0.2.2:8080/account?email=david@szabo.com&password=empty";
 
             HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet(url);

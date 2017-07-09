@@ -10,9 +10,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import org.json.JSONException;
-import grace.friendfinder.MainActivity;
-import grace.friendfinder.R;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
+import cz.msebera.android.httpclient.Header;
+import grace.friendfinder.utils.DatabaseHandler;
+import grace.friendfinder.utils.HTTpTask;
+import grace.friendfinder.utils.HttpUtils;
 
 /**
  * @author David M Szabo
@@ -20,22 +27,15 @@ import grace.friendfinder.R;
 public class LoginActivity extends Activity {
 
     Button btnLogin;
-    Button btnRegistering;
+    Button btnRegister;
     EditText inputEmail;
     EditText inputPassword;
     TextView loginErrorMsg;
     TextView textViewForgotPassword;
 
-    // JSON Response node names
-    private static String KEY_SUCCESS = "success";
-    private static String KEY_ERROR = "error";
-    private static String KEY_ERROR_MSG = "error_msg";
-    private static String KEY_UID = "uid";
-    private static String KEY_NAME = "name";
-    private static String KEY_EMAIL = "email";
-    private static String KEY_CREATED_AT = "created_at";
+    private String TAG = "Login";
 
-    String url = "http://10.0.2.2:8080/demo/all";
+    String url = "http://10.0.2.2:8080/account";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class LoginActivity extends Activity {
         inputEmail = (EditText) findViewById(R.id.loginEmail);
         inputPassword = (EditText) findViewById(R.id.loginPassword);
         btnLogin = (Button) findViewById(R.id.btnLogin);
-        btnRegistering = (Button) findViewById(R.id.btnRegister);
+        btnRegister = (Button) findViewById(R.id.btnRegister);
         loginErrorMsg = (TextView) findViewById(R.id.login_error);
         //textViewForgotPassword = (TextView) findViewById(R.id.textViewForgotPassword);
 
@@ -54,33 +54,62 @@ public class LoginActivity extends Activity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                Context context = getApplicationContext();
+                final Context context = getApplicationContext();
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
 
                 // check for login response
                 try {
-                        // Store user details in MySql Database
-                        DatabaseHandler db = new DatabaseHandler();
-                        Log.d("GET", "Before");
-                        AsyncTask bufferTask = new HTTpTask().execute(url);
-                        //db.sendGet();
-                        Log.d("GET", "After");
+                    String urlLogin = "/account";
+                    //TODO - Store user details in SqlLite Database ?
 
-                        /*if (db.checkUser(email, password)) {
-                            loginErrorMsg.setText("Correct password and user name");
+                    RequestParams rp = new RequestParams();
+                    rp.add("email", "david@szabo.com");
+                    rp.add("password", "empty");
+
+                    HttpUtils.get(urlLogin, rp, new JsonHttpResponseHandler() {
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            // If the response is JSONObject instead of expected JSONArray
+                            Log.d(TAG, "---------------- this is response : " + response);
+                            try {
+                                JSONObject serverResp = new JSONObject(response.toString());
+                                String id = serverResp.getString("accountId");
+                                String email = serverResp.getString("email");
+                                String password = serverResp.getString("password");
+                                String created_at = serverResp.getString("createdAt");
+                                Log.d(TAG, "the id, email, password is: " + id + " " +email + " " + password + " " + created_at);
+
+                                DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+                                db.resetTables();
+                                db.addUser(email, created_at);
+
+                                if (db.getRowCount()) {
+                                    HashMap hm = db.getUserDetails();
+                                    String email2 = (String) hm.get("email");
+                                    Log.d(TAG, "email2: " + email2);
+                                }
+
+                                // Launch Dashboard Screen
+                                Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                                // Close all views before launching Dashboard
+                                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                //startActivity(mainActivityIntent);
+                                // Close Login Screen
+                                //finish();
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
-                            loginErrorMsg.setText("Password or user name is incorrect");*/
 
-                        // Launch Dashboard Screen
-    /*                            Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
-
-                        // Close all views before launching Dashboard
-                        mainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(mainActivity);
-
-                        // Close Login Screen
-                        finish();*/
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            Log.d(TAG , "onFailure : "+ statusCode);
+                            Log.d(TAG , "onFailure : "+ throwable);
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -88,7 +117,7 @@ public class LoginActivity extends Activity {
         });
 
         // Link to Register Screen
-        btnRegistering.setOnClickListener(new View.OnClickListener() {
+        btnRegister.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),
@@ -96,16 +125,5 @@ public class LoginActivity extends Activity {
                 startActivity(intent);
             }
         });
-
-        /*textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
-                startActivity(intent);
-            }
-        });*/
     }
-
-
 }

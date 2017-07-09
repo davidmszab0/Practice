@@ -5,15 +5,6 @@
     android:screenOrientation="portrait"
     tools:context="grace.friendfinder.LoginActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/cityscape"
-        android:contentDescription="Menu" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -34,7 +25,6 @@
         android:layout_centerHorizontal="true"
         android:text="@string/login_activity_title_label_2"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#ff0000"
         android:textSize="40sp"
         android:typeface="serif" />
 
