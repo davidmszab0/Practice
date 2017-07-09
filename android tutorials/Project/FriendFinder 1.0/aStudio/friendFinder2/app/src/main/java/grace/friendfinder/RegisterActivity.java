@@ -143,8 +143,6 @@ public class RegisterActivity extends Activity {
                                     }
                                     });
 
-                                // TODO add rest call to the userController: update name and gender
-
                                 // Launch Dashboard Screen
                                 Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
                                 // Close all views before launching Dashboard
