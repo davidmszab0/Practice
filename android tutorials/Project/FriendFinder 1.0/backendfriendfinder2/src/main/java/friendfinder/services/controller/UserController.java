@@ -2,6 +2,8 @@ package friendfinder.services.controller;
 
 import friendfinder.domain.Account;
 import friendfinder.domain.User;
+import friendfinder.exceptions.HttpConflictException;
+import friendfinder.exceptions.HttpNotFoundException;
 import friendfinder.exceptions.HttpUnprocessableEntityException;
 import friendfinder.persistence.UserRepository;
 import org.slf4j.Logger;
@@ -31,33 +33,31 @@ public class UserController {
     }
 
     @GetMapping(path="/getUserByNameAndGender")
-    public String getEntity (@RequestParam(value = "name") String name,
+    public User getEntity (@RequestParam(value = "name") String name,
                               @RequestParam(value = "gender") String gender) {
         log.debug("Getting the user by name and gender");
-        String id = "";
+        User serchedEntity = null;
         try {
             if (isBlank(name)) {
-                return "User not found";
+                throw new HttpUnprocessableEntityException("Entity was not found");
             }
-            User serchedEntity = userRepository.findUserByNameAndGender(name, gender);
+            serchedEntity = userRepository.findUserByNameAndGender(name, gender);
 
             if (serchedEntity == null) {
                 log.debug("Entity does not exist.");
-                return "Entity does not exist.";
+                throw new HttpNotFoundException("Entity was not found");
             }
-            id = String.valueOf(serchedEntity.getId());
         } catch (Exception ex) {
             ex.printStackTrace();
-            return "Error getting the User: " + ex.toString();
         }
-        return "The user id is: " + id + " ";
+        return serchedEntity;
     }
 
     @GetMapping(path="/search")
-    public String searchEntitys (@RequestParam(value = "name") String name,
+    public List<User> searchEntitys (@RequestParam(value = "name") String name,
                              @RequestParam(value = "gender") String gender) {
         log.debug("Getting the users by name and gender");
-        List<User> usr;
+        List<User> usr = null;
         try {
             log.debug("name: " + name);
             log.debug("gender: " + gender);
@@ -68,40 +68,37 @@ public class UserController {
 
             if (usr == null) {
                 System.out.println("Entities do not exist.");
-                return "Entities do not exist.";
+                throw new HttpNotFoundException("Entity was not found");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            return "Error getting the User: " + ex.toString();
         }
-        return "The entities are: " + usr + " ";
+        return usr;
     }
 
     @PostMapping
-    public String createEntity (@RequestBody User entity) {
+    public User createEntity (@RequestBody User entity) {
 
-        String id = "";
+        User newEntity = null;
         try {
             if (entity == null) {
                 throw new HttpUnprocessableEntityException("Entity is null.");
             }
-            User newEntity = userRepository.findUserByName(entity.getName());
+            newEntity = userRepository.findUserByName(entity.getName());
 
             if (newEntity != null) {
                 log.debug("Entity already registered.");
-                return "Entity already registered.";
+                throw new HttpConflictException("Entity already registered.");
             }
             log.debug("Creating an entity");
 
             Account acc = new Account(entity);
             entity.setAccount(acc);
             userRepository.save(entity);
-            id = String.valueOf(entity.getId());
         } catch (Exception ex) {
             ex.printStackTrace();
-            return "Error creating the entity: " + ex.toString();
         }
-        return "Entity successfully created with id = " + id + " ";
+        return newEntity;
     }
 
     @PutMapping(value = "/{id}")
