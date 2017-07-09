@@ -75,18 +75,22 @@ public class LoginActivity extends Activity {
                                 String email = serverResp.getString("email");
                                 String password = serverResp.getString("password");
                                 String created_at = serverResp.getString("createdAt");
-                                Log.d(TAG, "the id, email, password is: " + id + " " +email + " " + password + " " + created_at);
+                                Log.d(TAG, "the id, email, password, createdAt is: " + id + " " +email + " " + password + " " + created_at);
 
                                 // storing the user in the local SQLite db
                                 DatabaseHandler db = new DatabaseHandler(getApplicationContext());
                                 db.resetTables(); // first deleting all the rows
-                                db.addUser(email, created_at);
+                                db.addUser("", "", email, created_at);
                                 Log.d(TAG, "Created user in the local SQLite db.");
 
                                 if (db.getRowCount()) {
                                     HashMap hm = db.getUserDetails();
+                                    String name2 = (String) hm.get("name");
+                                    String gender2 = (String) hm.get("gender");
                                     String email2 = (String) hm.get("email");
-                                    Log.d(TAG, "email_login: " + email2);
+                                    String created_at2 = (String) hm.get("created_at");
+                                    Log.d(TAG, "login name, gender, email, created_at: 1-" +
+                                            name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2);
                                 }
 
                                 // Launch Dashboard Screen

@@ -17,6 +17,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import cz.msebera.android.httpclient.Header;
@@ -38,16 +39,8 @@ public class RegisterActivity extends Activity {
     EditText inputPassword;
     TextView registerErrorMsg;
 
-    // JSON Response node names
-    private static String KEY_SUCCESS = "success";
-    private static String KEY_ERROR = "error";
-    private static String KEY_ERROR_MSG = "error_msg";
-    private static String KEY_UID = "uid";
-    private static String KEY_NAME = "name";
-    private static String KEY_EMAIL = "email";
-    private static String KEY_CREATED_AT = "created_at";
-
     private String TAG = "Register";
+    private DatabaseHandler db = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +58,7 @@ public class RegisterActivity extends Activity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
-                Context context = getApplicationContext();
+                final Context context = getApplicationContext();
                 String name = inputFullName.getText().toString();
                 String email = inputEmail.getText().toString();
                 String gender = RegisterActivity.this.gender.getText().toString();
@@ -81,30 +74,76 @@ public class RegisterActivity extends Activity {
                     JSONObject jsonParams = new JSONObject();
                     jsonParams.put("email", "email2");
                     jsonParams.put("password", "empty");
-                    StringEntity entity = new StringEntity(jsonParams.toString());
-                    Log.d(TAG, "entity: " + entity);
+                    StringEntity entityAccount = new StringEntity(jsonParams.toString());
+                    Log.d(TAG, "entityAccount: " + entityAccount);
 
-
-                    HttpUtils.post(context, "/account", entity, "application/json", new JsonHttpResponseHandler() {
+                    HttpUtils.post(context, "/account", entityAccount, "application/json", new JsonHttpResponseHandler() {
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             Log.d(TAG, "------- this is response : " + response);
 
                             try {
-                                JSONObject serverResp = new JSONObject(response.toString());
+                                final JSONObject serverResp = new JSONObject(response.toString());
 
                                 // storing the user in the local SQLite db
-                                DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+                                db = new DatabaseHandler(getApplicationContext());
                                 db.resetTables(); // first deleting all the rows
-                                db.addUser(serverResp.getString("email"), serverResp.getString("createdAt"));
+                                db.addUser("", "", serverResp.getString("email"),serverResp.getString("createdAt"));
                                 Log.d(TAG, "Created user in the local SQLite db.");
 
-                                if (db.getRowCount()) {
                                     HashMap hm = db.getUserDetails();
+                                    String name2 = (String) hm.get("name");
+                                    String gender2 = (String) hm.get("gender");
                                     String email2 = (String) hm.get("email");
-                                    Log.d(TAG, "email_register: " + email2);
-                                }
+                                    String created_at2 = (String) hm.get("created_at");
+                                    Log.d(TAG, "register name, gender, email, created_at: 1-" +
+                                            name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2);
+
+                                JSONObject jsonParams2 = new JSONObject();
+                                jsonParams2.put("name", "Greg");
+                                jsonParams2.put("gender", "male");
+                                StringEntity entityUser = new StringEntity(jsonParams2.toString());
+                                Log.d(TAG, "entityUser: " + entityUser);
+
+                                HttpUtils.put(context, "/user/" + serverResp.getString("accountId"), entityUser, "application/json", new JsonHttpResponseHandler() {
+                                    @Override
+                                    public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
+                                        Log.d(TAG, "------- this is response2 : " + response2);
+                                        try {
+                                            JSONObject serverResp2 = new JSONObject(response2.toString());
+                                                db.updateUser(serverResp2.getString("name"), serverResp2.getString("gender"),
+                                                       serverResp.getString("email"), serverResp.getString("createdAt"));
+
+                                            HashMap hm = db.getUserDetails();
+                                            String name2 = (String) hm.get("name");
+                                            String gender2 = (String) hm.get("gender");
+                                            String email2 = (String) hm.get("email");
+                                            String created_at2 = (String) hm.get("created_at");
+                                            Log.d(TAG, "register2 name, gender, email, created_at: 1-" +
+                                                    name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2);
+
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                        Log.d(TAG , "onFailure statusCode: "+ statusCode);
+                                        Log.d(TAG , "onFailure headers: "+ headers);
+                                        Log.d(TAG , "onFailure responseString: "+ responseString);
+                                        Log.d(TAG , "onFailure throwable: "+ throwable);
+                                    }
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject object) {
+                                        Log.d(TAG , "onFailure statusCode: "+ statusCode);
+                                        Log.d(TAG , "onFailure headers: "+ headers);
+                                        Log.d(TAG , "onFailure throwable: "+ throwable);
+                                        Log.d(TAG , "onFailure object: "+ object);
+                                    }
+                                    });
+
+                                // TODO add rest call to the userController: update name and gender
 
                                 // Launch Dashboard Screen
                                 Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -114,6 +153,8 @@ public class RegisterActivity extends Activity {
                                 // Close Login Screen
                                 finish();
                             } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
                         }

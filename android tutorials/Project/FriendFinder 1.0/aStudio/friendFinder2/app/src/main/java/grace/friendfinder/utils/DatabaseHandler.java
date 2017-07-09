@@ -29,6 +29,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Login Table Columns names
     private final String KEY_ID = "id";
     private final String KEY_NAME = "name";
+    private final String KEY_GENDER = "gender";
     private final String KEY_EMAIL = "email";
     private final String KEY_CREATED_AT = "created_at";
 
@@ -42,6 +43,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_LOGIN + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_NAME + " TEXT,"
+                + KEY_GENDER + " TEXT,"
                 + KEY_EMAIL + " TEXT UNIQUE,"
                 + KEY_CREATED_AT + " TEXT" + ")";
         db.execSQL(CREATE_LOGIN_TABLE);
@@ -60,15 +62,38 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      * */
-    public void addUser(String email, String created_at) {
+    public void addUser(String name, String gender, String email, String created_at) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_NAME, name); // Name
+        values.put(KEY_GENDER, gender); // Gender
         values.put(KEY_EMAIL, email); // Email
         values.put(KEY_CREATED_AT, created_at); // Created At
 
         // Inserting Row
         db.insert(TABLE_LOGIN, null, values);
+        db.close(); // Closing database connection
+    }
+
+    /**
+     *
+     * @param name
+     * @param gender
+     * @param email
+     * @param created_at
+     */
+    public void updateUser(String name, String gender, String email, String created_at) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, name); // Name
+        values.put(KEY_GENDER, gender); // Gender
+        values.put(KEY_EMAIL, email); // Email
+        values.put(KEY_CREATED_AT, created_at); // Created At
+
+        String restrict = KEY_ID + "=" + 1;
+        db.update(TABLE_LOGIN, values, restrict, null);
         db.close(); // Closing database connection
     }
 
@@ -85,8 +110,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
         if(cursor.getCount() > 0){
             user.put("name", cursor.getString(1));
-            user.put("email", cursor.getString(2));
-            user.put("created_at", cursor.getString(3));
+            user.put("gender", cursor.getString(2));
+            user.put("email", cursor.getString(3));
+            user.put("created_at", cursor.getString(4));
         }
         cursor.close();
         db.close();
