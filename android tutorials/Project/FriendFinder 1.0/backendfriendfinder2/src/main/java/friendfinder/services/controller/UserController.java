@@ -94,7 +94,7 @@ public class UserController {
 
             Account acc = new Account(entity);
             entity.setAccount(acc);
-            userRepository.save(entity);
+            newEntity = userRepository.save(entity);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -104,26 +104,31 @@ public class UserController {
     @PutMapping(value = "/{id}")
     public User updateEntity (@PathVariable(value = "id") Integer id,
                                  @RequestBody User entity) {
-        log.debug("Updating an entity");
+        log.debug("Updating the entity.");
         try {
             User entityBefore = userRepository.findUserById(id);
+            if (entityBefore == null) {
+                throw new HttpNotFoundException("The Entity was not found");
+            }
             entity.setId(id);
             userRepository.save(entity);
         } catch (Exception ex) {
             ex.printStackTrace();
-            log.debug("Error updating the Entity: " + ex.toString());
         }
         return entity;
     }
 
     @DeleteMapping(value = "/{id}")
     public void deleteEntity (@PathVariable(value = "id") Integer id) {
-        log.debug("Deleting an entity");
+        log.debug("Deleting the entity.");
         try {
             User deleteEntity = userRepository.findUserById(id);
+            if (deleteEntity == null) {
+                throw new HttpNotFoundException("The Entity was not found.");
+            }
             userRepository.delete(deleteEntity);
         } catch (Exception ex) {
-            log.debug("Error deleting the Entity: " + ex.toString());
+            ex.printStackTrace();
         }
     }
 }

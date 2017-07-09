@@ -34,6 +34,13 @@ public class AccountController {
         return accountRepository.findAll();
     }
 
+    /**
+     * The REST call needs to return a JSON object for the FrontEnd. This way the FrontEnd can
+     * use the returned object and do operations on it.
+     * @param email
+     * @param password
+     * @return
+     */
     @GetMapping
     public Account loginAccount (@RequestParam(value = "email") String email,
                               @RequestParam(value = "password") String password) {
@@ -86,19 +93,18 @@ public class AccountController {
     @PutMapping(value = "/{accountId}")
     public Account updateAccount (@PathVariable(value = "accountId") Integer accountId,
                                  @RequestBody Account entity) {
-        log.debug("Updating an account");
+        log.debug("Updating the Entity");
         Account entityBefore = null;
         try {
             entityBefore = accountRepository.findByAccountId(accountId);
             if (entityBefore == null) {
-                throw new HttpNotFoundException("Entity was not found");
+                throw new HttpNotFoundException("The Entity was not found");
             }
             entity.setAccountId(accountId);
             entity.setCreatedAt(entityBefore.getCreatedAt());
             entityBefore = accountRepository.save(entity);
         } catch (Exception ex) {
             ex.printStackTrace();
-            log.debug("Error updating the Entity: " + ex.toString());
         }
         return entityBefore;
     }
@@ -110,11 +116,11 @@ public class AccountController {
         try {
             deleteEntity = accountRepository.findByAccountId(accountId);
             if (deleteEntity == null) {
-                throw new HttpNotFoundException("Entity was not found");
+                throw new HttpNotFoundException("The Entity was not found.");
             }
             accountRepository.delete(deleteEntity);
         } catch (Exception ex) {
-            log.debug("Error deleting the Account: " + ex.toString());
+            ex.printStackTrace();
         }
     }
 }
