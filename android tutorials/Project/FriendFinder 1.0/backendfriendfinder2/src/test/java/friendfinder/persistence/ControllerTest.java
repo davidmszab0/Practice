@@ -2,6 +2,7 @@ package friendfinder.persistence;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.response.Response;
 import friendfinder.Application;
 import friendfinder.domain.Account;
 import friendfinder.domain.User;
@@ -54,20 +55,60 @@ public class ControllerTest {
         userRepository.deleteAll();
     }
 
-    // Start the application before you run the tests
+    // TODO Start the application before you run the tests
     @Test
     public void testCreateAccount() throws Exception {
         Account account1 = new Account("david@szabo.com", "empty");
 
-        given().
+        Response response = given().
                 body(account1).
                 contentType("application/json").
                 accept("application/json").
                 when().
                 post("account").
                 then().
-                statusCode(200);
+                statusCode(200).
+                body("email", equalTo(account1.getEmail())).
+                body("password", equalTo(account1.getPassword())).
+                extract().response();
+        String jsonAsString = response.asString();
+        System.out.println("jsonAsString: "+jsonAsString);
+
         assertEquals(1, accountRepository.count());
+    }
+
+    @Test
+    public void testUpdateAccount() throws Exception {
+        Account account1 = new Account("david@szabo.com", "empty");
+
+        Account acc = given().
+                body(account1).
+                contentType("application/json").
+                accept("application/json").
+                when().
+                post("account").
+                then().
+                statusCode(200).
+                body("email", equalTo(account1.getEmail())).
+                body("password", equalTo(account1.getPassword())).
+                extract().body().as(Account.class);
+
+        assertEquals(1, accountRepository.count());
+
+        account1.setEmail("david2@szabo.com");
+        Response response = given().
+                body(account1).
+                contentType("application/json").
+                accept("application/json").
+                when().
+                put("account/" + acc.getAccountId()).
+                then().
+                statusCode(200).
+                body("email", equalTo(account1.getEmail())).
+                body("password", equalTo(account1.getPassword())).
+                extract().response();
+        String jsonAsString = response.asString();
+        System.out.println("jsonAsString: "+jsonAsString);
     }
 
     @Test

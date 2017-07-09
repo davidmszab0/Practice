@@ -60,14 +60,15 @@ public class AccountController {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
+        Account searchedEntity = null;
         Account newEntity = null;
         try {
             if (entity == null || isBlank(entity.getEmail()) || isBlank(entity.getPassword())) {
                 throw new HttpUnprocessableEntityException("Entity, email or password is blank.");
             }
-            newEntity = accountRepository.findByEmail(entity.getEmail());
+            searchedEntity = accountRepository.findByEmail(entity.getEmail());
 
-            if (newEntity != null) {
+            if (searchedEntity != null) {
                 log.debug("Entity already registered.");
                 throw new HttpConflictException("Entity already registered.");
             }
@@ -75,7 +76,7 @@ public class AccountController {
 
             User usr = new User(entity);
             entity.setUser(usr);
-            accountRepository.save(entity);
+            newEntity = accountRepository.save(entity);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -94,12 +95,12 @@ public class AccountController {
             }
             entity.setAccountId(accountId);
             entity.setCreatedAt(entityBefore.getCreatedAt());
-            accountRepository.save(entity);
+            entityBefore = accountRepository.save(entity);
         } catch (Exception ex) {
             ex.printStackTrace();
             log.debug("Error updating the Entity: " + ex.toString());
         }
-        return entity;
+        return entityBefore;
     }
 
     @DeleteMapping(value = "/{accountId}")
