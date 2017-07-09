@@ -46,7 +46,7 @@ public class LoginActivity extends Activity {
         inputEmail = (EditText) findViewById(R.id.loginEmail);
         inputPassword = (EditText) findViewById(R.id.loginPassword);
         btnLogin = (Button) findViewById(R.id.btnLogin);
-        btnRegister = (Button) findViewById(R.id.btnRegister);
+        btnRegister = (Button) findViewById(R.id.btnRegisterLogin);
         loginErrorMsg = (TextView) findViewById(R.id.login_error);
         //textViewForgotPassword = (TextView) findViewById(R.id.textViewForgotPassword);
 
@@ -54,7 +54,6 @@ public class LoginActivity extends Activity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                final Context context = getApplicationContext();
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
 
@@ -69,7 +68,7 @@ public class LoginActivity extends Activity {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             // If the response is JSONObject instead of expected JSONArray
-                            Log.d(TAG, "---------------- this is response : " + response);
+                            Log.d(TAG, "------- this is response : " + response);
                             try {
                                 JSONObject serverResp = new JSONObject(response.toString());
                                 String id = serverResp.getString("accountId");
@@ -87,7 +86,7 @@ public class LoginActivity extends Activity {
                                 if (db.getRowCount()) {
                                     HashMap hm = db.getUserDetails();
                                     String email2 = (String) hm.get("email");
-                                    Log.d(TAG, "email2: " + email2);
+                                    Log.d(TAG, "email_login: " + email2);
                                 }
 
                                 // Launch Dashboard Screen
@@ -105,8 +104,10 @@ public class LoginActivity extends Activity {
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            Log.d(TAG , "onFailure : "+ statusCode);
-                            Log.d(TAG , "onFailure : "+ throwable);
+                            Log.d(TAG , "onFailure statusCode: "+ statusCode);
+                            Log.d(TAG , "onFailure headers: "+ headers);
+                            Log.d(TAG , "onFailure responseString: "+ responseString);
+                            Log.d(TAG , "onFailure throwable: "+ throwable);
                         }
                     });
                 } catch (Exception e) {
@@ -119,9 +120,9 @@ public class LoginActivity extends Activity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),
+                Intent registerIntent = new Intent(getApplicationContext(),
                         RegisterActivity.class);
-                startActivity(intent);
+                startActivity(registerIntent);
             }
         });
     }

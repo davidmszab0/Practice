@@ -90,6 +90,7 @@ public class RegisterActivity extends Activity {
                                 db.addUser(json_user.getString(KEY_NAME), json_user.getString(KEY_EMAIL),
                                         json.getString(KEY_UID), json_user.getString(KEY_CREATED_AT));
                                 HashMap<String, String> user = db.getUserDetails();
+
                                 JSONObject jsonTar = userFunction.userInTarget(user.get(KEY_UID));
                                 // Launch Dashboard Screen
                                 Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);

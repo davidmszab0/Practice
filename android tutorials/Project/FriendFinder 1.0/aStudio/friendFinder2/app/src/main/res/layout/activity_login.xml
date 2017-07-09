@@ -73,7 +73,7 @@
             android:background="@drawable/assassinate_button" />
 
         <Button
-            android:id="@+id/btnRegister"
+            android:id="@+id/btnRegisterLogin"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginTop="20dp"

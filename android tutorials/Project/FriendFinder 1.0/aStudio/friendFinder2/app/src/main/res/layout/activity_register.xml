@@ -5,14 +5,6 @@
     android:screenOrientation="portrait"
     tools:context="grace.friendfinder.RegisterActivity">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/cityscape" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +12,6 @@
         android:text="@string/login_activity_title_label_1"
         android:id="@+id/textView"
         android:gravity="center_horizontal"
-        android:layout_alignBottom="@+id/imageView"
         android:layout_centerHorizontal="true"
         android:textSize="25dp"
         android:typeface="serif" />
@@ -33,7 +24,6 @@
         android:id="@+id/textView2"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:textColor="#ff0000"
         android:typeface="serif"
         android:textIsSelectable="false"
         android:textSize="40dp" />
@@ -67,16 +57,16 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/registerPassword"
-            android:hint="@string/register_activity_hint_password" />
+            android:id="@+id/gender"
+            android:hint="@string/gender" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/registerConfirmPassword"
-            android:hint="@string/register_activity_hint_pass_confirm" />
+            android:id="@+id/registerPassword"
+            android:hint="@string/register_activity_hint_password" />
 
         <Button
             android:layout_width="fill_parent"
