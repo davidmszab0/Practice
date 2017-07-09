@@ -86,14 +86,18 @@ public class AccountController {
     public Account updateAccount (@PathVariable(value = "accountId") Integer accountId,
                                  @RequestBody Account entity) {
         log.debug("Updating an account");
+        Account entityBefore = null;
         try {
-            Account entityBefore = accountRepository.findByAccountId(accountId);
+            entityBefore = accountRepository.findByAccountId(accountId);
+            if (entityBefore == null) {
+                throw new HttpNotFoundException("Entity was not found");
+            }
             entity.setAccountId(accountId);
             entity.setCreatedAt(entityBefore.getCreatedAt());
             accountRepository.save(entity);
         } catch (Exception ex) {
             ex.printStackTrace();
-            log.debug("Error updating the Account: " + ex.toString());
+            log.debug("Error updating the Entity: " + ex.toString());
         }
         return entity;
     }
@@ -101,9 +105,13 @@ public class AccountController {
     @DeleteMapping(value = "/{accountId}")
     public void deleteAccount (@PathVariable(value = "accountId") Integer accountId) {
         log.debug("Deleting an account");
+        Account deleteEntity = null;
         try {
-            Account deleteAccount = accountRepository.findByAccountId(accountId);
-            accountRepository.delete(deleteAccount);
+            deleteEntity = accountRepository.findByAccountId(accountId);
+            if (deleteEntity == null) {
+                throw new HttpNotFoundException("Entity was not found");
+            }
+            accountRepository.delete(deleteEntity);
         } catch (Exception ex) {
             log.debug("Error deleting the Account: " + ex.toString());
         }
