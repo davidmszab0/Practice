@@ -60,14 +60,11 @@ public class LoginActivity extends Activity {
 
                 // check for login response
                 try {
-                    String urlLogin = "/account";
-                    //TODO - Store user details in SqlLite Database ?
-
                     RequestParams rp = new RequestParams();
                     rp.add("email", "david@szabo.com");
                     rp.add("password", "empty");
 
-                    HttpUtils.get(urlLogin, rp, new JsonHttpResponseHandler() {
+                    HttpUtils.get("/account", rp, new JsonHttpResponseHandler() {
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -81,9 +78,11 @@ public class LoginActivity extends Activity {
                                 String created_at = serverResp.getString("createdAt");
                                 Log.d(TAG, "the id, email, password is: " + id + " " +email + " " + password + " " + created_at);
 
+                                // storing the user in the local SQLite db
                                 DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-                                db.resetTables();
+                                db.resetTables(); // first deleting all the rows
                                 db.addUser(email, created_at);
+                                Log.d(TAG, "Created user in the local SQLite db.");
 
                                 if (db.getRowCount()) {
                                     HashMap hm = db.getUserDetails();
@@ -95,9 +94,9 @@ public class LoginActivity extends Activity {
                                 Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
                                 // Close all views before launching Dashboard
                                 mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                //startActivity(mainActivityIntent);
+                                startActivity(mainActivityIntent);
                                 // Close Login Screen
-                                //finish();
+                                finish();
 
                             } catch (Exception e) {
                                 e.printStackTrace();

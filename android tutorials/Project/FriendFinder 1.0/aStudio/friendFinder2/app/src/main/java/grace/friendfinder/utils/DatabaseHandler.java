@@ -24,14 +24,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "android_api";
     // Login table name
-    private static final String TABLE_LOGIN = "login";
+    private final String TABLE_LOGIN = "login";
 
     // Login Table Columns names
-    private static final String KEY_ID = "id";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_CREATED_AT = "created_at";
-    private static final String KEY_REGID = "regid";
+    private final String KEY_ID = "id";
+    private final String KEY_NAME = "name";
+    private final String KEY_EMAIL = "email";
+    private final String KEY_CREATED_AT = "created_at";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -44,8 +43,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_NAME + " TEXT,"
                 + KEY_EMAIL + " TEXT UNIQUE,"
-                + KEY_CREATED_AT + " TEXT,"
-                + KEY_REGID + " TEXT" + ")";
+                + KEY_CREATED_AT + " TEXT" + ")";
         db.execSQL(CREATE_LOGIN_TABLE);
     }
 
@@ -127,24 +125,5 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Delete All Rows
         db.delete(TABLE_LOGIN, null, null);
         db.close();
-    }
-
-    /**
-     * function make Login Request
-     * @param email
-     * @param password
-     * */
-    public void loginUser(String email, String password){
-
-    }
-
-    /**
-     * function make Login Request
-     * @param name
-     * @param email
-     * @param password
-     * */
-    public void registerUser(String name, String email, String password){
-
     }
 }

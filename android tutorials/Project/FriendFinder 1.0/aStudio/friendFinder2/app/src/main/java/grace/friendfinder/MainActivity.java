@@ -8,11 +8,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import grace.friendfinder.utils.DatabaseHandler;
-import grace.friendfinder.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    boolean userLoggedIn = false;
     private String TAG = "Main";
     private DatabaseHandler db = null;
 
@@ -47,10 +45,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case android.R.id.icon_frame:  // Predefined icon ID
+            case R.id.logout:  // Predefined icon ID
                 db.resetTables();
+                Log.d(TAG, "Deleted the user from the SQLite local db.");
+
+                Intent loginIntent = new Intent(this, LoginActivity.class);
+                loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(loginIntent);
+                finish();
                 return true;
-            case android.R.id.selectAll:
+            case R.id.settings:
                 return true;
 
             default:
