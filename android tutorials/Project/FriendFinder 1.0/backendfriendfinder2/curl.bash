@@ -28,6 +28,8 @@ curl --verbose --header "Content-Type: application/json" --request PUT --data '{
 curl --verbose --header "Content-Type: application/json" --request POST --data '{"email":"email","password":"empty"}' 'http://localhost:8080/account'
 curl --verbose --header "Content-Type: application/json" --request PUT --data '{"name":"John","gender":"male"}' 'http://localhost:8080/user/4'
 
+curl --verbose --header "Content-Type: application/json" --request POST --data '{"email":"e","password":"e"}' 'http://localhost:8080/account'
+curl --verbose --header "Content-Type: application/json" --request PUT --data '{"name":"Missy","gender":"female"}' 'http://localhost:8080/user/4'
 
 #eval "$curl_header --request GET 'http://localhost:8080/account/all'"
 #eval "$curl_header --request POST --data '{\"email\":\"david4@szabo.com\",\"password\":\"empty\"}' 'http://localhost:8080/account'"

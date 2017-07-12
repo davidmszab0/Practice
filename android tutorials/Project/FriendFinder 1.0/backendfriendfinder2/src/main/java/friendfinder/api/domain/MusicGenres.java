@@ -1,4 +1,4 @@
-package friendfinder.domain;
+package friendfinder.api.domain;
 
 import javax.persistence.*;
 

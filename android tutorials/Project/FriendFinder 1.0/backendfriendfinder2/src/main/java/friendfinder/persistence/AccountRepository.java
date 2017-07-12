@@ -1,6 +1,6 @@
 package friendfinder.persistence;
 
-import friendfinder.domain.Account;
+import friendfinder.api.domain.Account;
 import org.springframework.data.repository.CrudRepository;
 
 /**

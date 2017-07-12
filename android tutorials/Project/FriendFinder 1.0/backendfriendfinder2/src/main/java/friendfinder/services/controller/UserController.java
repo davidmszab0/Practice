@@ -1,10 +1,10 @@
 package friendfinder.services.controller;
 
-import friendfinder.domain.Account;
-import friendfinder.domain.User;
-import friendfinder.exceptions.HttpConflictException;
-import friendfinder.exceptions.HttpNotFoundException;
-import friendfinder.exceptions.HttpUnprocessableEntityException;
+import friendfinder.api.domain.Account;
+import friendfinder.api.domain.User;
+import friendfinder.api.exceptions.HttpConflictException;
+import friendfinder.api.exceptions.HttpNotFoundException;
+import friendfinder.api.exceptions.HttpUnprocessableEntityException;
 import friendfinder.persistence.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

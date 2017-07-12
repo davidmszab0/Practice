@@ -1,4 +1,4 @@
-package friendfinder.domain;
+package friendfinder.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;

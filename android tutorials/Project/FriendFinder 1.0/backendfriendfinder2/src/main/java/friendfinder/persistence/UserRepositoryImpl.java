@@ -1,12 +1,12 @@
 package friendfinder.persistence;
 
-import friendfinder.domain.User;
+import friendfinder.api.domain.User;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
-import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**

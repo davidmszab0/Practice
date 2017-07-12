@@ -1,6 +1,6 @@
 package friendfinder.persistence;
 
-import friendfinder.domain.MovieGenres;
+import friendfinder.api.domain.MovieGenres;
 import org.springframework.data.repository.CrudRepository;
 
 /**

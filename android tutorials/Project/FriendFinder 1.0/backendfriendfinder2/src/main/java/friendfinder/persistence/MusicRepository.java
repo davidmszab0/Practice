@@ -1,6 +1,6 @@
 package friendfinder.persistence;
 
-import friendfinder.domain.MusicGenres;
+import friendfinder.api.domain.MusicGenres;
 import org.springframework.data.repository.CrudRepository;
 
 /**

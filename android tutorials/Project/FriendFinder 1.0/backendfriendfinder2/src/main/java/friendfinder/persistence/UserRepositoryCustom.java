@@ -1,9 +1,6 @@
 package friendfinder.persistence;
 
-import friendfinder.domain.User;
-import org.hibernate.Session;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.QueryByExampleExecutor;
+import friendfinder.api.domain.User;
 
 import java.util.List;
 
