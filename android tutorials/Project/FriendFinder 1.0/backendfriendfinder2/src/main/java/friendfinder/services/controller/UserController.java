@@ -49,6 +49,22 @@ public class UserController {
         return serchedEntity;
     }
 
+    @GetMapping(value = "/{id}")
+    public User getEntity (@PathVariable(value = "id") Integer id) {
+        log.debug("Getting the entity by id.");
+        User serchedEntity = null;
+        if (id <= 0) {
+            throw new HttpUnprocessableEntityException("Entity has invalid id.");
+        }
+        serchedEntity = userRepository.findUserById(id);
+
+        if (serchedEntity == null) {
+            log.debug("Entity does not exist.");
+            throw new HttpNotFoundException("Entity was not found.");
+        }
+        return serchedEntity;
+    }
+
     @GetMapping(path="/search")
     public List<User> searchEntitys (@RequestParam(value = "name") String name,
                              @RequestParam(value = "gender") String gender) {
