@@ -6,16 +6,12 @@ import friendfinder.api.exceptions.HttpConflictException;
 import friendfinder.api.exceptions.HttpNotFoundException;
 import friendfinder.api.exceptions.HttpUnprocessableEntityException;
 import friendfinder.persistence.UserRepository;
-import org.apache.commons.lang3.EnumUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import static friendfinder.api.domain.User.getEnums;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 
