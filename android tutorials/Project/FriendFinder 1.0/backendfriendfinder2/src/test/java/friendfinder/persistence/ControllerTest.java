@@ -57,7 +57,7 @@ public class ControllerTest {
 
     // TODO Start the application before you run the tests
     @Test
-    public void testCreateAccount() throws Exception {
+    public void testRegisterAccount() throws Exception {
         Account account1 = new Account("david@szabo.com", "empty");
 
         Response response = given().
@@ -75,6 +75,47 @@ public class ControllerTest {
         System.out.println("jsonAsString: "+jsonAsString);
 
         assertEquals(1, accountRepository.count());
+    }
+
+    @Test
+    public void testLoginAccount() throws Exception {
+        Account account1 = new Account("david@szabo.com", "empty");
+
+        Account acc = given().
+                body(account1).
+                contentType("application/json").
+                accept("application/json").
+                when().
+                post("account").
+                then().
+                statusCode(200).
+                body("email", equalTo(account1.getEmail())).
+                body("password", equalTo(account1.getPassword())).
+                extract().body().as(Account.class);
+
+        assertEquals(1, accountRepository.count());
+
+        Response response =given().
+                accept("application/json").
+                contentType(ContentType.JSON).
+                when().
+                get("account?email=david@szabo.com&password=empty").
+                then().
+                statusCode(200).
+                extract().response();
+        String jsonAsString = response.asString();
+        System.out.println("jsonAsString: "+jsonAsString);
+
+        Response response2 =given().
+                accept("application/json").
+                contentType(ContentType.JSON).
+                when().
+                get("account?email=david2@szabo.com&password=empty").
+                then().
+                statusCode(404).
+                extract().response();
+        String jsonAsString2 = response2.asString();
+        System.out.println("jsonAsString2: "+jsonAsString2);
     }
 
     @Test
