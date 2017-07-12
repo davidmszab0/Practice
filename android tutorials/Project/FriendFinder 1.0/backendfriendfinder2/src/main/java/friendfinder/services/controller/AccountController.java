@@ -46,7 +46,6 @@ public class AccountController {
                               @RequestParam(value = "password") String password) {
         log.debug("Getting the account by email and password");
         Account serchedEntity = null;
-        try {
             if (isBlank(email) || isBlank(password)) {
                 throw new HttpUnprocessableEntityException("Email or password is blank.");
             }
@@ -56,9 +55,6 @@ public class AccountController {
                 log.debug("Account does not exist.");
                 throw new HttpNotFoundException("Entity was not found");
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         return serchedEntity;
     }
 
@@ -69,7 +65,6 @@ public class AccountController {
 
         Account searchedEntity = null;
         Account newEntity = null;
-        try {
             if (entity == null || isBlank(entity.getEmail()) || isBlank(entity.getPassword())) {
                 throw new HttpUnprocessableEntityException("Entity, email or password is blank.");
             }
@@ -84,9 +79,6 @@ public class AccountController {
             User usr = new User(entity);
             entity.setUser(usr);
             newEntity = accountRepository.save(entity);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         return newEntity;
     }
 
@@ -95,7 +87,6 @@ public class AccountController {
                                  @RequestBody Account entity) {
         log.debug("Updating the Entity");
         Account entityBefore = null;
-        try {
             entityBefore = accountRepository.findByAccountId(accountId);
             if (entityBefore == null) {
                 throw new HttpNotFoundException("The Entity was not found");
@@ -103,9 +94,6 @@ public class AccountController {
             entity.setAccountId(accountId);
             entity.setCreatedAt(entityBefore.getCreatedAt());
             entityBefore = accountRepository.save(entity);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         return entityBefore;
     }
 
@@ -113,14 +101,10 @@ public class AccountController {
     public void deleteAccount (@PathVariable(value = "accountId") Integer accountId) {
         log.debug("Deleting an account");
         Account deleteEntity = null;
-        try {
             deleteEntity = accountRepository.findByAccountId(accountId);
             if (deleteEntity == null) {
                 throw new HttpNotFoundException("The Entity was not found.");
             }
             accountRepository.delete(deleteEntity);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 }

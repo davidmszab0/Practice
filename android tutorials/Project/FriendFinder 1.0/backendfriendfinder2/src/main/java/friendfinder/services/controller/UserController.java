@@ -37,7 +37,6 @@ public class UserController {
                               @RequestParam(value = "gender") String gender) {
         log.debug("Getting the user by name and gender");
         User serchedEntity = null;
-        try {
             if (isBlank(name)) {
                 throw new HttpUnprocessableEntityException("Entity was not found");
             }
@@ -47,9 +46,6 @@ public class UserController {
                 log.debug("Entity does not exist.");
                 throw new HttpNotFoundException("Entity was not found");
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         return serchedEntity;
     }
 
@@ -58,7 +54,6 @@ public class UserController {
                              @RequestParam(value = "gender") String gender) {
         log.debug("Getting the users by name and gender");
         List<User> usr = null;
-        try {
             log.debug("name: " + name);
             log.debug("gender: " + gender);
 
@@ -70,9 +65,6 @@ public class UserController {
                 System.out.println("Entities do not exist.");
                 throw new HttpNotFoundException("Entity was not found");
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         return usr;
     }
 
@@ -80,7 +72,6 @@ public class UserController {
     public User createEntity (@RequestBody User entity) {
 
         User newEntity = null;
-        try {
             if (entity == null) {
                 throw new HttpUnprocessableEntityException("Entity is null.");
             }
@@ -95,9 +86,6 @@ public class UserController {
             Account acc = new Account(entity);
             entity.setAccount(acc);
             newEntity = userRepository.save(entity);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         return newEntity;
     }
 
@@ -105,30 +93,22 @@ public class UserController {
     public User updateEntity (@PathVariable(value = "id") Integer id,
                                  @RequestBody User entity) {
         log.debug("Updating the entity.");
-        try {
             User entityBefore = userRepository.findUserById(id);
             if (entityBefore == null) {
                 throw new HttpNotFoundException("The Entity was not found");
             }
             entity.setId(id);
             userRepository.save(entity);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         return entity;
     }
 
     @DeleteMapping(value = "/{id}")
     public void deleteEntity (@PathVariable(value = "id") Integer id) {
         log.debug("Deleting the entity.");
-        try {
             User deleteEntity = userRepository.findUserById(id);
             if (deleteEntity == null) {
                 throw new HttpNotFoundException("The Entity was not found.");
             }
             userRepository.delete(deleteEntity);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 }
