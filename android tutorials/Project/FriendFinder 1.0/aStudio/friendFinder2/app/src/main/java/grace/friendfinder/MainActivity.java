@@ -14,9 +14,19 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import java.util.ArrayList;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 import grace.friendfinder.utils.DatabaseHandler;
+import grace.friendfinder.utils.HttpUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "on the mainActivity screen");
 
             // TODO fill the arrays with data
-            namesArray.add("David");
-            gendersArray.add("Male");
             moviesArray.add("K-pax");
             musicArray.add("Hillsong");
+
+            fillArrays();
 
             ListView listView = (ListView) findViewById(R.id.listView);
             friendsAdapter = new FriendsAdapter(this, R.layout.list_item,
@@ -118,10 +128,52 @@ public class MainActivity extends AppCompatActivity {
 
             nameLine.setText(name.get(position));
             genderLine.setText(gender.get(position));
-            moviesLine.setText(movies.get(position));
-            musicLine.setText(music.get(position));
+            //moviesLine.setText(movies.get(position));
+            //musicLine.setText(music.get(position));
 
             return rowView;
         }
+    }
+
+    private void fillArrays() {
+        HttpUtils.get("/user/all", null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.d(TAG, "------- this is the user response: " + response);
+
+                try {
+
+                    for (int i = 0; i < response.length(); i++){
+                        JSONObject userObject = response.getJSONObject(i);
+                        Log.d(TAG, "jsonObject: " + userObject);
+                        String name = userObject.getString("name");
+                        String gender = userObject.getString("gender");
+                        namesArray.add(name);
+                        gendersArray.add(gender);
+                        //moviesArray.add("K-pax");
+                        //musicArray.add("Hillsong");
+                    }
+                    friendsAdapter.notifyDataSetChanged();
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d(TAG , "onFailure statusCode: "+ statusCode);
+                Log.d(TAG , "onFailure headers: "+ headers);
+                Log.d(TAG , "onFailure responseString: "+ responseString);
+                Log.d(TAG , "onFailure throwable: "+ throwable);
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray object) {
+                Log.d(TAG , "onFailure statusCode: "+ statusCode);
+                Log.d(TAG , "onFailure headers: "+ headers);
+                Log.d(TAG , "onFailure throwable: "+ throwable);
+                Log.d(TAG , "onFailure object: "+ object);
+            }
+        });
     }
 }
