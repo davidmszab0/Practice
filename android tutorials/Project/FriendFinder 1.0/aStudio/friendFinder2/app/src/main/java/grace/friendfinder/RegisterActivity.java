@@ -27,11 +27,15 @@ import grace.friendfinder.utils.HttpUtils;
 public class RegisterActivity extends Activity {
 
     Button btnRegister;
-    EditText inputFullName;
-    EditText inputEmail;
-    EditText gender;
-    EditText inputPassword;
-    TextView registerErrorMsg;
+    EditText nameEditText;
+    EditText emailEditText;
+    EditText genderEditText;
+    EditText passwordEditText;
+
+    private String genderInput ="";
+    private String passwordInput = "";
+    private String emailInput = "";
+    private String nameInput = "";
 
     private String TAG = "Register";
     private DatabaseHandler db = null;
@@ -42,10 +46,10 @@ public class RegisterActivity extends Activity {
         setContentView(R.layout.activity_register);
 
         // Importing all assets like buttons, text fields
-        inputFullName = (EditText) findViewById(R.id.registerName);
-        inputEmail = (EditText) findViewById(R.id.registerEmail);
-        gender = (EditText) findViewById(R.id.gender);
-        inputPassword = (EditText) findViewById(R.id.registerPassword);
+        nameEditText = (EditText) findViewById(R.id.registerName);
+        emailEditText = (EditText) findViewById(R.id.registerEmail);
+        genderEditText = (EditText) findViewById(R.id.gender);
+        passwordEditText = (EditText) findViewById(R.id.registerPassword);
         btnRegister = (Button) findViewById(R.id.btnRegister);
 
         // Register Button Click event
@@ -53,20 +57,24 @@ public class RegisterActivity extends Activity {
             public void onClick(View view) {
 
                 final Context context = getApplicationContext();
-                String name = inputFullName.getText().toString();
-                String email = inputEmail.getText().toString();
-                String gender = RegisterActivity.this.gender.getText().toString();
-                String password = inputPassword.getText().toString();
+                nameInput = nameEditText.getText().toString();
+                emailInput = emailEditText.getText().toString();
+                genderInput = genderEditText.getText().toString();
+                passwordInput = passwordEditText.getText().toString();
 
-                if (password.length() < 0) {
+                if (passwordInput.length() < 0) {
                     Toast.makeText(getApplicationContext(), "Password needs to be at least 1 character long", Toast.LENGTH_SHORT).show();
-                    inputPassword.setText("");
+                    passwordEditText.setText("");
+                }
+                if (emailInput.length() < 0) {
+                    Toast.makeText(getApplicationContext(), "Email needs to be at least 1 character long", Toast.LENGTH_SHORT).show();
+                    emailEditText.setText("");
                 }
 
                 try {
                     JSONObject jsonParams = new JSONObject();
-                    jsonParams.put("email", "email2");
-                    jsonParams.put("password", "empty");
+                    jsonParams.put("email", emailInput);
+                    jsonParams.put("password", passwordInput);
                     StringEntity entityAccount = new StringEntity(jsonParams.toString());
                     Log.d(TAG, "entityAccount: " + entityAccount);
 
@@ -90,12 +98,12 @@ public class RegisterActivity extends Activity {
                                     String gender2 = (String) hm.get("gender");
                                     String email2 = (String) hm.get("email");
                                     String created_at2 = (String) hm.get("created_at");
-                                    Log.d(TAG, "register: name, gender, email, created_at: 1-" +
+                                    Log.d(TAG, "register-hash: name, gender, email, created_at: 1-" +
                                             name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2);
 
                                 JSONObject jsonParams2 = new JSONObject();
-                                jsonParams2.put("name", "Greg");
-                                jsonParams2.put("gender", "Male");
+                                jsonParams2.put("name", nameInput);
+                                jsonParams2.put("gender", genderInput);
                                 StringEntity entityUser = new StringEntity(jsonParams2.toString());
                                 Log.d(TAG, "entityUser: " + entityUser);
 
@@ -113,7 +121,7 @@ public class RegisterActivity extends Activity {
                                             String gender2 = (String) hm.get("gender");
                                             String email2 = (String) hm.get("email");
                                             String created_at2 = (String) hm.get("created_at");
-                                            Log.d(TAG, "register2 name, gender, email, created_at: 1-" +
+                                            Log.d(TAG, "register2-hash: name, gender, email, created_at: 1-" +
                                                     name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2);
 
                                         } catch (Exception ex) {

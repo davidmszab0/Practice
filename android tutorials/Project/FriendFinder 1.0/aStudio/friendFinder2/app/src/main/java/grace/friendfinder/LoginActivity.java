@@ -58,8 +58,8 @@ public class LoginActivity extends Activity {
                 // check for login response
                 try {
                     RequestParams rp = new RequestParams();
-                    rp.add("email", "e");
-                    rp.add("password", "e");
+                    rp.add("email", email);
+                    rp.add("password", password);
 
                     HttpUtils.get("/account", rp, new JsonHttpResponseHandler() {
 
@@ -69,11 +69,8 @@ public class LoginActivity extends Activity {
                             Log.d(TAG, "------- this is the account response: " + response);
                             try {
                                 JSONObject serverResp = new JSONObject(response.toString());
-                                String id = serverResp.getString("accountId");
                                 String email = serverResp.getString("email");
-                                String password = serverResp.getString("password");
                                 String created_at = serverResp.getString("createdAt");
-                                Log.d(TAG, "the id: "+ id + ", email: "+email + ", password: " + password +", createdAt is: " + created_at);
 
                                 // storing the user in the local SQLite db
                                 db = new DatabaseHandler(getApplicationContext());
@@ -87,7 +84,7 @@ public class LoginActivity extends Activity {
                                     String gender2 = (String) hm.get("gender");
                                     String email2 = (String) hm.get("email");
                                     String created_at2 = (String) hm.get("created_at");
-                                    Log.d(TAG, "login: name, gender, email, created_at: 1-" +
+                                    Log.d(TAG, "login-hash: name, gender, email, created_at: 1-" +
                                             name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2);
                                 }
 
@@ -108,7 +105,7 @@ public class LoginActivity extends Activity {
                                             String gender3 = (String) hm.get("gender");
                                             String email3 = (String) hm.get("email");
                                             String created_at3 = (String) hm.get("created_at");
-                                            Log.d(TAG, "login2: name, gender, email, created_at: 1-" +
+                                            Log.d(TAG, "login2-hash: name, gender, email, created_at: 1-" +
                                                     name3 +" 2-"+gender3+" 3-"+email3+" 4-"+created_at3);
 
                                             // Launch Dashboard Screen
