@@ -5,12 +5,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
-/**
- * Created by grace on 23/06/17.
- */
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "users")
 public class User implements Serializable {
+
+    /**
+     * Created by grace on 23/06/17.
+     */
+    public enum Gender {Male, Female}
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -19,7 +21,7 @@ public class User implements Serializable {
 
     private String name;
 
-    private String gender;
+    private Gender gender;
 
     // mappedBy maps the Entity of this class and not the table
     @OneToOne(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
@@ -38,12 +40,12 @@ public class User implements Serializable {
         this.account = account;
     }
 
-    public User(String name, String gender) {
+    public User(String name, Gender gender) {
         this.name = name;
         this.gender=gender;
     }
 
-    public User(String name, String gender, Account account) {
+    public User(String name, Gender gender, Account account) {
         this.name = name;
         this.gender = gender;
         this.account = account;
@@ -65,11 +67,11 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 

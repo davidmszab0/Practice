@@ -17,19 +17,19 @@ curl_header="$curl_cmd --header \"Content-Type: application/json\" --header \"Ac
 
 
 curl --verbose --header "Content-Type: application/json" --request POST --data '{"email":"david@szabo.com","password":"empty"}' 'http://localhost:8080/account'
-curl --verbose --header "Content-Type: application/json" --request PUT --data '{"name":"David","gender":"male"}' 'http://localhost:8080/user/1'
+curl --verbose --header "Content-Type: application/json" --request PUT --data '{"name":"David","gender":"Male"}' 'http://localhost:8080/user/1'
 
 curl --verbose --header "Content-Type: application/json" --request POST --data '{"email":"david1@szabo.com","password":"empty"}' 'http://localhost:8080/account'
-curl --verbose --header "Content-Type: application/json" --request PUT --data '{"name":"David1","gender":"male"}' 'http://localhost:8080/user/2'
+curl --verbose --header "Content-Type: application/json" --request PUT --data '{"name":"David1","gender":"Male"}' 'http://localhost:8080/user/2'
 
 curl --verbose --header "Content-Type: application/json" --request POST --data '{"email":"david2@szabo.com","password":"empty"}' 'http://localhost:8080/account'
-curl --verbose --header "Content-Type: application/json" --request PUT --data '{"name":"David3","gender":"male"}' 'http://localhost:8080/user/3'
+curl --verbose --header "Content-Type: application/json" --request PUT --data '{"name":"David3","gender":"Male"}' 'http://localhost:8080/user/3'
 
 curl --verbose --header "Content-Type: application/json" --request POST --data '{"email":"email","password":"empty"}' 'http://localhost:8080/account'
-curl --verbose --header "Content-Type: application/json" --request PUT --data '{"name":"John","gender":"male"}' 'http://localhost:8080/user/4'
+curl --verbose --header "Content-Type: application/json" --request PUT --data '{"name":"John","gender":"Male"}' 'http://localhost:8080/user/4'
 
 curl --verbose --header "Content-Type: application/json" --request POST --data '{"email":"e","password":"e"}' 'http://localhost:8080/account'
-curl --verbose --header "Content-Type: application/json" --request PUT --data '{"name":"Missy","gender":"female"}' 'http://localhost:8080/user/4'
+curl --verbose --header "Content-Type: application/json" --request PUT --data '{"name":"Missy","gender":"Female"}' 'http://localhost:8080/user/4'
 
 #eval "$curl_header --request GET 'http://localhost:8080/account/all'"
 #eval "$curl_header --request POST --data '{\"email\":\"david4@szabo.com\",\"password\":\"empty\"}' 'http://localhost:8080/account'"
