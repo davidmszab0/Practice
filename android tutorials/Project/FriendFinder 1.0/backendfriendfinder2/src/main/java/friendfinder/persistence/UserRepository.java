@@ -13,5 +13,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface UserRepository extends CrudRepository<User, Integer>, UserRepositoryCustom {
     public User findUserById (Integer id);
     public User findUserByName (String name);
-    public User findUserByNameAndGender (String name, String gender);
+    public User findUserByNameAndGender (String name, User.Gender gender);
 }

@@ -34,7 +34,7 @@ public class UserController {
 
     @GetMapping(path="/getUserByNameAndGender")
     public User getEntityByNameAndGender (@RequestParam(value = "name") String name,
-                              @RequestParam(value = "gender") String gender) {
+                              @RequestParam(value = "gender") User.Gender gender) {
         log.debug("Getting the user by name and gender");
         User serchedEntity = null;
             if (isBlank(name)) {
@@ -67,7 +67,7 @@ public class UserController {
 
     @GetMapping(path="/search")
     public List<User> searchEntitys (@RequestParam(value = "name") String name,
-                             @RequestParam(value = "gender") String gender) {
+                             @RequestParam(value = "gender") User.Gender gender) {
         log.debug("Getting the users by name and gender");
         List<User> usr = null;
             log.debug("name: " + name);

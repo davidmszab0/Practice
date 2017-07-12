@@ -12,5 +12,5 @@ public interface UserRepositoryCustom {
     /*@Query(value = "SELECT * FROM todos t WHERE t.title = 'title'",
             nativeQuery=true
     )*/
-    List<User> findByQuery(String name, String gender);
+    List<User> findByQuery(String name, User.Gender gender);
 }
