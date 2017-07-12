@@ -3,7 +3,6 @@ package grace.friendfinder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,12 +12,9 @@ import android.widget.TextView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import org.json.JSONObject;
-
 import java.util.HashMap;
-
 import cz.msebera.android.httpclient.Header;
 import grace.friendfinder.utils.DatabaseHandler;
-import grace.friendfinder.utils.HTTpTask;
 import grace.friendfinder.utils.HttpUtils;
 
 /**
@@ -32,6 +28,7 @@ public class LoginActivity extends Activity {
     EditText inputPassword;
     TextView loginErrorMsg;
     TextView textViewForgotPassword;
+    private DatabaseHandler db = null;
 
     private String TAG = "Login";
 
@@ -54,31 +51,32 @@ public class LoginActivity extends Activity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+                final Context context = getApplicationContext();
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
 
                 // check for login response
                 try {
                     RequestParams rp = new RequestParams();
-                    rp.add("email", "david@szabo.com");
-                    rp.add("password", "empty");
+                    rp.add("email", "e");
+                    rp.add("password", "e");
 
                     HttpUtils.get("/account", rp, new JsonHttpResponseHandler() {
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             // If the response is JSONObject instead of expected JSONArray
-                            Log.d(TAG, "------- this is response : " + response);
+                            Log.d(TAG, "------- this is the account response: " + response);
                             try {
                                 JSONObject serverResp = new JSONObject(response.toString());
                                 String id = serverResp.getString("accountId");
                                 String email = serverResp.getString("email");
                                 String password = serverResp.getString("password");
                                 String created_at = serverResp.getString("createdAt");
-                                Log.d(TAG, "the id, email, password, createdAt is: " + id + " " +email + " " + password + " " + created_at);
+                                Log.d(TAG, "the id: "+ id + ", email: "+email + ", password: " + password +", createdAt is: " + created_at);
 
                                 // storing the user in the local SQLite db
-                                DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+                                db = new DatabaseHandler(getApplicationContext());
                                 db.resetTables(); // first deleting all the rows
                                 db.addUser("", "", email, created_at);
                                 Log.d(TAG, "Created user in the local SQLite db.");
@@ -89,23 +87,61 @@ public class LoginActivity extends Activity {
                                     String gender2 = (String) hm.get("gender");
                                     String email2 = (String) hm.get("email");
                                     String created_at2 = (String) hm.get("created_at");
-                                    Log.d(TAG, "login name, gender, email, created_at: 1-" +
+                                    Log.d(TAG, "login: name, gender, email, created_at: 1-" +
                                             name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2);
                                 }
 
-                                // Launch Dashboard Screen
-                                Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                // Close all views before launching Dashboard
-                                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(mainActivityIntent);
-                                // Close Login Screen
-                                finish();
+                                HttpUtils.get("/user/" + serverResp.getString("accountId"), null, new JsonHttpResponseHandler() {
+                                    @Override
+                                    public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
+                                        Log.d(TAG, "------- this is the user response: " + response2);
+                                        try {
+                                            JSONObject serverResp2 = new JSONObject(response2.toString());
 
+                                            String name = serverResp2.getString("name");
+                                            String gender = serverResp2.getString("gender");
+
+                                            db.updateUser(name, gender, null, null);
+
+                                            HashMap hm = db.getUserDetails();
+                                            String name3 = (String) hm.get("name");
+                                            String gender3 = (String) hm.get("gender");
+                                            String email3 = (String) hm.get("email");
+                                            String created_at3 = (String) hm.get("created_at");
+                                            Log.d(TAG, "login2: name, gender, email, created_at: 1-" +
+                                                    name3 +" 2-"+gender3+" 3-"+email3+" 4-"+created_at3);
+
+                                            // Launch Dashboard Screen
+                                            Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                                            // Close all views before launching Dashboard
+                                            mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(mainActivityIntent);
+                                            // Close Login Screen
+                                            finish();
+
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                        Log.d(TAG , "onFailure statusCode: "+ statusCode);
+                                        Log.d(TAG , "onFailure headers: "+ headers);
+                                        Log.d(TAG , "onFailure responseString: "+ responseString);
+                                        Log.d(TAG , "onFailure throwable: "+ throwable);
+                                    }
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject object) {
+                                        Log.d(TAG , "onFailure statusCode: "+ statusCode);
+                                        Log.d(TAG , "onFailure headers: "+ headers);
+                                        Log.d(TAG , "onFailure throwable: "+ throwable);
+                                        Log.d(TAG , "onFailure object: "+ object);
+                                    }
+                                });
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
-
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             Log.d(TAG , "onFailure statusCode: "+ statusCode);

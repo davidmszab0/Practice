@@ -10,19 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
-import cz.msebera.android.httpclient.message.BasicHeader;
 import grace.friendfinder.utils.DatabaseHandler;
 import grace.friendfinder.utils.HttpUtils;
 
@@ -70,7 +64,6 @@ public class RegisterActivity extends Activity {
                 }
 
                 try {
-
                     JSONObject jsonParams = new JSONObject();
                     jsonParams.put("email", "email2");
                     jsonParams.put("password", "empty");
@@ -89,7 +82,7 @@ public class RegisterActivity extends Activity {
                                 // storing the user in the local SQLite db
                                 db = new DatabaseHandler(getApplicationContext());
                                 db.resetTables(); // first deleting all the rows
-                                db.addUser("", "", serverResp.getString("email"),serverResp.getString("createdAt"));
+                                db.addUser(null, null, serverResp.getString("email"),serverResp.getString("createdAt"));
                                 Log.d(TAG, "Created user in the local SQLite db.");
 
                                     HashMap hm = db.getUserDetails();
@@ -97,12 +90,12 @@ public class RegisterActivity extends Activity {
                                     String gender2 = (String) hm.get("gender");
                                     String email2 = (String) hm.get("email");
                                     String created_at2 = (String) hm.get("created_at");
-                                    Log.d(TAG, "register name, gender, email, created_at: 1-" +
+                                    Log.d(TAG, "register: name, gender, email, created_at: 1-" +
                                             name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2);
 
                                 JSONObject jsonParams2 = new JSONObject();
                                 jsonParams2.put("name", "Greg");
-                                jsonParams2.put("gender", "male");
+                                jsonParams2.put("gender", "Male");
                                 StringEntity entityUser = new StringEntity(jsonParams2.toString());
                                 Log.d(TAG, "entityUser: " + entityUser);
 
@@ -112,8 +105,8 @@ public class RegisterActivity extends Activity {
                                         Log.d(TAG, "------- this is response2 : " + response2);
                                         try {
                                             JSONObject serverResp2 = new JSONObject(response2.toString());
-                                                db.updateUser(serverResp2.getString("name"), serverResp2.getString("gender"),
-                                                       serverResp.getString("email"), serverResp.getString("createdAt"));
+                                            db.updateUser(serverResp2.getString("name"), serverResp2.getString("gender"),
+                                                   serverResp.getString("email"), serverResp.getString("createdAt"));
 
                                             HashMap hm = db.getUserDetails();
                                             String name2 = (String) hm.get("name");
@@ -141,7 +134,7 @@ public class RegisterActivity extends Activity {
                                         Log.d(TAG , "onFailure throwable: "+ throwable);
                                         Log.d(TAG , "onFailure object: "+ object);
                                     }
-                                    });
+                                });
 
                                 // Launch Dashboard Screen
                                 Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -163,8 +156,14 @@ public class RegisterActivity extends Activity {
                             Log.d(TAG , "onFailure responseString: "+ responseString);
                             Log.d(TAG , "onFailure throwable: "+ throwable);
                         }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject object) {
+                            Log.d(TAG , "onFailure statusCode: "+ statusCode);
+                            Log.d(TAG , "onFailure headers: "+ headers);
+                            Log.d(TAG , "onFailure throwable: "+ throwable);
+                            Log.d(TAG , "onFailure object: "+ object);
+                        }
                     });
-
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

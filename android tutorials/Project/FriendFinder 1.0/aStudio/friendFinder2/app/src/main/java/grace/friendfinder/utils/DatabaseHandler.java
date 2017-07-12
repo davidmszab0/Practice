@@ -1,18 +1,12 @@
 package grace.friendfinder.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
+import java.util.HashMap;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author David M. Szabo
@@ -66,10 +60,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, name); // Name
-        values.put(KEY_GENDER, gender); // Gender
-        values.put(KEY_EMAIL, email); // Email
-        values.put(KEY_CREATED_AT, created_at); // Created At
+        if (isNotBlank(name)) {
+            values.put(KEY_NAME, name); // Name
+        }
+        if (isNotBlank(gender)) {
+            values.put(KEY_GENDER, gender); // Gender
+        }
+        if (isNotBlank(email)) {
+            values.put(KEY_EMAIL, email); // Email
+        }
+        if (isNotBlank(created_at)) {
+            values.put(KEY_CREATED_AT, created_at); // CreatedAt
+        }
+
+//        values.put(KEY_NAME, name); // Name
+//        values.put(KEY_GENDER, gender); // Gender
+//        values.put(KEY_EMAIL, email); // Email
+//        values.put(KEY_CREATED_AT, created_at); // Created At
 
         // Inserting Row
         db.insert(TABLE_LOGIN, null, values);
@@ -87,10 +94,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, name); // Name
-        values.put(KEY_GENDER, gender); // Gender
-        values.put(KEY_EMAIL, email); // Email
-        values.put(KEY_CREATED_AT, created_at); // Created At
+        if (isNotBlank(name)) {
+            values.put(KEY_NAME, name); // Name
+        }
+        if (isNotBlank(gender)) {
+            values.put(KEY_GENDER, gender); // Gender
+        }
+        if (isNotBlank(email)) {
+            values.put(KEY_EMAIL, email); // Email
+        }
+        if (isNotBlank(created_at)) {
+            values.put(KEY_CREATED_AT, created_at); // CreatedAt
+        }
 
         String restrict = KEY_ID + "=" + 1;
         db.update(TABLE_LOGIN, values, restrict, null);
