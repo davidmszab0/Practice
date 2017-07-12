@@ -48,12 +48,11 @@ public class UserController {
         if (isBlank(name)) {
             throw new HttpUnprocessableEntityException("The name of the entity was not found.");
         }
-        
-        if (isBlank(gender)) {
-            throw new HttpUnprocessableEntityException("The gender of the entity was not found.");
-        } else if (hs.contains(gender) == false)  {
+
+        if (isBlank(gender) || hs.contains(gender) == false) {
             throw new HttpUnprocessableEntityException("The gender of the entity was not found.");
         }
+
         serchedEntity = userRepository.findUserByNameAndGender(name, User.Gender.valueOf(gender));
 
         if (serchedEntity == null) {
