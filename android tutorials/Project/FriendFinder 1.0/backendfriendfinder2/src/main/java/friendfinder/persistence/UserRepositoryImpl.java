@@ -5,11 +5,10 @@ import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 
-import static friendfinder.api.domain.User.getEnums;
+import static friendfinder.api.domain.User.getGenderEnums;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -28,7 +27,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         Root<User> root = cq.from(User.class); // called to set the query root
         cq.select(root); // set the result list type
 
-        HashSet hs = getEnums();
+        HashSet hs = getGenderEnums();
 
         if(isNotBlank(name)) {
             cq.where(cb.equal(root.get("name"), name));

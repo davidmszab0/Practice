@@ -106,7 +106,7 @@ public class User implements Serializable {
         return "[id= "+ id + ", name= " + name + ", gender= " + gender + "]";
     }
 
-    public static HashSet<String> getEnums() {
+    public static HashSet<String> getGenderEnums() {
 
         HashSet<String> values = new HashSet<String>();
 

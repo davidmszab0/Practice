@@ -2,6 +2,7 @@ package friendfinder.persistence;
 
 import friendfinder.Application;
 import friendfinder.api.domain.Account;
+import friendfinder.api.domain.MovieGenres;
 import friendfinder.api.domain.User;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
-public class DBTests {
+public class DbTests {
 
     @Autowired
     private AccountRepository accountRepository;
@@ -71,5 +72,26 @@ public class DBTests {
         Assert.assertNotNull(newUser);
         Assert.assertEquals("David Szabo", newUser.getName());
         Assert.assertEquals("david@szabo.com", newAccount.getEmail());
+    }
+
+    @Test
+    public void testCreateMovies(){
+        Assert.assertEquals(accountRepository.count(),0);
+        Assert.assertEquals(userRepository.count(),0);
+
+        Account account1 = new Account("david@szabo.com", "empty");
+        User user1 = new User("David Szabo", User.Gender.Male, account1);
+        account1.setUser(user1);
+
+        accountRepository.save(account1);
+        userRepository.save(user1);
+
+        Assert.assertEquals(accountRepository.count(),1);
+        Assert.assertEquals(userRepository.count(),1);
+
+        MovieGenres comedy = new MovieGenres("Comedy");
+        MovieGenres action = new MovieGenres("Action");
+
+
     }
 }

@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes=Application.class)
-public class ControllerTest {
+public class AccountServiceTests {
 
     @Autowired
     private AccountRepository accountRepository;
@@ -175,79 +175,13 @@ public class ControllerTest {
         User user1 = new User("David Szabo", User.Gender.Male, account1);
         account1.setUser(user1);
 
-        Account savedAccount = accountRepository.save(account1);
-        User savedUser = userRepository.save(user1);
+        accountRepository.save(account1);
+        userRepository.save(user1);
 
         given().
                 accept("application/json").
                 when().
                 get("account/all").
-                then().
-                statusCode(200);
-    }
-
-    @Test
-    public void testUserSearch() throws Exception {
-
-        given().
-                contentType("application/json").
-                accept("application/json").
-                body(new Account("david@szabo.com", "empty")).
-                when().
-                post("account").
-                then().
-                statusCode(200);
-
-        Account postedAcc = accountRepository.findByEmail("david@szabo.com");
-
-        given().
-                body(new User("David", User.Gender.Male)).
-                contentType(ContentType.JSON).
-                accept("application/json").
-                when().
-                put("user/" + Integer.toString(postedAcc.getAccountId())).
-                then().
-                statusCode(200);
-
-        given().
-                accept("application/json").
-                contentType(ContentType.JSON).
-                when().
-                get("user/search?name=David&gender=Male").
-                then().
-                statusCode(200);
-
-        given().
-                accept("application/json").
-                contentType(ContentType.JSON).
-                when().
-                get("user/search?name=&gender=Male").
-                then().
-                statusCode(200);
-
-        Response resp = given().log().all().
-                accept("application/json").
-                contentType(ContentType.JSON).
-                when().
-                get("user/search?name=David&gender=").
-                then().
-                statusCode(200).extract().response();
-        String jsonAsString2 = resp.asString();
-        System.out.println("jsonAsString: "+jsonAsString2);
-
-        given().
-                accept("application/json").
-                contentType(ContentType.JSON).
-                when().
-                get("user/search?name=&gender=").
-                then().
-                statusCode(200);
-
-        given().
-                accept("application/json").
-                contentType(ContentType.JSON).
-                when().
-                get("user/search?name=&gender=male").
                 then().
                 statusCode(200);
     }

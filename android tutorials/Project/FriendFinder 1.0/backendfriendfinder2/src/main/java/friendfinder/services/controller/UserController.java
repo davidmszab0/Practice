@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import static friendfinder.api.domain.User.getEnums;
+import static friendfinder.api.domain.User.getGenderEnums;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import java.util.HashSet;
 import java.util.List;
@@ -39,7 +39,7 @@ public class UserController {
                               @RequestParam(value = "gender") String gender) {
         log.debug("Getting the entity by name and gender.");
         User serchedEntity = null;
-        HashSet hs = getEnums();
+        HashSet hs = getGenderEnums();
 
         if (isBlank(name)) {
             throw new HttpUnprocessableEntityException("The name of the entity was not found.");
