@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping(path="/getUserByNameAndGender")
-    public User getEntity (@RequestParam(value = "name") String name,
+    public User getEntityByNameAndGender (@RequestParam(value = "name") String name,
                               @RequestParam(value = "gender") String gender) {
         log.debug("Getting the user by name and gender");
         User serchedEntity = null;
@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public User getEntity (@PathVariable(value = "id") Integer id) {
+    public User getEntityById (@PathVariable(value = "id") Integer id) {
         log.debug("Getting the entity by id.");
         User serchedEntity = null;
         if (id <= 0) {
