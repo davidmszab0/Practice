@@ -60,21 +60,32 @@ public class ControllerTest {
     public void testRegisterAccount() throws Exception {
         Account account1 = new Account("david@szabo.com", "empty");
 
-        Response response = given().
-                body(account1).
-                contentType("application/json").
+        Account acc1 = given().
+                contentType(ContentType.JSON).
                 accept("application/json").
+                body(account1).
                 when().
                 post("account").
                 then().
                 statusCode(200).
                 body("email", equalTo(account1.getEmail())).
                 body("password", equalTo(account1.getPassword())).
-                extract().response();
-        String jsonAsString = response.asString();
-        System.out.println("jsonAsString: "+jsonAsString);
+                extract().body().as(Account.class);
 
         assertEquals(1, accountRepository.count());
+
+        User usr = new User("Laszlo", User.Gender.Male);
+        Response response2 = given().
+                contentType(ContentType.JSON).
+                accept("application/json").
+                body(usr).
+                when().
+                put("user/" + acc1.getAccountId()).
+                then().
+                statusCode(200).
+                extract().response();
+        String jsonAsString2 = response2.asString();
+        System.out.println("jsonAsString: "+jsonAsString2);
     }
 
     @Test
@@ -95,6 +106,9 @@ public class ControllerTest {
 
         assertEquals(1, accountRepository.count());
 
+        //
+        // Get the registered account
+        //
         Response response =given().
                 accept("application/json").
                 contentType(ContentType.JSON).
@@ -106,7 +120,10 @@ public class ControllerTest {
         String jsonAsString = response.asString();
         System.out.println("jsonAsString: "+jsonAsString);
 
-        Response response2 =given().
+        //
+        // Get notFound for the  unRegistered account
+        //
+        Response response2 = given().
                 accept("application/json").
                 contentType(ContentType.JSON).
                 when().
@@ -155,7 +172,7 @@ public class ControllerTest {
     @Test
     public void testGetAll() throws Exception {
         Account account1 = new Account("david@szabo.com", "empty");
-        User user1 = new User("David Szabo", "male", account1);
+        User user1 = new User("David Szabo", User.Gender.Male, account1);
         account1.setUser(user1);
 
         Account savedAccount = accountRepository.save(account1);
@@ -184,7 +201,7 @@ public class ControllerTest {
         Account postedAcc = accountRepository.findByEmail("david@szabo.com");
 
         given().
-                body(new User("David", "male")).
+                body(new User("David", User.Gender.Male)).
                 contentType(ContentType.JSON).
                 accept("application/json").
                 when().
@@ -192,11 +209,37 @@ public class ControllerTest {
                 then().
                 statusCode(200);
 
-        given().log().all().
+        given().
                 accept("application/json").
                 contentType(ContentType.JSON).
                 when().
-                get("user/search?name=David&gender=male").
+                get("user/search?name=David&gender=Male").
+                then().
+                statusCode(200);
+
+        given().
+                accept("application/json").
+                contentType(ContentType.JSON).
+                when().
+                get("user/search?name=&gender=Male").
+                then().
+                statusCode(200);
+
+        Response resp = given().log().all().
+                accept("application/json").
+                contentType(ContentType.JSON).
+                when().
+                get("user/search?name=David&gender=").
+                then().
+                statusCode(200).extract().response();
+        String jsonAsString2 = resp.asString();
+        System.out.println("jsonAsString: "+jsonAsString2);
+
+        given().
+                accept("application/json").
+                contentType(ContentType.JSON).
+                when().
+                get("user/search?name=&gender=").
                 then().
                 statusCode(200);
 
@@ -207,22 +250,5 @@ public class ControllerTest {
                 get("user/search?name=&gender=male").
                 then().
                 statusCode(200);
-
-        given().
-                accept("application/json").
-                contentType(ContentType.JSON).
-                when().
-                get("user/search?name=David&gender=").
-                then().
-                statusCode(200);
-
-        given().
-                accept("application/json").
-                contentType(ContentType.JSON).
-                when().
-                get("user/search?name=&gender=").
-                then().
-                statusCode(200);
     }
-
 }

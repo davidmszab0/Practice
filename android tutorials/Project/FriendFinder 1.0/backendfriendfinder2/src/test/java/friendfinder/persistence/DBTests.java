@@ -38,7 +38,7 @@ public class DBTests {
 
         Account account1 = new Account("david@szabo.com", "empty");
         Assert.assertNotNull(account1);
-        User user1 = new User("David Szabo", "male", account1);
+        User user1 = new User("David Szabo", User.Gender.Male, account1);
         account1.setUser(user1);
         Assert.assertNotNull(user1);
 
@@ -56,7 +56,7 @@ public class DBTests {
 
         Account account1 = new Account("david@szabo.com", "empty");
         Assert.assertNotNull(account1);
-        User user1 = new User("David Szabo", "male", account1);
+        User user1 = new User("David Szabo", User.Gender.Male, account1);
         account1.setUser(user1);
         Assert.assertNotNull(user1);
 

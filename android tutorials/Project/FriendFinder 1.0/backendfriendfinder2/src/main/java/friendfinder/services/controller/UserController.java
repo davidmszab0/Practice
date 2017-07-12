@@ -6,11 +6,17 @@ import friendfinder.api.exceptions.HttpConflictException;
 import friendfinder.api.exceptions.HttpNotFoundException;
 import friendfinder.api.exceptions.HttpUnprocessableEntityException;
 import friendfinder.persistence.UserRepository;
+import org.apache.commons.lang3.EnumUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import static friendfinder.api.domain.User.getEnums;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+
+import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -34,18 +40,26 @@ public class UserController {
 
     @GetMapping(path="/getUserByNameAndGender")
     public User getEntityByNameAndGender (@RequestParam(value = "name") String name,
-                              @RequestParam(value = "gender") User.Gender gender) {
-        log.debug("Getting the user by name and gender");
+                              @RequestParam(value = "gender") String gender) {
+        log.debug("Getting the entity by name and gender.");
         User serchedEntity = null;
-            if (isBlank(name)) {
-                throw new HttpUnprocessableEntityException("Entity was not found");
-            }
-            serchedEntity = userRepository.findUserByNameAndGender(name, gender);
+        HashSet hs = getEnums();
 
-            if (serchedEntity == null) {
-                log.debug("Entity does not exist.");
-                throw new HttpNotFoundException("Entity was not found");
-            }
+        if (isBlank(name)) {
+            throw new HttpUnprocessableEntityException("The name of the entity was not found.");
+        }
+        
+        if (isBlank(gender)) {
+            throw new HttpUnprocessableEntityException("The gender of the entity was not found.");
+        } else if (hs.contains(gender) == false)  {
+            throw new HttpUnprocessableEntityException("The gender of the entity was not found.");
+        }
+        serchedEntity = userRepository.findUserByNameAndGender(name, User.Gender.valueOf(gender));
+
+        if (serchedEntity == null) {
+            log.debug("Entity does not exist.");
+            throw new HttpNotFoundException("Entity was not found.");
+        }
         return serchedEntity;
     }
 
@@ -67,7 +81,7 @@ public class UserController {
 
     @GetMapping(path="/search")
     public List<User> searchEntitys (@RequestParam(value = "name") String name,
-                             @RequestParam(value = "gender") User.Gender gender) {
+                             @RequestParam(value = "gender") String gender) {
         log.debug("Getting the users by name and gender");
         List<User> usr = null;
             log.debug("name: " + name);

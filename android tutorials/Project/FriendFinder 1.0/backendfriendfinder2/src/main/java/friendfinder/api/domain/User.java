@@ -3,6 +3,7 @@ package friendfinder.api.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity // This tells Hibernate to make a table out of this class
@@ -21,6 +22,7 @@ public class User implements Serializable {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     // mappedBy maps the Entity of this class and not the table
@@ -42,7 +44,7 @@ public class User implements Serializable {
 
     public User(String name, Gender gender) {
         this.name = name;
-        this.gender=gender;
+        this.gender = gender;
     }
 
     public User(String name, Gender gender, Account account) {
@@ -102,5 +104,15 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "[id= "+ id + ", name= " + name + ", gender= " + gender + "]";
+    }
+
+    public static HashSet<String> getEnums() {
+
+        HashSet<String> values = new HashSet<String>();
+
+        for (User.Gender g : User.Gender.values()) {
+            values.add(g.name());
+        }
+        return values;
     }
 }
