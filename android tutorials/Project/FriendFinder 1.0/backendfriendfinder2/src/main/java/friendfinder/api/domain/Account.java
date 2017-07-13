@@ -16,7 +16,7 @@ public class Account {
     @Id
     //@GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name="account_id")
-    private Integer accountId;
+    private Integer id;
 
     @NotNull
     private String email;
@@ -38,8 +38,6 @@ public class Account {
 
     public Account () {}
 
-    public Account (User usr) {this.user = usr;}
-
     public Account (String email, String password) {
         this.email = email;
         this.password = password;
@@ -55,12 +53,12 @@ public class Account {
         modifiedAt = new Date();
     }
 
-    public Integer getAccountId() {
-        return accountId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setAccountId(Integer accountId) {
-        this.accountId = accountId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Date getModifiedAt() {

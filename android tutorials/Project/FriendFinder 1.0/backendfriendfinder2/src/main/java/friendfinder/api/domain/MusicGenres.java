@@ -12,9 +12,9 @@ public class MusicGenres {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name="music_id")
-    private Integer musicId;
+    private Integer id;
 
-    private String musicGenres;
+    private String name;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="music_user_id") // foreign key will be here
@@ -23,24 +23,24 @@ public class MusicGenres {
     public MusicGenres() {
     }
 
-    public MusicGenres(String musicGenres) {
-        this.musicGenres = musicGenres;
+    public MusicGenres(String name) {
+        this.name = name;
     }
 
-    public Integer getMusicId() {
-        return musicId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setMusicId(Integer musicId) {
-        this.musicId = musicId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getMusicGenres() {
-        return musicGenres;
+    public String getName() {
+        return name;
     }
 
-    public void setMusicGenres(String musicGenres) {
-        this.musicGenres = musicGenres;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public User getUser() {

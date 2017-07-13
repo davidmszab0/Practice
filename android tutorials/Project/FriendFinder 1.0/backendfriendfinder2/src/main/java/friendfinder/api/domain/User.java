@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity // This tells Hibernate to make a table out of this class
@@ -30,27 +31,30 @@ public class User implements Serializable {
     @JsonIgnore
     private Account account;
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<MovieGenres> movies;
+    @ManyToMany(fetch=FetchType.EAGER, mappedBy = "users")
+    private Set<MovieGenres> movieGenres = new HashSet<>();
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<MusicGenres> music;
+    private Set<MusicGenres> musicGenres;
 
     public User () {}
 
-    public User(Account account) {
-        this.account = account;
-    }
-
-    public User(String name, Gender gender) {
+    public User(String name, Set<MovieGenres> movieGenres) {
         this.name = name;
-        this.gender = gender;
+        this.movieGenres=movieGenres;
     }
 
     public User(String name, Gender gender, Account account) {
         this.name = name;
         this.gender = gender;
         this.account = account;
+    }
+
+    public User(String name, Gender gender, Account account, Set<MovieGenres> movieGenres) {
+        this.name = name;
+        this.gender = gender;
+        this.account = account;
+        this.movieGenres=movieGenres;
     }
 
     public Integer getId() {
@@ -85,25 +89,35 @@ public class User implements Serializable {
         this.account = account;
     }
 
-    public Set<MovieGenres> getMovies() {
-        return movies;
+    public Set<MovieGenres> getMovieGenres() {
+        return movieGenres;
     }
 
-    public void setMovies(Set<MovieGenres> movies) {
-        this.movies = movies;
+    public void setMovieGenres(Set<MovieGenres> movieGenres) {
+        this.movieGenres = movieGenres;
     }
 
-    public Set<MusicGenres> getMusic() {
-        return music;
+    public Set<MusicGenres> getMusicGenres() {
+        return musicGenres;
     }
 
-    public void setMusic(Set<MusicGenres> music) {
-        this.music = music;
+    public void setMusicGenres(Set<MusicGenres> musicGenres) {
+        this.musicGenres = musicGenres;
     }
 
     @Override
     public String toString() {
-        return "[id= "+ id + ", name= " + name + ", gender= " + gender + "]";
+        String result = String.format(
+                "User [id=%d, name='%s', gender='%s']%n",
+                id, name, gender);
+        if (movieGenres != null) {
+            for(MovieGenres mvG : movieGenres) {
+                result += String.format(
+                        "MovieGenres[id=%d, name='%s']%n",
+                        mvG.getId(), mvG.getName());
+            }
+        }
+        return result;
     }
 
     public static HashSet<String> getGenderEnums() {

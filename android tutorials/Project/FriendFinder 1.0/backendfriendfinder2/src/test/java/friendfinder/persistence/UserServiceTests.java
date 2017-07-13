@@ -63,11 +63,11 @@ public class UserServiceTests {
                 extract().body().as(Account.class);
 
         given().
-                body(new User("David", User.Gender.Male)).
+                body(new User("David", User.Gender.Male, postedAcc)).
                 contentType(ContentType.JSON).
                 accept("application/json").
                 when().
-                put("user/" + Integer.toString(postedAcc.getAccountId())).
+                put("user/" + Integer.toString(postedAcc.getId())).
                 then().
                 statusCode(200);
 

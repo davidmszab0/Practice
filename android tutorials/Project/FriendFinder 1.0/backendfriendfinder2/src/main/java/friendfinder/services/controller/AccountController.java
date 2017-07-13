@@ -75,7 +75,8 @@ public class AccountController {
             }
             log.debug("Creating an Entity");
 
-            User usr = new User(entity);
+            User usr = new User();
+            usr.setAccount(entity);
             entity.setUser(usr);
             newEntity = accountRepository.save(entity);
         return newEntity;
@@ -86,11 +87,11 @@ public class AccountController {
                                  @RequestBody Account entity) {
         log.debug("Updating the Entity");
         Account entityBefore = null;
-            entityBefore = accountRepository.findByAccountId(accountId);
+            entityBefore = accountRepository.findById(accountId);
             if (entityBefore == null) {
                 throw new HttpNotFoundException("The Entity was not found");
             }
-            entity.setAccountId(accountId);
+            entity.setId(accountId);
             entity.setCreatedAt(entityBefore.getCreatedAt());
             entityBefore = accountRepository.save(entity);
         return entityBefore;
@@ -100,7 +101,7 @@ public class AccountController {
     public void deleteAccount (@PathVariable(value = "accountId") Integer accountId) {
         log.debug("Deleting an account");
         Account deleteEntity = null;
-            deleteEntity = accountRepository.findByAccountId(accountId);
+            deleteEntity = accountRepository.findById(accountId);
             if (deleteEntity == null) {
                 throw new HttpNotFoundException("The Entity was not found.");
             }

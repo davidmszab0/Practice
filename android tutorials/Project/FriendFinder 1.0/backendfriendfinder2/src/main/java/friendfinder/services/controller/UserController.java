@@ -108,7 +108,8 @@ public class UserController {
             }
             log.debug("Creating an entity");
 
-            Account acc = new Account(entity);
+            Account acc = new Account();
+            acc.setUser(entity);
             entity.setAccount(acc);
             newEntity = userRepository.save(entity);
         return newEntity;

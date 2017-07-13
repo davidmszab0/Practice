@@ -74,13 +74,13 @@ public class AccountServiceTests {
 
         assertEquals(1, accountRepository.count());
 
-        User usr = new User("Laszlo", User.Gender.Male);
+        User usr = new User("Laszlo", User.Gender.Male, acc1);
         Response response2 = given().
                 contentType(ContentType.JSON).
                 accept("application/json").
                 body(usr).
                 when().
-                put("user/" + acc1.getAccountId()).
+                put("user/" + acc1.getId()).
                 then().
                 statusCode(200).
                 extract().response();
@@ -159,7 +159,7 @@ public class AccountServiceTests {
                 contentType("application/json").
                 accept("application/json").
                 when().
-                put("account/" + acc.getAccountId()).
+                put("account/" + acc.getId()).
                 then().
                 statusCode(200).
                 body("email", equalTo(account1.getEmail())).
