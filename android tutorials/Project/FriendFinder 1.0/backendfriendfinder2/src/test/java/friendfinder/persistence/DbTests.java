@@ -3,6 +3,7 @@ package friendfinder.persistence;
 import friendfinder.Application;
 import friendfinder.api.domain.Account;
 import friendfinder.api.domain.MovieGenres;
+import friendfinder.api.domain.MusicGenres;
 import friendfinder.api.domain.User;
 import friendfinder.services.controller.AccountController;
 import org.hibernate.Hibernate;
@@ -87,7 +88,7 @@ public class DbTests {
     }
 
     @Test
-    public void testCreateMovies(){
+    public void testCreateMoviesAndMusic(){
         Assert.assertEquals(accountRepository.count(),0);
         Assert.assertEquals(userRepository.count(),0);
         Assert.assertEquals(movieGenresRepository.count(),0);
@@ -95,6 +96,12 @@ public class DbTests {
         MovieGenres comedy = new MovieGenres("Comedy");
         MovieGenres action = new MovieGenres("Action");
         MovieGenres bromance = new MovieGenres("Bromance");
+
+        MusicGenres jazz = new MusicGenres("Jazz");
+        MusicGenres blues = new MusicGenres("Blues");
+        HashSet<MusicGenres> musicGenresHashSet = new HashSet<>();
+        musicGenresHashSet.add(jazz);
+        musicGenresHashSet.add(blues);
 
         HashSet<MovieGenres> movieGenresHash = new HashSet<>();
         movieGenresHash.add(comedy);
@@ -107,6 +114,7 @@ public class DbTests {
         user2.setName("User 1");
         user2.setGender(User.Gender.Male);
         user2.setMovieGenres(movieGenresHash);
+        user2.setMusicGenres(musicGenresHashSet);
         //user2.addMovieGenres(comedy); // this works for not the inverse table too, who is not the owner
         //user2.addMovieGenres(action);
 
@@ -114,6 +122,7 @@ public class DbTests {
         user3.setName("User 2");
         user3.setGender(User.Gender.Male);
         user3.setMovieGenres(movieGenresHash2);
+        user3.setMusicGenres(musicGenresHashSet);
         //user3.addMovieGenres(comedy); // to don't get detached tables
         //user3.addMovieGenres(bromance);
 

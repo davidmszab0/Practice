@@ -1,6 +1,8 @@
 package friendfinder.api.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by grace on 25/06/17.
@@ -11,14 +13,12 @@ public class MusicGenres {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name="music_id")
     private Integer id;
 
     private String name;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="music_user_id") // foreign key will be here
-    private User user;
+    @ManyToMany(fetch=FetchType.LAZY, mappedBy = "musicGenres", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<User> users = new HashSet<>();
 
     public MusicGenres() {
     }
@@ -43,11 +43,11 @@ public class MusicGenres {
         this.name = name;
     }
 
-    public User getUser() {
-        return user;
+    public Set<User> getUser() {
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Set<User>  user) {
+        this.users = user;
     }
 }

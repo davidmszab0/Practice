@@ -6,6 +6,7 @@ import com.jayway.restassured.response.Response;
 import friendfinder.Application;
 import friendfinder.api.domain.Account;
 import friendfinder.api.domain.MovieGenres;
+import friendfinder.api.domain.MusicGenres;
 import friendfinder.api.domain.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,13 +74,18 @@ public class UserServiceTests {
                 statusCode(200).
                 extract().body().as(Account.class);
 
-        HashSet<MovieGenres> mvG = new HashSet<MovieGenres>() {{
+        HashSet<MovieGenres> movieG = new HashSet<MovieGenres>() {{
                 add(new MovieGenres("Comedy"));
                 add(new MovieGenres("Action"));
         }};
 
+        HashSet<MusicGenres> musicG = new HashSet<MusicGenres>() {{
+            add(new MusicGenres("Jazz"));
+            add(new MusicGenres("Blues"));
+        }};
+
         Response response = given().
-                body(new User("Peter", User.Gender.Male, postedAcc, mvG)).
+                body(new User("Peter", User.Gender.Male, postedAcc, movieG, musicG)).
                 contentType(ContentType.JSON).
                 accept("application/json").
                 when().

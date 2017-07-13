@@ -34,11 +34,14 @@ public class User implements Serializable {
     // @JoinColumn indicates the entity is the owner of the relationship: foreign key is here to the referenced table: user.
     @ManyToMany(fetch=FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "movie_genres_users", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"))
+            inverseJoinColumns = @JoinColumn(name = "movie_genres_id", referencedColumnName = "id"))
     private Set<MovieGenres> movieGenres = new HashSet<>();
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<MusicGenres> musicGenres;
+    // if I want to update the fields from both sides, put @JoinColumn to the MusicGenres and avoid mapping table
+    @ManyToMany(fetch=FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "music_genres_users", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "music_genres_id", referencedColumnName = "id"))
+    private Set<MusicGenres> musicGenres = new HashSet<>();
 
     public User () {}
 
@@ -53,11 +56,12 @@ public class User implements Serializable {
         this.account = account;
     }
 
-    public User(String name, Gender gender, Account account, Set<MovieGenres> movieGenres) {
+    public User(String name, Gender gender, Account account, Set<MovieGenres> movieGenres, Set<MusicGenres> musicGenres) {
         this.name = name;
         this.gender = gender;
         this.account = account;
         this.movieGenres = movieGenres;
+        this.musicGenres = musicGenres;
     }
 
     public Integer getId() {
