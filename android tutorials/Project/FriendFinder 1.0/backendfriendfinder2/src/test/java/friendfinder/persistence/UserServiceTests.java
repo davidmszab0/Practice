@@ -5,6 +5,7 @@ import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.Response;
 import friendfinder.Application;
 import friendfinder.api.domain.Account;
+import friendfinder.api.domain.MovieGenres;
 import friendfinder.api.domain.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +13,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.HashSet;
+
 import static com.jayway.restassured.RestAssured.given;
 
 /**
@@ -23,6 +27,9 @@ public class UserServiceTests {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MovieGenresRepository movieGenresRepository;
 
     @Before
     public void setup() {
@@ -47,6 +54,41 @@ public class UserServiceTests {
         RestAssured.basePath = basePath;
 
         userRepository.deleteAll();
+    }
+    @Test
+    public void testfsdkja() {
+
+    }
+
+    @Test
+    public void testCreateUser() throws Exception {
+
+        Account postedAcc = given().
+                contentType("application/json").
+                accept("application/json").
+                body(new Account("no-reply@gmail.com", "empty")).
+                when().
+                post("account").
+                then().
+                statusCode(200).
+                extract().body().as(Account.class);
+
+        HashSet<MovieGenres> mvG = new HashSet<MovieGenres>() {{
+                add(new MovieGenres("Comedy"));
+                add(new MovieGenres("Action"));
+        }};
+
+        Response response = given().
+                body(new User("Peter", User.Gender.Male, postedAcc, mvG)).
+                contentType(ContentType.JSON).
+                accept("application/json").
+                when().
+                put("user/" + Integer.toString(postedAcc.getId())).
+                then().
+                statusCode(200)
+                .extract().response();
+        String jsonAsString2 = response.asString();
+        System.out.println("jsonAsString: "+jsonAsString2);
     }
 
     @Test

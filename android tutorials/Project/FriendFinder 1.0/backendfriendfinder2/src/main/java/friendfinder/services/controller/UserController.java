@@ -108,6 +108,7 @@ public class UserController {
             }
             log.debug("Creating an entity");
 
+            // Fixme account email and password can't be null
             Account acc = new Account();
             acc.setUser(entity);
             entity.setAccount(acc);
@@ -137,4 +138,6 @@ public class UserController {
             }
             userRepository.delete(deleteEntity);
     }
+
+    // TODO get movies?
 }

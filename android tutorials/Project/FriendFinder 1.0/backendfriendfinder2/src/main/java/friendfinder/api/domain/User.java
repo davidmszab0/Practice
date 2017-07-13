@@ -18,7 +18,6 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name="id")
     private Integer id;
 
     private String name;
@@ -31,7 +30,7 @@ public class User implements Serializable {
     @JsonIgnore
     private Account account;
 
-    @ManyToMany(fetch=FetchType.EAGER, mappedBy = "users")
+    @ManyToMany(fetch=FetchType.LAZY, mappedBy = "users", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<MovieGenres> movieGenres = new HashSet<>();
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
@@ -105,12 +104,30 @@ public class User implements Serializable {
         this.musicGenres = musicGenres;
     }
 
+    // https://vladmihalcea.com/2015/03/05/a-beginners-guide-to-jpa-and-hibernate-cascade-types/
+    public void addMovieGenres(MovieGenres mvG) {
+        movieGenres.add(mvG);
+        mvG.getUsers().add(this);
+    }
+
+    public void removeBook(MovieGenres mvG) {
+        movieGenres.remove(mvG);
+        mvG.getUsers().remove(this);
+    }
+
+    public void remove() {
+        for(MovieGenres mvG : new HashSet<MovieGenres>(movieGenres)) {
+            removeBook(mvG);
+        }
+    }
+
+    // Fixme: failed to lazily initialize a collection
     @Override
     public String toString() {
         String result = String.format(
-                "User [id=%d, name='%s', gender='%s']%n",
-                id, name, gender);
-        if (movieGenres != null) {
+                "User [id=%d, name='%s', gender='%s', account='%s']%n",
+                id, name, gender, account);
+        if (!movieGenres.isEmpty()) {
             for(MovieGenres mvG : movieGenres) {
                 result += String.format(
                         "MovieGenres[id=%d, name='%s']%n",

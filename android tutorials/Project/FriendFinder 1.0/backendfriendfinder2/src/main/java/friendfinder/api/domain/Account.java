@@ -101,4 +101,11 @@ public class Account {
         this.user = user;
     }
 
+    @Override
+    public String toString() {
+        String result = String.format(
+                "Account[id=%d, email='%s']%n",
+                id, email);
+    return result;
+    }
 }

@@ -106,33 +106,59 @@ public class DbTests {
         User user2 = new User();
         user2.setName("User 1");
         user2.setGender(User.Gender.Male);
-        user2.setMovieGenres(movieGenresHash);
+        //user2.setMovieGenres(movieGenresHash);
+        user2.addMovieGenres(comedy);
+        user2.addMovieGenres(action);
 
         User user3 = new User();
         user3.setName("User 2");
         user3.setGender(User.Gender.Male);
-        user3.setMovieGenres(movieGenresHash2);
+        //user3.setMovieGenres(movieGenresHash2);
+        user3.addMovieGenres(comedy); // to don't get detached tables
+        user3.addMovieGenres(bromance);
 
+        Account acc2 = new Account("email", "pwd");
+        acc2.setUser(user2);
+        user2.setAccount(acc2);
+
+        Account acc3 = new Account("email2", "pwd");
+        acc3.setUser(user3);
+        user3.setAccount(acc3);
         //
-        // save a couple of Users
+        // save a couple of Users,
         //
         HashSet<User> userHash = new HashSet<>();
         userHash.add(user2);
         userHash.add(user3);
-        userRepository.save(userHash);
+        //userRepository.save(userHash);
+
+        userRepository.save(user2);
+        userRepository.save(user3);
         Assert.assertEquals(userRepository.count(),2);
 
-        log.info("print hashSet2 " + userHash.toString());
-        //Hibernate.initialize(user2.getMovieGenres());
+        //log.info("print hashSet2 " + userHash.toString());
+        //Hibernate.initialize(user.getMovieGenres());
+
+        /*userRepository.save(new HashSet<User>() {{
+            add(new User("User A", new HashSet<MovieGenres>() {{
+                add(comedy);
+                add(action);
+            }}));
+
+            add(new User("User B", new HashSet<MovieGenres>() {{
+                add(comedy);
+                add(bromance);
+            }}));
+        }});*/
 
         // fetch all users
         for(User usr : userRepository.findAll()) {
-            log.info(usr.toString());
+//            log.debug(usr.toString());
         }
         //
         // save a couple of movieGenres
         //
-        User userA = new User();
+       /* User userA = new User();
         userA.setName("User A");
         User userB = new User();
         userB.setName("User B");
@@ -152,7 +178,7 @@ public class DbTests {
 
         // fetch all movieGenres
         for(MovieGenres mvG : movieGenresRepository.findAll()) {
-            log.info(mvG.toString());
-        }
+            log.debug(mvG.toString());
+        }*/
     }
 }
