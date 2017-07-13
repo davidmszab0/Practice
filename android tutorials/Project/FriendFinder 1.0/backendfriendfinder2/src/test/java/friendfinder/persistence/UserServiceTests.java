@@ -62,7 +62,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void testCreateUser() throws Exception {
+    public void testUpdateUser() throws Exception {
 
         Account postedAcc = given().
                 contentType("application/json").
@@ -95,6 +95,60 @@ public class UserServiceTests {
                 .extract().response();
         String jsonAsString2 = response.asString();
         System.out.println("jsonAsString: "+jsonAsString2);
+    }
+
+    @Test
+    public void testLoginAccount() {
+        Account postedAcc = given().
+                contentType("application/json").
+                accept("application/json").
+                body(new Account("no-reply@gmail.com", "empty")).
+                when().
+                post("account").
+                then().
+                statusCode(200).
+                extract().body().as(Account.class);
+
+        HashSet<MovieGenres> movieG = new HashSet<MovieGenres>() {{
+            add(new MovieGenres("Comedy"));
+            add(new MovieGenres("Action"));
+        }};
+
+        HashSet<MusicGenres> musicG = new HashSet<MusicGenres>() {{
+            add(new MusicGenres("Jazz"));
+            add(new MusicGenres("Blues"));
+        }};
+
+        given().
+                body(new User("Peter", User.Gender.Male, postedAcc, movieG, musicG)).
+                contentType(ContentType.JSON).
+                accept("application/json").
+                when().
+                put("user/" + Integer.toString(postedAcc.getId())).
+                then().
+                statusCode(200);
+
+        Response response = given().
+                contentType(ContentType.JSON).
+                accept("application/json").
+                when().
+                get("account?email=no-reply@gmail.com&password=empty").
+                then().
+                statusCode(200)
+                .extract().response();
+        String jsonAsString2 = response.asString();
+        System.out.println("jsonAsString: "+jsonAsString2);
+
+        Response response2 = given().
+                contentType(ContentType.JSON).
+                accept("application/json").
+                when().
+                get("user/" + Integer.toString(postedAcc.getId())).
+                then().
+                statusCode(200)
+                .extract().response();
+        String jsonAsString3 = response2.asString();
+        System.out.println("jsonAsString: "+jsonAsString3);
     }
 
     @Test

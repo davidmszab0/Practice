@@ -1,6 +1,10 @@
 package friendfinder.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -9,6 +13,9 @@ import java.util.Set;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "users")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User implements Serializable {
 
     /**
@@ -61,6 +68,13 @@ public class User implements Serializable {
         this.gender = gender;
         this.account = account;
         this.movieGenres = movieGenres;
+        this.musicGenres = musicGenres;
+    }
+
+    public User(String name, Gender gender, Account account, Set<MusicGenres> musicGenres) {
+        this.name = name;
+        this.gender = gender;
+        this.account = account;
         this.musicGenres = musicGenres;
     }
 

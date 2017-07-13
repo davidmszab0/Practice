@@ -89,7 +89,7 @@ public class AccountServiceTests {
     }
 
     @Test
-    public void testLoginAccount() throws Exception {
+    public void testAccountFindBy() throws Exception {
         Account account1 = new Account("david@szabo.com", "empty");
 
         Account acc = given().

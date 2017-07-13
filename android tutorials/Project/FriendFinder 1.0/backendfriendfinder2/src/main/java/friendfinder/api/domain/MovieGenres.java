@@ -1,5 +1,8 @@
 package friendfinder.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +21,7 @@ public class MovieGenres {
     private String name;
 
     @ManyToMany(fetch=FetchType.LAZY, mappedBy = "movieGenres", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     public MovieGenres() {
