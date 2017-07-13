@@ -27,10 +27,14 @@ public class User implements Serializable {
 
     // mappedBy maps the Entity of this class and not the table
     @OneToOne(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonIgnore // to avoid infinite recursion
     private Account account;
 
-    @ManyToMany(fetch=FetchType.LAZY, mappedBy = "users", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    // https://stackoverflow.com/questions/19280121/spring-and-or-hibernate-saving-many-to-many-relations-from-one-side-after-form
+    // @JoinColumn indicates the entity is the owner of the relationship: foreign key is here to the referenced table: user.
+    @ManyToMany(fetch=FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "movie_genres_users", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"))
     private Set<MovieGenres> movieGenres = new HashSet<>();
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
@@ -53,7 +57,7 @@ public class User implements Serializable {
         this.name = name;
         this.gender = gender;
         this.account = account;
-        this.movieGenres=movieGenres;
+        this.movieGenres = movieGenres;
     }
 
     public Integer getId() {
@@ -118,6 +122,12 @@ public class User implements Serializable {
     public void remove() {
         for(MovieGenres mvG : new HashSet<MovieGenres>(movieGenres)) {
             removeBook(mvG);
+        }
+    }
+
+    public void addAllMovieGenres(Set<MovieGenres> movieGenresInput) {
+        for(MovieGenres mvG : movieGenresInput) {
+            addMovieGenres(mvG);
         }
     }
 

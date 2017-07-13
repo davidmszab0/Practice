@@ -62,12 +62,10 @@ public class AccountController {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
-        Account searchedEntity = null;
-        Account newEntity = null;
             if (entity == null || isBlank(entity.getEmail()) || isBlank(entity.getPassword())) {
                 throw new HttpUnprocessableEntityException("Entity, email or password is blank.");
             }
-            searchedEntity = accountRepository.findByEmail(entity.getEmail());
+            Account searchedEntity = accountRepository.findByEmail(entity.getEmail());
 
             if (searchedEntity != null) {
                 log.debug("Entity already registered.");
@@ -78,7 +76,7 @@ public class AccountController {
             User usr = new User();
             usr.setAccount(entity);
             entity.setUser(usr);
-            newEntity = accountRepository.save(entity);
+            Account newEntity = accountRepository.save(entity);
         return newEntity;
     }
 

@@ -17,10 +17,7 @@ public class MovieGenres {
 
     private String name;
 
-    // @JoinColumn indicates the entity is the owner of the relationship: foreign key is here to the referenced table: user.
-    @ManyToMany(fetch=FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "movie_genres_users", joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    @ManyToMany(fetch=FetchType.LAZY, mappedBy = "movieGenres", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<User> users = new HashSet<>();
 
     public MovieGenres() {
@@ -32,7 +29,7 @@ public class MovieGenres {
 
     public MovieGenres(String name, Set<User> users) {
         this.name = name;
-        this.users=users;
+        this.users = users;
     }
 
     public Integer getId() {

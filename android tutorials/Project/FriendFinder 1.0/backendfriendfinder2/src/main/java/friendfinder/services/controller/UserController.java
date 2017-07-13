@@ -1,10 +1,12 @@
 package friendfinder.services.controller;
 
 import friendfinder.api.domain.Account;
+import friendfinder.api.domain.MovieGenres;
 import friendfinder.api.domain.User;
 import friendfinder.api.exceptions.HttpConflictException;
 import friendfinder.api.exceptions.HttpNotFoundException;
 import friendfinder.api.exceptions.HttpUnprocessableEntityException;
+import friendfinder.persistence.MovieGenresRepository;
 import friendfinder.persistence.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import static friendfinder.api.domain.User.getGenderEnums;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by grace on 29/06/17.
@@ -26,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MovieGenresRepository movieGenresRepository;
 
     @GetMapping(path="/all")
     public Iterable<User> getAllEntities() {
@@ -88,7 +96,7 @@ public class UserController {
 
             if (usr == null) {
                 System.out.println("Entities do not exist.");
-                throw new HttpNotFoundException("Entity was not found");
+                throw new HttpNotFoundException("Entity was not found.");
             }
         return usr;
     }

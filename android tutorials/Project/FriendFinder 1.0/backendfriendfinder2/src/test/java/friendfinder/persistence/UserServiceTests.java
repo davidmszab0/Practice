@@ -56,7 +56,7 @@ public class UserServiceTests {
         userRepository.deleteAll();
     }
     @Test
-    public void testfsdkja() {
+    public void testDeleteSQLdb() {
 
     }
 
