@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < movies.get(position).size(); i++) {
                 moviesLine.append(movies.get(position).get(i) + ", ");
             }
-            for (int i = 0; i < music.get(position).size(); i++) {
-                musicLine.append(music.get(position).get(i) + ", ");
+            for (int j = 0; j < music.get(position).size(); j++) {
+                musicLine.append(music.get(position).get(j) + ", ");
             }
 
             return rowView;
@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "userObject: " + i + ": " + userObject);
                         String name = userObject.getString("name");
                         String gender = userObject.getString("gender");
+                        moviesArray.add(new ArrayList<String>());
 
                         JSONArray listMovieGenres = userObject.getJSONArray("movieGenres");
                         if(listMovieGenres != null){
@@ -158,11 +159,11 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject elemMovieGenres = listMovieGenres.getJSONObject(j);
                                 Log.d(TAG, "elemMovieGenresObject i: " + i +",j: " + j + " - " + elemMovieGenres);
                                 if(elemMovieGenres != null){
-                                    moviesArray.add(new ArrayList<String>());
                                     moviesArray.get(i).add(elemMovieGenres.getString("name"));
                                 }
                             }
                         }
+                        musicArray.add(new ArrayList<String>());
 
                         JSONArray listMusicGenres = userObject.getJSONArray("musicGenres");
                         if(listMusicGenres != null){
@@ -171,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject elemMusicGenres = listMusicGenres.getJSONObject(j);
                                 Log.d(TAG, "elemMovieGenresObject i: " + i +",j: " + j + " - " + elemMusicGenres);
                                 if(elemMusicGenres != null){
-                                    musicArray.add(new ArrayList<String>());
                                     musicArray.get(i).add(elemMusicGenres.getString("name"));
                                 }
                             }
