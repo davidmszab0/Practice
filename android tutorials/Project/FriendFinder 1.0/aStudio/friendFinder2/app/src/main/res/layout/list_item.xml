@@ -21,13 +21,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="Movie"
+        android:text="Movie: "
         android:textAppearance="?android:attr/textAppearanceMedium" />
     <TextView
         android:id="@+id/musicId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="Music"
+        android:text="Music: "
         android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>

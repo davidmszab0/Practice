@@ -107,7 +107,7 @@ public class RegisterActivity extends Activity {
                                 StringEntity entityUser = new StringEntity(jsonParams2.toString());
                                 Log.d(TAG, "entityUser: " + entityUser);
 
-                                HttpUtils.put(context, "/user/" + serverResp.getString("accountId"), entityUser, "application/json", new JsonHttpResponseHandler() {
+                                HttpUtils.put(context, "/user/" + serverResp.getString("id"), entityUser, "application/json", new JsonHttpResponseHandler() {
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
                                         Log.d(TAG, "------- this is response2 : " + response2);

@@ -18,7 +18,7 @@ curl_header="$curl_cmd --header \"Content-Type: application/json\" --header \"Ac
 
 curl --verbose --header "Content-Type: application/json" --request POST --data '{"email":"david@szabo.com","password":"empty"}' 'http://localhost:8080/account'
 curl --verbose --header "Content-Type: application/json" --request PUT \
---data '{"name":"David","gender":"Male","movieGenres":[{"id":null,"name":"Comedy","users":null}], "musicGenres":[{"id":null,"name":"Jazz","users":null}]}' 'http://localhost:8080/user/1'
+--data '{"name":"David","gender":"Male","movieGenres":[{"id":null,"name":"Comedy","users":null}, {"id":null,"name":"Action","users":null}], "musicGenres":[{"id":null,"name":"Jazz","users":null}]}' 'http://localhost:8080/user/1'
 
 curl --verbose --header "Content-Type: application/json" --request POST --data '{"email":"peter@szabo.com","password":"empty"}' 'http://localhost:8080/account'
 curl --verbose --header "Content-Type: application/json" --request PUT \

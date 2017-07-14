@@ -88,7 +88,7 @@ public class LoginActivity extends Activity {
                                             name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2);
                                 }
 
-                                HttpUtils.get("/user/" + serverResp.getString("accountId"), null, new JsonHttpResponseHandler() {
+                                HttpUtils.get("/user/" + serverResp.getString("id"), null, new JsonHttpResponseHandler() {
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
                                         Log.d(TAG, "------- this is the user response: " + response2);
@@ -146,6 +146,14 @@ public class LoginActivity extends Activity {
                             Log.d(TAG , "onFailure responseString: "+ responseString);
                             Log.d(TAG , "onFailure throwable: "+ throwable);
                         }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject object) {
+                            Log.d(TAG , "onFailure statusCode: "+ statusCode);
+                            Log.d(TAG , "onFailure headers: "+ headers);
+                            Log.d(TAG , "onFailure throwable: "+ throwable);
+                            Log.d(TAG , "onFailure object: "+ object);
+                        }
+
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
