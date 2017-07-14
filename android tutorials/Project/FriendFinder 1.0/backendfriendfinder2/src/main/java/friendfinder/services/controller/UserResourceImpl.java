@@ -1,6 +1,8 @@
 package friendfinder.services.controller;
 
 import friendfinder.api.domain.Account;
+import friendfinder.api.domain.MovieGenres;
+import friendfinder.api.domain.MusicGenres;
 import friendfinder.api.domain.User;
 import friendfinder.api.exceptions.HttpConflictException;
 import friendfinder.api.exceptions.HttpNotFoundException;
@@ -16,6 +18,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by grace on 29/06/17.
@@ -29,18 +32,15 @@ public class UserResourceImpl {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private MovieGenresRepository movieGenresRepository;
-
     @GetMapping(path="/all")
-    public Iterable<User> getAllEntities() {
+    public Iterable<User> getAllUsers() {
         log.debug("Getting all entities");
 
         return userRepository.findAll();
     }
 
     @GetMapping(path="/getUserByNameAndGender")
-    public User getEntityByNameAndGender (@RequestParam(value = "name") String name,
+    public User getUserByNameAndGender (@RequestParam(value = "name") String name,
                               @RequestParam(value = "gender") String gender) {
         log.debug("Getting the entity by name and gender.");
         User serchedEntity = null;
@@ -64,7 +64,7 @@ public class UserResourceImpl {
     }
 
     @GetMapping(value = "/{id}")
-    public User getEntityById (@PathVariable(value = "id") Integer id) {
+    public User getUserById (@PathVariable(value = "id") Integer id) {
         log.debug("Getting the entity by id.");
         User serchedEntity = null;
         if (id <= 0) {
@@ -99,7 +99,7 @@ public class UserResourceImpl {
     }
 
     @PostMapping
-    public User createEntity (@RequestBody User entity) {
+    public User createUser (@RequestBody User entity) {
 
         User newEntity = null;
             if (entity == null) {
@@ -135,7 +135,7 @@ public class UserResourceImpl {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteEntity (@PathVariable(value = "id") Integer id) {
+    public void deleteUser (@PathVariable(value = "id") Integer id) {
         log.debug("Deleting the entity.");
             User deleteEntity = userRepository.findUserById(id);
             if (deleteEntity == null) {
@@ -144,5 +144,47 @@ public class UserResourceImpl {
             userRepository.delete(deleteEntity);
     }
 
-    // TODO get movies only
+    // ------------------------  Operations on MovieGenres ------------------------
+
+    @GetMapping(value = "/{id}/movieGenres")
+    public Set<MovieGenres> getMovieGenresByUserId (@PathVariable(value = "id") Integer id) {
+        log.debug("Getting the movieGenres by user id.");
+
+        if (id <= 0) {
+            throw new HttpUnprocessableEntityException("Entity has invalid id.");
+        }
+
+        User searchedEntity = userRepository.findUserById(id);
+
+        if (searchedEntity == null) {
+            log.debug("Entity does not exist.");
+            throw new HttpNotFoundException("Entity was not found.");
+        }
+
+        Set<MovieGenres> movieGenres = searchedEntity.getMovieGenres();
+
+        return movieGenres;
+    }
+
+    // ------------------------  Operations on MusicGenres ------------------------
+
+    @GetMapping(value = "/{id}/musicGenres")
+    public Set<MusicGenres> getMusicGenresByUserId (@PathVariable(value = "id") Integer id) {
+        log.debug("Getting the musicGenres by user id.");
+
+        if (id <= 0) {
+            throw new HttpUnprocessableEntityException("Entity has invalid id.");
+        }
+
+        User searchedEntity = userRepository.findUserById(id);
+
+        if (searchedEntity == null) {
+            log.debug("Entity does not exist.");
+            throw new HttpNotFoundException("Entity was not found.");
+        }
+
+        Set<MusicGenres> musicGenres = searchedEntity.getMusicGenres();
+
+        return musicGenres;
+    }
 }
