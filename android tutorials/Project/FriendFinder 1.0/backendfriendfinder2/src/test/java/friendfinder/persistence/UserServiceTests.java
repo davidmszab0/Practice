@@ -95,6 +95,20 @@ public class UserServiceTests {
                 .extract().response();
         String jsonAsString2 = response.asString();
         System.out.println("jsonAsString: "+jsonAsString2);
+
+        musicG.add(new MusicGenres("Rock"));
+
+        Response response2 = given().
+                body(new User("Peter", User.Gender.Male, postedAcc, musicG)).
+                contentType(ContentType.JSON).
+                accept("application/json").
+                when().
+                put("user/" + Integer.toString(postedAcc.getId())).
+                then().
+                statusCode(200)
+                .extract().response();
+        String jsonAsString3 = response2.asString();
+        System.out.println("jsonAsString2: "+jsonAsString3);
     }
 
     @Test

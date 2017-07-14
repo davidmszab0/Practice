@@ -5,8 +5,6 @@ import friendfinder.api.domain.Account;
 import friendfinder.api.domain.MovieGenres;
 import friendfinder.api.domain.MusicGenres;
 import friendfinder.api.domain.User;
-import friendfinder.services.controller.AccountController;
-import org.hibernate.Hibernate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

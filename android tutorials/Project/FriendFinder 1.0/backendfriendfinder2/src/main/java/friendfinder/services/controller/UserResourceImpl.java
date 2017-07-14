@@ -1,7 +1,6 @@
 package friendfinder.services.controller;
 
 import friendfinder.api.domain.Account;
-import friendfinder.api.domain.MovieGenres;
 import friendfinder.api.domain.User;
 import friendfinder.api.exceptions.HttpConflictException;
 import friendfinder.api.exceptions.HttpNotFoundException;
@@ -15,19 +14,17 @@ import org.springframework.web.bind.annotation.*;
 import static friendfinder.api.domain.User.getGenderEnums;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by grace on 29/06/17.
  */
 @RestController
 @RequestMapping(path="/user")
-public class UserController {
+public class UserResourceImpl {
 
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final Logger log = LoggerFactory.getLogger(UserResourceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -83,7 +80,7 @@ public class UserController {
     }
 
     @GetMapping(path="/search")
-    public List<User> searchEntitys (@RequestParam(value = "name") String name,
+    public List<User> searchEntities (@RequestParam(value = "name") String name,
                              @RequestParam(value = "gender") String gender) {
         log.debug("Getting the users by name and gender");
         List<User> usr = null;
@@ -147,5 +144,5 @@ public class UserController {
             userRepository.delete(deleteEntity);
     }
 
-    // TODO get movies?
+    // TODO get movies only
 }

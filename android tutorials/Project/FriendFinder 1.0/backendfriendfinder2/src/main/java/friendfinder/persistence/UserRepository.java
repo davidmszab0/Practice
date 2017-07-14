@@ -11,7 +11,7 @@ import org.springframework.data.repository.CrudRepository;
 // CRUD refers Create, Read, Update, Delete
 
 public interface UserRepository extends CrudRepository<User, Integer>, UserRepositoryCustom {
-    public User findUserById (Integer id);
-    public User findUserByName (String name);
-    public User findUserByNameAndGender (String name, User.Gender gender);
+    User findUserById (Integer id);
+    User findUserByName (String name);
+    User findUserByNameAndGender (String name, User.Gender gender);
 }
