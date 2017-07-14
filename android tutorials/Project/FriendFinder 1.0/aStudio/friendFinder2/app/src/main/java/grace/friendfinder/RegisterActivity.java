@@ -82,7 +82,7 @@ public class RegisterActivity extends Activity {
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            Log.d(TAG, "------- this is response : " + response);
+                            Log.d(TAG, "------- account response : " + response);
 
                             try {
                                 final JSONObject serverResp = new JSONObject(response.toString());
@@ -99,7 +99,7 @@ public class RegisterActivity extends Activity {
                                     String gender2 = (String) hm.get("gender");
                                     String email2 = (String) hm.get("email");
                                     String created_at2 = (String) hm.get("created_at");
-                                    Integer user_id2 = (Integer) hm.get("id");
+                                    Integer user_id2 =  Integer.parseInt((String) hm.get("user_id"));
                                     Log.d(TAG, "register-hash: name, gender, email, created_at, user_id: 1-" +
                                             name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2 +" 5-"+user_id2 );
 
@@ -112,7 +112,7 @@ public class RegisterActivity extends Activity {
                                 HttpUtils.put(context, "/user/" + serverResp.getString("id"), entityUser, "application/json", new JsonHttpResponseHandler() {
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
-                                        Log.d(TAG, "------- this is response2 : " + response2);
+                                        Log.d(TAG, "------- user response2 : " + response2);
                                         try {
                                             JSONObject serverResp2 = new JSONObject(response2.toString());
                                             db.updateUser(serverResp2.getString("name"), serverResp2.getString("gender"),
@@ -123,7 +123,7 @@ public class RegisterActivity extends Activity {
                                             String gender2 = (String) hm.get("gender");
                                             String email2 = (String) hm.get("email");
                                             String created_at2 = (String) hm.get("created_at");
-                                            Integer user_id2 = (Integer) hm.get("id");
+                                            Integer user_id2 =  Integer.parseInt((String) hm.get("user_id"));
                                             Log.d(TAG, "register2-hash: name, gender, email, created_at, user_id: 1-" +
                                                     name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2+" 5-"+user_id2);
 

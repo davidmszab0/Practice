@@ -66,7 +66,7 @@ public class LoginActivity extends Activity {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             // If the response is JSONObject instead of expected JSONArray
-                            Log.d(TAG, "------- this is the account response: " + response);
+                            Log.d(TAG, "------- account response: " + response);
                             try {
                                 JSONObject serverResp = new JSONObject(response.toString());
                                 String email = serverResp.getString("email");
@@ -85,7 +85,7 @@ public class LoginActivity extends Activity {
                                     String gender2 = (String) hm.get("gender");
                                     String email2 = (String) hm.get("email");
                                     String created_at2 = (String) hm.get("created_at");
-                                    Integer user_id2 = (Integer) hm.get("id");
+                                    Integer user_id2 =  Integer.parseInt((String) hm.get("user_id"));
                                     Log.d(TAG, "login-hash: name, gender, email, created_at, user_id: 1-" +
                                             name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2+" 5-"+user_id2 );
                                 }
@@ -93,7 +93,7 @@ public class LoginActivity extends Activity {
                                 HttpUtils.get("/user/" + serverResp.getString("id"), null, new JsonHttpResponseHandler() {
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
-                                        Log.d(TAG, "------- this is the user response: " + response2);
+                                        Log.d(TAG, "------- user response: " + response2);
                                         try {
                                             JSONObject serverResp2 = new JSONObject(response2.toString());
 
@@ -107,7 +107,7 @@ public class LoginActivity extends Activity {
                                             String gender3 = (String) hm.get("gender");
                                             String email3 = (String) hm.get("email");
                                             String created_at3 = (String) hm.get("created_at");
-                                            Integer user_id3 = (Integer) hm.get("id");
+                                            Integer user_id3 =  Integer.parseInt((String) hm.get("user_id"));
                                             Log.d(TAG, "login2-hash: name, gender, email, created_at, user_id: 1-" +
                                                     name3 +" 2-"+gender3+" 3-"+email3+" 4-"+created_at3+" 5-"+user_id3);
 
