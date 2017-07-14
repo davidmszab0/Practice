@@ -2,6 +2,8 @@ package grace.friendfinder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -50,7 +53,13 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.list_view);
             Log.d(TAG, "on the mainActivity screen");
 
-            fillArrays();
+            if (isNetworkAvailable() == true) {
+                fillArrays();
+            } else {
+                Toast.makeText(MainActivity.this,"The app couldn't connect to the internet. " +
+                        "Please connect to the internet and " +
+                        "resume the application!", Toast.LENGTH_LONG).show();
+            }
 
             ListView listView = (ListView) findViewById(R.id.listView);
             friendsAdapter = new FriendsAdapter(this, R.layout.list_item,
@@ -208,5 +217,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG , "onFailure object: "+ object);
             }
         });
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
     }
 }

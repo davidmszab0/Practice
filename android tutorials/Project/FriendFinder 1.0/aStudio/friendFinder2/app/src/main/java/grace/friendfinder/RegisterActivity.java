@@ -3,6 +3,8 @@ package grace.friendfinder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -70,115 +72,134 @@ public class RegisterActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "Email needs to be at least 1 character long", Toast.LENGTH_SHORT).show();
                     emailEditText.setText("");
                 }
+                if (isNetworkAvailable() == true) {
+                    registerRequest(context);
+                } else {
+                    Toast.makeText(RegisterActivity.this,"The app couldn't connect to the internet. " +
+                            "Please connect to the internet and " +
+                            "resume the application!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+    private void registerRequest (final Context context) {
+        try {
+            JSONObject jsonParams = new JSONObject();
+            jsonParams.put("email", emailInput);
+            jsonParams.put("password", passwordInput);
+            StringEntity entityAccount = new StringEntity(jsonParams.toString());
+            Log.d(TAG, "entityAccount: " + entityAccount);
 
-                try {
-                    JSONObject jsonParams = new JSONObject();
-                    jsonParams.put("email", emailInput);
-                    jsonParams.put("password", passwordInput);
-                    StringEntity entityAccount = new StringEntity(jsonParams.toString());
-                    Log.d(TAG, "entityAccount: " + entityAccount);
+            HttpUtils.post(context, "/account", entityAccount, "application/json", new JsonHttpResponseHandler() {
 
-                    HttpUtils.post(context, "/account", entityAccount, "application/json", new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    Log.d(TAG, "------- account response : " + response);
 
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            Log.d(TAG, "------- account response : " + response);
+                    try {
+                        final JSONObject serverResp = new JSONObject(response.toString());
 
-                            try {
-                                final JSONObject serverResp = new JSONObject(response.toString());
+                        // storing the user in the local SQLite db
+                        db = new DatabaseHandler(getApplicationContext());
+                        db.resetTables(); // first deleting all the rows
+                        db.addUser(null, null, serverResp.getString("email"),
+                                serverResp.getString("createdAt"), serverResp.getInt("id"));
+                        Log.d(TAG, "Created user in the local SQLite db.");
 
-                                // storing the user in the local SQLite db
-                                db = new DatabaseHandler(getApplicationContext());
-                                db.resetTables(); // first deleting all the rows
-                                db.addUser(null, null, serverResp.getString("email"),
-                                        serverResp.getString("createdAt"), serverResp.getInt("id"));
-                                Log.d(TAG, "Created user in the local SQLite db.");
+                        HashMap hm = db.getUserDetails();
+                        String name2 = (String) hm.get("name");
+                        String gender2 = (String) hm.get("gender");
+                        String email2 = (String) hm.get("email");
+                        String created_at2 = (String) hm.get("created_at");
+                        Integer user_id2 = Integer.parseInt((String) hm.get("user_id"));
+                        Log.d(TAG, "register-hash: name, gender, email, created_at, user_id: 1-" +
+                                name2 + " 2-" + gender2 + " 3-" + email2 + " 4-" + created_at2 + " 5-" + user_id2);
+
+                        JSONObject jsonParams2 = new JSONObject();
+                        jsonParams2.put("name", nameInput);
+                        jsonParams2.put("gender", genderInput);
+                        StringEntity entityUser = new StringEntity(jsonParams2.toString());
+                        Log.d(TAG, "entityUser: " + entityUser);
+
+                        HttpUtils.put(context, "/user/" + serverResp.getString("id"), entityUser, "application/json", new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
+                                Log.d(TAG, "------- user response2 : " + response2);
+                                try {
+                                    JSONObject serverResp2 = new JSONObject(response2.toString());
+                                    db.updateUser(serverResp2.getString("name"), serverResp2.getString("gender"),
+                                            serverResp.getString("email"), serverResp.getString("createdAt"), serverResp.getInt("id"));
 
                                     HashMap hm = db.getUserDetails();
                                     String name2 = (String) hm.get("name");
                                     String gender2 = (String) hm.get("gender");
                                     String email2 = (String) hm.get("email");
                                     String created_at2 = (String) hm.get("created_at");
-                                    Integer user_id2 =  Integer.parseInt((String) hm.get("user_id"));
-                                    Log.d(TAG, "register-hash: name, gender, email, created_at, user_id: 1-" +
-                                            name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2 +" 5-"+user_id2 );
+                                    Integer user_id2 = Integer.parseInt((String) hm.get("user_id"));
+                                    Log.d(TAG, "register2-hash: name, gender, email, created_at, user_id: 1-" +
+                                            name2 + " 2-" + gender2 + " 3-" + email2 + " 4-" + created_at2 + " 5-" + user_id2);
 
-                                JSONObject jsonParams2 = new JSONObject();
-                                jsonParams2.put("name", nameInput);
-                                jsonParams2.put("gender", genderInput);
-                                StringEntity entityUser = new StringEntity(jsonParams2.toString());
-                                Log.d(TAG, "entityUser: " + entityUser);
-
-                                HttpUtils.put(context, "/user/" + serverResp.getString("id"), entityUser, "application/json", new JsonHttpResponseHandler() {
-                                    @Override
-                                    public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
-                                        Log.d(TAG, "------- user response2 : " + response2);
-                                        try {
-                                            JSONObject serverResp2 = new JSONObject(response2.toString());
-                                            db.updateUser(serverResp2.getString("name"), serverResp2.getString("gender"),
-                                                   serverResp.getString("email"), serverResp.getString("createdAt"), serverResp.getInt("id"));
-
-                                            HashMap hm = db.getUserDetails();
-                                            String name2 = (String) hm.get("name");
-                                            String gender2 = (String) hm.get("gender");
-                                            String email2 = (String) hm.get("email");
-                                            String created_at2 = (String) hm.get("created_at");
-                                            Integer user_id2 =  Integer.parseInt((String) hm.get("user_id"));
-                                            Log.d(TAG, "register2-hash: name, gender, email, created_at, user_id: 1-" +
-                                                    name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2+" 5-"+user_id2);
-
-                                        } catch (Exception ex) {
-                                            ex.printStackTrace();
-                                        }
-                                    }
-                                    @Override
-                                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                        Log.d(TAG , "onFailure statusCode: "+ statusCode);
-                                        Log.d(TAG , "onFailure headers: "+ headers);
-                                        Log.d(TAG , "onFailure responseString: "+ responseString);
-                                        Log.d(TAG , "onFailure throwable: "+ throwable);
-                                    }
-                                    @Override
-                                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject object) {
-                                        Log.d(TAG , "onFailure statusCode: "+ statusCode);
-                                        Log.d(TAG , "onFailure headers: "+ headers);
-                                        Log.d(TAG , "onFailure throwable: "+ throwable);
-                                        Log.d(TAG , "onFailure object: "+ object);
-                                    }
-                                });
-
-                                // Launch Dashboard Screen
-                                Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                // Close all views before launching Dashboard
-                                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(mainActivityIntent);
-                                // Close Login Screen
-                                finish();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
                             }
-                        }
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            Log.d(TAG , "onFailure statusCode: "+ statusCode);
-                            Log.d(TAG , "onFailure headers: "+ headers);
-                            Log.d(TAG , "onFailure responseString: "+ responseString);
-                            Log.d(TAG , "onFailure throwable: "+ throwable);
-                        }
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject object) {
-                            Log.d(TAG , "onFailure statusCode: "+ statusCode);
-                            Log.d(TAG , "onFailure headers: "+ headers);
-                            Log.d(TAG , "onFailure throwable: "+ throwable);
-                            Log.d(TAG , "onFailure object: "+ object);
-                        }
-                    });
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                Log.d(TAG, "onFailure statusCode: " + statusCode);
+                                Log.d(TAG, "onFailure headers: " + headers);
+                                Log.d(TAG, "onFailure responseString: " + responseString);
+                                Log.d(TAG, "onFailure throwable: " + throwable);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject object) {
+                                Log.d(TAG, "onFailure statusCode: " + statusCode);
+                                Log.d(TAG, "onFailure headers: " + headers);
+                                Log.d(TAG, "onFailure throwable: " + throwable);
+                                Log.d(TAG, "onFailure object: " + object);
+                            }
+                        });
+
+                        // Launch Dashboard Screen
+                        Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                        // Close all views before launching Dashboard
+                        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(mainActivityIntent);
+                        // Close Login Screen
+                        finish();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Log.d(TAG, "onFailure statusCode: " + statusCode);
+                    Log.d(TAG, "onFailure headers: " + headers);
+                    Log.d(TAG, "onFailure responseString: " + responseString);
+                    Log.d(TAG, "onFailure throwable: " + throwable);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject object) {
+                    Log.d(TAG, "onFailure statusCode: " + statusCode);
+                    Log.d(TAG, "onFailure headers: " + headers);
+                    Log.d(TAG, "onFailure throwable: " + throwable);
+                    Log.d(TAG, "onFailure object: " + object);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
     }
 }

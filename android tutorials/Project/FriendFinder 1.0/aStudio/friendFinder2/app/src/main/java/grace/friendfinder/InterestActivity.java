@@ -6,12 +6,16 @@ package grace.friendfinder;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +58,13 @@ public class InterestActivity extends Activity {
         musicGenresTextView = (TextView) findViewById(R.id.music_genres_textView);
         movieGenresTextView = (TextView) findViewById(R.id.movie_genres_textView);
 
-        fillTextViews();
+        if (isNetworkAvailable() == true) {
+            fillTextViews();
+        } else {
+            Toast.makeText(InterestActivity.this,"The app couldn't connect to the internet. " +
+                    "Please connect to the internet and " +
+                    "resume the application!", Toast.LENGTH_LONG).show();
+        }
     }
 
     private class ButtonClick implements View.OnClickListener {
@@ -63,8 +73,15 @@ public class InterestActivity extends Activity {
             String movieGenres = movieGenresEditText.getText().toString();
             String musicGenres = musicGenresEditText.getText().toString();
 
-            StringEntity userUpdate = userJson(userName, userGender, movieGenres, musicGenres);
-            updateUser(getApplicationContext(), userUpdate);
+            if (isNetworkAvailable() == true) {
+                // Fixme check if the interest already exists
+                StringEntity userUpdate = userJson(userName, userGender, movieGenres, musicGenres);
+                updateUser(getApplicationContext(), userUpdate);
+            } else {
+                Toast.makeText(InterestActivity.this,"The app couldn't connect to the internet. " +
+                        "Please connect to the internet and " +
+                        "resume the application!", Toast.LENGTH_LONG).show();
+            }
         }
     }
     private void fillTextViews() {
@@ -164,6 +181,8 @@ public class InterestActivity extends Activity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
                 Log.d(TAG, "------- user response2 : " + response2);
+
+                // TODO launch login Activity
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -180,5 +199,12 @@ public class InterestActivity extends Activity {
                 Log.d(TAG , "onFailure object: "+ object);
             }
         });
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
     }
 }
