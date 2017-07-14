@@ -86,6 +86,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(loginIntent);
                 finish();
                 return true;
+            case R.id.add_interest:
+                Log.d(TAG, "Adding Interests.");
+
+                Intent interestIntent = new Intent(this, InterestActivity.class);
+                interestIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(interestIntent);
+                finish();
+                return true;
             case R.id.settings:
                 return true;
 
