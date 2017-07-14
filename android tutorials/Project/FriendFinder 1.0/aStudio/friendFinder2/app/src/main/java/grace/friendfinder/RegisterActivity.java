@@ -90,7 +90,8 @@ public class RegisterActivity extends Activity {
                                 // storing the user in the local SQLite db
                                 db = new DatabaseHandler(getApplicationContext());
                                 db.resetTables(); // first deleting all the rows
-                                db.addUser(null, null, serverResp.getString("email"),serverResp.getString("createdAt"));
+                                db.addUser(null, null, serverResp.getString("email"),
+                                        serverResp.getString("createdAt"), serverResp.getInt("id"));
                                 Log.d(TAG, "Created user in the local SQLite db.");
 
                                     HashMap hm = db.getUserDetails();
@@ -98,8 +99,9 @@ public class RegisterActivity extends Activity {
                                     String gender2 = (String) hm.get("gender");
                                     String email2 = (String) hm.get("email");
                                     String created_at2 = (String) hm.get("created_at");
-                                    Log.d(TAG, "register-hash: name, gender, email, created_at: 1-" +
-                                            name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2);
+                                    Integer user_id2 = (Integer) hm.get("id");
+                                    Log.d(TAG, "register-hash: name, gender, email, created_at, user_id: 1-" +
+                                            name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2 +" 5-"+user_id2 );
 
                                 JSONObject jsonParams2 = new JSONObject();
                                 jsonParams2.put("name", nameInput);
@@ -114,15 +116,16 @@ public class RegisterActivity extends Activity {
                                         try {
                                             JSONObject serverResp2 = new JSONObject(response2.toString());
                                             db.updateUser(serverResp2.getString("name"), serverResp2.getString("gender"),
-                                                   serverResp.getString("email"), serverResp.getString("createdAt"));
+                                                   serverResp.getString("email"), serverResp.getString("createdAt"), serverResp.getInt("id"));
 
                                             HashMap hm = db.getUserDetails();
                                             String name2 = (String) hm.get("name");
                                             String gender2 = (String) hm.get("gender");
                                             String email2 = (String) hm.get("email");
                                             String created_at2 = (String) hm.get("created_at");
-                                            Log.d(TAG, "register2-hash: name, gender, email, created_at: 1-" +
-                                                    name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2);
+                                            Integer user_id2 = (Integer) hm.get("id");
+                                            Log.d(TAG, "register2-hash: name, gender, email, created_at, user_id: 1-" +
+                                                    name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2+" 5-"+user_id2);
 
                                         } catch (Exception ex) {
                                             ex.printStackTrace();

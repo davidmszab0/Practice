@@ -71,11 +71,12 @@ public class LoginActivity extends Activity {
                                 JSONObject serverResp = new JSONObject(response.toString());
                                 String email = serverResp.getString("email");
                                 String created_at = serverResp.getString("createdAt");
+                                Integer user_id = serverResp.getInt("id");
 
                                 // storing the user in the local SQLite db
                                 db = new DatabaseHandler(getApplicationContext());
                                 db.resetTables(); // first deleting all the rows
-                                db.addUser("", "", email, created_at);
+                                db.addUser("", "", email, created_at, user_id);
                                 Log.d(TAG, "Created user in the local SQLite db.");
 
                                 if (db.getRowCount()) {
@@ -84,8 +85,9 @@ public class LoginActivity extends Activity {
                                     String gender2 = (String) hm.get("gender");
                                     String email2 = (String) hm.get("email");
                                     String created_at2 = (String) hm.get("created_at");
-                                    Log.d(TAG, "login-hash: name, gender, email, created_at: 1-" +
-                                            name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2);
+                                    Integer user_id2 = (Integer) hm.get("id");
+                                    Log.d(TAG, "login-hash: name, gender, email, created_at, user_id: 1-" +
+                                            name2 +" 2-"+gender2+" 3-"+email2+" 4-"+created_at2+" 5-"+user_id2 );
                                 }
 
                                 HttpUtils.get("/user/" + serverResp.getString("id"), null, new JsonHttpResponseHandler() {
@@ -98,15 +100,16 @@ public class LoginActivity extends Activity {
                                             String name = serverResp2.getString("name");
                                             String gender = serverResp2.getString("gender");
 
-                                            db.updateUser(name, gender, null, null);
+                                            db.updateUser(name, gender, null, null, null);
 
                                             HashMap hm = db.getUserDetails();
                                             String name3 = (String) hm.get("name");
                                             String gender3 = (String) hm.get("gender");
                                             String email3 = (String) hm.get("email");
                                             String created_at3 = (String) hm.get("created_at");
-                                            Log.d(TAG, "login2-hash: name, gender, email, created_at: 1-" +
-                                                    name3 +" 2-"+gender3+" 3-"+email3+" 4-"+created_at3);
+                                            Integer user_id3 = (Integer) hm.get("id");
+                                            Log.d(TAG, "login2-hash: name, gender, email, created_at, user_id: 1-" +
+                                                    name3 +" 2-"+gender3+" 3-"+email3+" 4-"+created_at3+" 5-"+user_id3);
 
                                             // Launch Dashboard Screen
                                             Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);

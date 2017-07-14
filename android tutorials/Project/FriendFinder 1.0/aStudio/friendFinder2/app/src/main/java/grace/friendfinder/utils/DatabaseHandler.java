@@ -26,6 +26,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private final String KEY_GENDER = "gender";
     private final String KEY_EMAIL = "email";
     private final String KEY_CREATED_AT = "created_at";
+    private final String KEY_USER_ID = "user_id";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,7 +40,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_NAME + " TEXT,"
                 + KEY_GENDER + " TEXT,"
                 + KEY_EMAIL + " TEXT UNIQUE,"
-                + KEY_CREATED_AT + " TEXT" + ")";
+                + KEY_CREATED_AT + " TEXT,"
+                + KEY_USER_ID + " INTEGER" +")";
         db.execSQL(CREATE_LOGIN_TABLE);
     }
 
@@ -56,7 +58,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      * */
-    public void addUser(String name, String gender, String email, String created_at) {
+    public void addUser(String name, String gender, String email, String created_at, Integer user_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -71,6 +73,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         if (isNotBlank(created_at)) {
             values.put(KEY_CREATED_AT, created_at); // CreatedAt
+        }
+        if (user_id != null) {
+            values.put(KEY_USER_ID, user_id); // user_id
         }
 
 //        values.put(KEY_NAME, name); // Name
@@ -90,7 +95,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * @param email
      * @param created_at
      */
-    public void updateUser(String name, String gender, String email, String created_at) {
+    public void updateUser(String name, String gender, String email, String created_at, Integer user_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -105,6 +110,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         if (isNotBlank(created_at)) {
             values.put(KEY_CREATED_AT, created_at); // CreatedAt
+        }
+        if (user_id != null) {
+            values.put(KEY_USER_ID, user_id); // user_id
         }
 
         String restrict = KEY_ID + "=" + 1;
@@ -128,6 +136,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             user.put("gender", cursor.getString(2));
             user.put("email", cursor.getString(3));
             user.put("created_at", cursor.getString(4));
+            user.put("user_id", cursor.getString(5));
         }
         cursor.close();
         db.close();
