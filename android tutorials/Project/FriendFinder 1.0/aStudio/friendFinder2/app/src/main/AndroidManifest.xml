@@ -35,8 +35,8 @@
         </activity>
         <activity
             android:name="grace.friendfinder.InterestActivity"
-            android:parentActivityName=".LoginActivity"
-            android:label="@string/title_activity_login"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/interest_activity"
             android:screenOrientation="portrait" >
         </activity>
     </application>

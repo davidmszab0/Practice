@@ -6,6 +6,7 @@ package grace.friendfinder;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -43,11 +44,13 @@ public class InterestActivity extends Activity {
     private JSONArray listMovieGenres;
     private JSONArray listMusicGenres;
     Integer user_id2 = null;
+    private Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interest);
+        context=getApplicationContext();
 
         /* Assign listener to button */
         button = (Button)findViewById(R.id.done_button);
@@ -76,7 +79,7 @@ public class InterestActivity extends Activity {
             if (isNetworkAvailable() == true) {
                 // Fixme check if the interest already exists
                 StringEntity userUpdate = userJson(userName, userGender, movieGenres, musicGenres);
-                updateUser(getApplicationContext(), userUpdate);
+                updateUser(context, userUpdate);
             } else {
                 Toast.makeText(InterestActivity.this,"The app couldn't connect to the internet. " +
                         "Please connect to the internet and " +
@@ -87,10 +90,11 @@ public class InterestActivity extends Activity {
     private void fillTextViews() {
         db = new DatabaseHandler(getApplicationContext());
         HashMap hm = db.getUserDetails();
-        String name2 = (String) hm.get("name");
+        userName = (String) hm.get("name");
+        userGender = (String) hm.get("gender");
         user_id2 =  Integer.parseInt((String) hm.get("user_id"));
         Log.d(TAG, "interest-hash: name, user_id: 1-" +
-                name2 +" 2-" + user_id2 );
+                userName +" 2-" + user_id2 );
 
         HttpUtils.get("/user/" + user_id2, null, new JsonHttpResponseHandler() {
             @Override
@@ -98,9 +102,6 @@ public class InterestActivity extends Activity {
                 Log.d(TAG, "------- user response: " + response);
 
                 try {
-                    userName = response.getString("name");
-                    userGender = response.getString("gender");
-
                     listMovieGenres = response.getJSONArray("movieGenres");
                         if(listMovieGenres != null) {
                             Log.d(TAG, "listMovieGenresObject: " + listMovieGenres);
@@ -155,14 +156,14 @@ public class InterestActivity extends Activity {
         JSONObject parent = new JSONObject();
         StringEntity entityUser = null;
 
-        JSONObject movie = new JSONObject();
-        JSONObject music = new JSONObject();
+        JSONObject movieGenresObject = new JSONObject();
+        JSONObject musicGenresObject = new JSONObject();
 
         try {
-            movie.put("name", movieGenres);
-            listMovieGenres.put(movie);
-            music.put("name", musicGenres);
-            listMusicGenres.put(music);
+            movieGenresObject.put("name", movieGenres);
+            listMovieGenres.put(movieGenresObject);
+            musicGenresObject.put("name", musicGenres);
+            listMusicGenres.put(musicGenresObject);
 
             parent.put("name", name);
             parent.put("gender", gender);
@@ -176,13 +177,19 @@ public class InterestActivity extends Activity {
         return entityUser;
     }
 
-    private void updateUser (Context context, StringEntity entityUser) {
+    private void updateUser (final Context context, StringEntity entityUser) {
         HttpUtils.put(context, "/user/" + user_id2, entityUser, "application/json", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
                 Log.d(TAG, "------- user response2 : " + response2);
 
-                // TODO launch login Activity
+                // Launch Dashboard Screen
+                Intent mainActivityIntent = new Intent(context, MainActivity.class);
+                // Close all views before launching Dashboard
+                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(mainActivityIntent);
+                // Close Login Screen
+                finish();
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -206,5 +213,12 @@ public class InterestActivity extends Activity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent intent = new Intent(context, MainActivity.class);
+        startActivity(intent);
     }
 }

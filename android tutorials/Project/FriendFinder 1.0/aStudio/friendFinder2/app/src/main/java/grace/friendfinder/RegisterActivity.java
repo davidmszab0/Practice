@@ -72,8 +72,9 @@ public class RegisterActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "Email needs to be at least 1 character long", Toast.LENGTH_SHORT).show();
                     emailEditText.setText("");
                 }
+
                 if (isNetworkAvailable() == true) {
-                    registerRequest(context);
+                    registerRequest(context, emailInput, passwordInput);
                 } else {
                     Toast.makeText(RegisterActivity.this,"The app couldn't connect to the internet. " +
                             "Please connect to the internet and " +
@@ -82,7 +83,7 @@ public class RegisterActivity extends Activity {
             }
         });
     }
-    private void registerRequest (final Context context) {
+    private void registerRequest (final Context context, String emailInput, String passwordInput) {
         try {
             JSONObject jsonParams = new JSONObject();
             jsonParams.put("email", emailInput);
@@ -99,11 +100,14 @@ public class RegisterActivity extends Activity {
                     try {
                         final JSONObject serverResp = new JSONObject(response.toString());
 
+                        String email = serverResp.getString("email");
+                        String createdAt = serverResp.getString("createdAt");
+                        Integer id = serverResp.getInt("id");
                         // storing the user in the local SQLite db
-                        db = new DatabaseHandler(getApplicationContext());
+                        db = new DatabaseHandler(context);
                         db.resetTables(); // first deleting all the rows
-                        db.addUser(null, null, serverResp.getString("email"),
-                                serverResp.getString("createdAt"), serverResp.getInt("id"));
+                        db.addUser(null, null, email,
+                                createdAt, id);
                         Log.d(TAG, "Created user in the local SQLite db.");
 
                         HashMap hm = db.getUserDetails();
@@ -121,15 +125,16 @@ public class RegisterActivity extends Activity {
                         StringEntity entityUser = new StringEntity(jsonParams2.toString());
                         Log.d(TAG, "entityUser: " + entityUser);
 
-                        HttpUtils.put(context, "/user/" + serverResp.getString("id"), entityUser, "application/json", new JsonHttpResponseHandler() {
+                        HttpUtils.put(context, "/user/" + id, entityUser, "application/json", new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
                                 Log.d(TAG, "------- user response2 : " + response2);
                                 try {
                                     JSONObject serverResp2 = new JSONObject(response2.toString());
                                     db.updateUser(serverResp2.getString("name"), serverResp2.getString("gender"),
-                                            serverResp.getString("email"), serverResp.getString("createdAt"), serverResp.getInt("id"));
+                                            null, null, null);
 
+                                    // Fixme when you register a user the user_id is not correct, registered
                                     HashMap hm = db.getUserDetails();
                                     String name2 = (String) hm.get("name");
                                     String gender2 = (String) hm.get("gender");
@@ -162,7 +167,7 @@ public class RegisterActivity extends Activity {
                         });
 
                         // Launch Dashboard Screen
-                        Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent mainActivityIntent = new Intent(context, MainActivity.class);
                         // Close all views before launching Dashboard
                         mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(mainActivityIntent);

@@ -4,6 +4,7 @@
     <string name="title_activity_register">Register</string>
     <string name="title_activity_interest">Interest</string>
     <string name="login_activity_title_label_1"></string>
+    <string name="interest_activity">Interest Update</string>
     <string name="login_activity_title_label_2">FriendFinder</string>
     <string name="login_activity_hint_email">Enter email</string>
     <string name="login_activity_hint_password">Enter password</string>

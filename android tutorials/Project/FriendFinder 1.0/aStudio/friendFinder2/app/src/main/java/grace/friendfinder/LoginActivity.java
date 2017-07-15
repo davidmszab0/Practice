@@ -83,6 +83,7 @@ public class LoginActivity extends Activity {
             rp.add("email", email);
             rp.add("password", password);
 
+            // get user for this email and password
             HttpUtils.get("/account", rp, new JsonHttpResponseHandler() {
 
                 @Override
@@ -98,7 +99,7 @@ public class LoginActivity extends Activity {
                         // storing the user in the local SQLite db
                         db = new DatabaseHandler(getApplicationContext());
                         db.resetTables(); // first deleting all the rows
-                        db.addUser("", "", email, created_at, user_id);
+                        db.addUser(null, null, email, created_at, user_id);
                         Log.d(TAG, "Created user in the local SQLite db.");
 
                         if (db.getRowCount()) {
