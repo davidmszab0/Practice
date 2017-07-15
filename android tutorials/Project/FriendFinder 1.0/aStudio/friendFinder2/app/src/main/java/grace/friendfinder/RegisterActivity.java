@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -28,11 +29,10 @@ import grace.friendfinder.utils.HttpUtils;
 
 public class RegisterActivity extends Activity {
 
-    Button btnRegister;
-    EditText nameEditText;
-    EditText emailEditText;
-    EditText genderEditText;
-    EditText passwordEditText;
+    private Button btnRegister;
+    private EditText nameEditText;
+    private EditText emailEditText;
+    private EditText passwordEditText;
 
     private String genderInput ="";
     private String passwordInput = "";
@@ -50,7 +50,6 @@ public class RegisterActivity extends Activity {
         // Importing all assets like buttons, text fields
         nameEditText = (EditText) findViewById(R.id.registerName);
         emailEditText = (EditText) findViewById(R.id.registerEmail);
-        genderEditText = (EditText) findViewById(R.id.gender);
         passwordEditText = (EditText) findViewById(R.id.registerPassword);
         btnRegister = (Button) findViewById(R.id.btnRegister);
 
@@ -61,7 +60,6 @@ public class RegisterActivity extends Activity {
                 final Context context = getApplicationContext();
                 nameInput = nameEditText.getText().toString();
                 emailInput = emailEditText.getText().toString();
-                genderInput = genderEditText.getText().toString();
                 passwordInput = passwordEditText.getText().toString();
 
                 if (passwordInput.length() < 0) {
@@ -206,5 +204,24 @@ public class RegisterActivity extends Activity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null;
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radio_male:
+                if (checked)
+                    // Pirates are the best
+                    genderInput = "Male";
+                    break;
+            case R.id.radio_female:
+                if (checked)
+                    // Ninjas rule
+                    genderInput = "Female";
+                    break;
+        }
     }
 }

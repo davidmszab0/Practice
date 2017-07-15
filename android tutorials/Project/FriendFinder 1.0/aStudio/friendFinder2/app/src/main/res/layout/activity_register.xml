@@ -6,22 +6,22 @@
     tools:context="grace.friendfinder.RegisterActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/login_activity_title_label_1"
-        android:id="@+id/textView"
         android:gravity="center_horizontal"
         android:layout_centerHorizontal="true"
         android:textSize="25dp"
         android:typeface="serif" />
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/login_activity_title_label_2"
-        android:id="@+id/textView2"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:typeface="serif"
@@ -37,28 +37,37 @@
 
 
         <EditText
+            android:id="@+id/registerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/registerName"
             android:hint="@string/register_activity_hint_name" />
 
         <EditText
+            android:id="@+id/registerEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
             android:ems="10"
-            android:id="@+id/registerEmail"
             android:hint="@string/register_activity_hint_email" />
 
-        <EditText
-            android:layout_width="wrap_content"
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:ems="10"
-            android:id="@+id/gender"
-            android:hint="@string/gender" />
+            android:orientation="horizontal">
+            <RadioButton android:id="@+id/radio_male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gender1"
+                android:onClick="onRadioButtonClicked"/>
+
+            <RadioButton android:id="@+id/radio_female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gender2"
+                android:onClick="onRadioButtonClicked"/>
+        </RadioGroup>
 
         <EditText
             android:layout_width="wrap_content"
