@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import static org.apache.commons.lang3.StringUtils.*;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -105,8 +106,8 @@ public class ProfileActivity extends Activity {
                     e.printStackTrace();
                 }
 
-                //updateMovieGenres(getApplicationContext(), userUpdate);
-                updateMovieGenres(getApplicationContext(), user, movieGenres);
+                //updateUser(getApplicationContext(), userUpdate);
+                postGenres(getApplicationContext(), movieGenres, musicGenres);
             } else {
                 Toast.makeText(ProfileActivity.this,"The app couldn't connect to the internet. " +
                         "Please connect to the internet and " +
@@ -202,8 +203,11 @@ public class ProfileActivity extends Activity {
         return entityUser;
     }
 
-    private void updateMovieGenres(final Context context, StringEntity entityUser, String movieGenre) {
-        HttpUtils.put(context, "/user/" + user_id2+"/genre?movieGenre="+ movieGenre, entityUser, "application/json", new JsonHttpResponseHandler() {
+    private void postGenres(final Context context, String movieGenre, String musicGenre) {
+        RequestParams rp = new RequestParams();
+        rp.add("movieGenre", movieGenre);
+        rp.add("musicGenre", musicGenre);
+        HttpUtils.get("/user/" + user_id2 + "/genre", rp, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
                 Log.d(TAG, "------- put user response2 : " + response2);
@@ -225,6 +229,37 @@ public class ProfileActivity extends Activity {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d(TAG , "onFailure statusCode: "+ statusCode);
+                Log.d(TAG , "onFailure headers: "+ headers);
+                Log.d(TAG , "onFailure responseString: "+ responseString);
+                Log.d(TAG , "onFailure throwable: "+ throwable);
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject object) {
+                Log.d(TAG , "onFailure statusCode: "+ statusCode);
+                Log.d(TAG , "onFailure headers: "+ headers);
+                Log.d(TAG , "onFailure throwable: "+ throwable);
+                Log.d(TAG , "onFailure object: "+ object);
+            }
+        });
+    }
+
+    private void updateUser (final Context context, StringEntity entityUser) {
+        HttpUtils.put(context, "/user/" + user_id2, entityUser, "application/json", new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
+                Log.d(TAG, "------- user response2 : " + response2);
+
+                // Launch Dashboard Screen
+                Intent mainActivityIntent = new Intent(context, MainActivity.class);
+                // Close all views before launching Dashboard
+                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(mainActivityIntent);
+                // Close Login Screen
+                finish();
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
