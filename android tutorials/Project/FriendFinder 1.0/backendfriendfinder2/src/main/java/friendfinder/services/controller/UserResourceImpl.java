@@ -166,8 +166,9 @@ public class UserResourceImpl {
         return movieGenres;
     }
 
-    /*@PutMapping(value = "/{id}/movieGenres")
+    @PutMapping(value = "/{id}/genre")
     public User updateEntity (@PathVariable(value = "id") Integer id,
+                              @RequestParam(value = "movieGenre") String movieGenre,
                               @RequestBody User entity) {
         log.debug("Updating the entity with movieGenres.");
         User entityBefore = userRepository.findUserById(id);
@@ -175,9 +176,12 @@ public class UserResourceImpl {
             throw new HttpNotFoundException("The Entity was not found");
         }
         entity.setId(id);
+        MovieGenres mvG = new MovieGenres(movieGenre);
+        entity.addMovieGenres(mvG);
+
         userRepository.save(entity);
         return entity;
-    }*/
+    }
 
     // ------------------------  Operations on MusicGenres ------------------------
 

@@ -2,6 +2,7 @@ package friendfinder.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -15,8 +16,11 @@ import java.util.Set;
 @Table(name = "music_genres")
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id",
+        scope=MusicGenres.class)
 public class MusicGenres {
+
+    // TODO change infinite recursion to something else
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

@@ -1,9 +1,6 @@
 package friendfinder.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,7 +12,8 @@ import java.util.Set;
 @Table(name = "users")
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id",
+        scope = User.class)
 public class User implements Serializable {
 
     /**
@@ -132,14 +130,14 @@ public class User implements Serializable {
         mvG.getUsers().add(this);
     }
 
-    public void removeBook(MovieGenres mvG) {
+    public void removeMovieGenre(MovieGenres mvG) {
         movieGenres.remove(mvG);
         mvG.getUsers().remove(this);
     }
 
     public void remove() {
         for(MovieGenres mvG : new HashSet<MovieGenres>(movieGenres)) {
-            removeBook(mvG);
+            removeMovieGenre(mvG);
         }
     }
 

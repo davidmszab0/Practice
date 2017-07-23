@@ -111,18 +111,18 @@ public class DbTests {
         User user2 = new User();
         user2.setName("User 1");
         user2.setGender(User.Gender.Male);
-        user2.setMovieGenres(movieGenresHash);
-        user2.setMusicGenres(musicGenresHashSet);
-        //user2.addMovieGenres(comedy); // this works for not the inverse table too, who is not the owner
-        //user2.addMovieGenres(action);
+        //user2.setMovieGenres(movieGenresHash);
+        //user2.setMusicGenres(musicGenresHashSet);
+        user2.addMovieGenres(comedy); // this works for not the inverse table too, who is not the owner
+        user2.addMovieGenres(action);
 
         User user3 = new User();
         user3.setName("User 2");
         user3.setGender(User.Gender.Male);
-        user3.setMovieGenres(movieGenresHash2);
-        user3.setMusicGenres(musicGenresHashSet);
-        //user3.addMovieGenres(comedy); // to don't get detached tables
-        //user3.addMovieGenres(bromance);
+        //user3.setMovieGenres(movieGenresHash2);
+        //user3.setMusicGenres(musicGenresHashSet);
+        user3.addMovieGenres(comedy); // to don't get detached tables
+        user3.addMovieGenres(bromance);
 
         Account acc2 = new Account("email", "pwd");
         acc2.setUser(user2);
@@ -137,10 +137,10 @@ public class DbTests {
         HashSet<User> userHash = new HashSet<>();
         userHash.add(user2);
         userHash.add(user3);
-        userRepository.save(userHash);
+        //userRepository.save(userHash);
 
-        //userRepository.save(user2);
-        //userRepository.save(user3);
+        userRepository.save(user2);
+        userRepository.save(user3);
         Assert.assertEquals(userRepository.count(),2);
 
         //log.info("print hashSet2 " + userHash.toString());

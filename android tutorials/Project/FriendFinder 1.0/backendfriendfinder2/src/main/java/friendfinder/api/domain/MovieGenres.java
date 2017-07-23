@@ -1,7 +1,9 @@
 package friendfinder.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,6 +14,10 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "movie_genres")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id",
+        scope=MovieGenres.class)
 public class MovieGenres {
 
     @Id
@@ -21,7 +27,6 @@ public class MovieGenres {
     private String name;
 
     @ManyToMany(fetch=FetchType.LAZY, mappedBy = "movieGenres", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     public MovieGenres() {
