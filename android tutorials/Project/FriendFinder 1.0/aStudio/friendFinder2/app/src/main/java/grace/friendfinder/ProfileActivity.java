@@ -16,13 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import static org.apache.commons.lang3.StringUtils.*;
 import com.loopj.android.http.JsonHttpResponseHandler;
+
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import cz.msebera.android.httpclient.Header;
@@ -30,27 +29,35 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 import grace.friendfinder.utils.DatabaseHandler;
 import grace.friendfinder.utils.HttpUtils;
 
-public class InterestActivity extends Activity {
+public class ProfileActivity extends Activity {
 
-    private String TAG = "Interest";
+    private String TAG = "Profile";
     private Button button;
-    private EditText movieGenresEditText, musicGenresEditText;
+    private EditText movieGenresEditText, musicGenresEditText, nameEditText;
     private TextView musicGenresTextView, movieGenresTextView;
     private DatabaseHandler db = null;
     private ArrayList<String> moviesArray = new ArrayList<>();
-    private ArrayList<String> musicArray = new ArrayList<String>();
+    private ArrayList<String> musicArray = new ArrayList<>();
     private String userName = "";
     private String userGender = "";
     private JSONArray listMovieGenres;
     private JSONArray listMusicGenres;
     Integer user_id2 = null;
-    private Context context;
+    StringEntity user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_interest);
-        context=getApplicationContext();
+        setContentView(R.layout.activity_profile);
+        final Context context = this;
+        db = new DatabaseHandler(context);
+
+        HashMap hm = db.getUserDetails();
+        userName = (String) hm.get("name");
+        userGender = (String) hm.get("gender");
+        user_id2 =  Integer.parseInt((String) hm.get("user_id"));
+        Log.d(TAG, "interest-hash: name, user_id: 1-" +
+                userName +" 2-" + user_id2 );
 
         /* Assign listener to button */
         button = (Button)findViewById(R.id.done_button);
@@ -58,13 +65,17 @@ public class InterestActivity extends Activity {
 
         movieGenresEditText = (EditText)findViewById(R.id.movie_genres_editText);
         musicGenresEditText = (EditText)findViewById(R.id.music_genres_editText);
+        nameEditText = (EditText)findViewById(R.id.name_profile_editText);
         musicGenresTextView = (TextView) findViewById(R.id.music_genres_textView);
         movieGenresTextView = (TextView) findViewById(R.id.movie_genres_textView);
+
+        moviesArray.clear();
+        musicArray.clear();
 
         if (isNetworkAvailable() == true) {
             fillTextViews();
         } else {
-            Toast.makeText(InterestActivity.this,"The app couldn't connect to the internet. " +
+            Toast.makeText(ProfileActivity.this,"The app couldn't connect to the internet. " +
                     "Please connect to the internet and " +
                     "resume the application!", Toast.LENGTH_LONG).show();
         }
@@ -75,56 +86,66 @@ public class InterestActivity extends Activity {
 
             String movieGenres = movieGenresEditText.getText().toString();
             String musicGenres = musicGenresEditText.getText().toString();
+            String name = nameEditText.getText().toString();
+            Log.d(TAG, "user name: " + name);
+
+            if (isBlank(name)) {
+                name = userName;
+            } else {
+                name = nameEditText.getText().toString();
+            }
 
             if (isNetworkAvailable() == true) {
-                // Fixme check if the interest already exists
-                StringEntity userUpdate = userJson(userName, userGender, movieGenres, musicGenres);
-                updateUser(context, userUpdate);
+                // Fixme check if the music/movieGenres already exists, then don't add interest
+                //StringEntity userUpdate = userJson(userName, userGender, movieGenres, musicGenres);
+
+                try {
+                  //  System.out.println("Entity: " + IOUtils.toString(userUpdate.getContent()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //updateMovieGenres(getApplicationContext(), userUpdate);
+                updateMovieGenres(getApplicationContext(), user, movieGenres);
             } else {
-                Toast.makeText(InterestActivity.this,"The app couldn't connect to the internet. " +
+                Toast.makeText(ProfileActivity.this,"The app couldn't connect to the internet. " +
                         "Please connect to the internet and " +
                         "resume the application!", Toast.LENGTH_LONG).show();
             }
         }
     }
     private void fillTextViews() {
-        db = new DatabaseHandler(getApplicationContext());
-        HashMap hm = db.getUserDetails();
-        userName = (String) hm.get("name");
-        userGender = (String) hm.get("gender");
-        user_id2 =  Integer.parseInt((String) hm.get("user_id"));
-        Log.d(TAG, "interest-hash: name, user_id: 1-" +
-                userName +" 2-" + user_id2 );
-
         HttpUtils.get("/user/" + user_id2, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d(TAG, "------- user response: " + response);
+                Log.d(TAG, "------- get user response: " + response);
 
                 try {
+                    user = new StringEntity(response.toString());
+
                     listMovieGenres = response.getJSONArray("movieGenres");
-                        if(listMovieGenres != null) {
-                            Log.d(TAG, "listMovieGenresObject: " + listMovieGenres);
-                            for (int j = 0; j < listMovieGenres.length(); j++) {
-                                JSONObject elemMovieGenres = listMovieGenres.getJSONObject(j);
-                                Log.d(TAG, "elemMovieGenresObject j: " + j + " - " + elemMovieGenres);
-                                if (elemMovieGenres != null) {
-                                    moviesArray.add(elemMovieGenres.getString("name"));
-                                }
+                    if(listMovieGenres != null) {
+                        Log.d(TAG, "listMovieGenresObject: " + listMovieGenres);
+                        for (int j = 0; j < listMovieGenres.length(); j++) {
+                            JSONObject elemMovieGenres = listMovieGenres.getJSONObject(j);
+                            Log.d(TAG, "elemMovieGenresObject j: " + j + " - " + elemMovieGenres);
+                            if (elemMovieGenres != null) {
+                                moviesArray.add(elemMovieGenres.getString("name"));
                             }
                         }
+                    }
 
                     listMusicGenres = response.getJSONArray("musicGenres");
-                        if(listMusicGenres != null) {
-                            Log.d(TAG, "listMusicGenresObject: "  + listMusicGenres);
-                            for(int j = 0; j < listMusicGenres.length(); j++) {
-                                JSONObject elemMusicGenres = listMusicGenres.getJSONObject(j);
-                                Log.d(TAG, "elemMovieGenresObject j: " + j + " - " + elemMusicGenres);
-                                if(elemMusicGenres != null) {
-                                    musicArray.add(elemMusicGenres.getString("name"));
-                                }
+                    if(listMusicGenres != null) {
+                        Log.d(TAG, "listMusicGenresObject: "  + listMusicGenres);
+                        for(int j = 0; j < listMusicGenres.length(); j++) {
+                            JSONObject elemMusicGenres = listMusicGenres.getJSONObject(j);
+                            Log.d(TAG, "elemMovieGenresObject j: " + j + " - " + elemMusicGenres);
+                            if(elemMusicGenres != null) {
+                                musicArray.add(elemMusicGenres.getString("name"));
                             }
                         }
+                    }
                     for (int i = 0; i < moviesArray.size(); i++) {
                         movieGenresTextView.append(moviesArray.get(i) + ", ");
                     }
@@ -160,36 +181,50 @@ public class InterestActivity extends Activity {
         JSONObject musicGenresObject = new JSONObject();
 
         try {
-            movieGenresObject.put("name", movieGenres);
-            listMovieGenres.put(movieGenresObject);
-            musicGenresObject.put("name", musicGenres);
-            listMusicGenres.put(musicGenresObject);
+            if (isNotBlank(movieGenres)) {
+                movieGenresObject.put("name", movieGenres);
+                listMovieGenres.put(movieGenresObject);
+            }
+            if (isNotBlank(musicGenres)) {
+                musicGenresObject.put("name", musicGenres);
+                listMusicGenres.put(musicGenresObject);
+            }
 
+            //parent.put("id", JSONObject.NULL);
             parent.put("name", name);
             parent.put("gender", gender);
             parent.put("movieGenres", listMovieGenres);
             parent.put("musicGenres", listMusicGenres);
             entityUser = new StringEntity(parent.toString());
-            Log.d(TAG, "entityAccount: " + entityUser);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return entityUser;
     }
 
-    private void updateUser (final Context context, StringEntity entityUser) {
-        HttpUtils.put(context, "/user/" + user_id2, entityUser, "application/json", new JsonHttpResponseHandler() {
+    private void updateMovieGenres(final Context context, StringEntity entityUser, String movieGenre) {
+        HttpUtils.put(context, "/user/" + user_id2+"/genre?movieGenre="+ movieGenre, entityUser, "application/json", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
-                Log.d(TAG, "------- user response2 : " + response2);
+                Log.d(TAG, "------- put user response2 : " + response2);
+                try {
 
-                // Launch Dashboard Screen
-                Intent mainActivityIntent = new Intent(context, MainActivity.class);
-                // Close all views before launching Dashboard
-                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(mainActivityIntent);
-                // Close Login Screen
-                finish();
+                    user = new StringEntity(response2.toString());
+
+                    String name = response2.getString("name");
+                    db.updateUser(name, null,
+                            null, null, null);
+
+                    // Launch Dashboard Screen
+                    Intent mainActivityIntent = new Intent(context, MainActivity.class);
+                    // Close all views before launching Dashboard
+                    mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(mainActivityIntent);
+                    // Close Login Screen
+                    finish();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -218,7 +253,7 @@ public class InterestActivity extends Activity {
     @Override
     public void onBackPressed() {
         finish();
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }

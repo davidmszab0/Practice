@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import org.json.JSONObject;
@@ -28,12 +27,10 @@ public class LoginActivity extends Activity {
 
     private Button btnLogin, btnRegister;
     private EditText inputEmail, inputPassword;
-    private TextView loginErrorMsg, textViewForgotPassword;
+    private TextView textViewForgotPassword;
     private DatabaseHandler db = null;
 
     private String TAG = "Login";
-
-    String url = "http://10.0.2.2:8080/account";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +42,6 @@ public class LoginActivity extends Activity {
         inputPassword = (EditText) findViewById(R.id.loginPassword);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnRegister = (Button) findViewById(R.id.btnRegisterLogin);
-        loginErrorMsg = (TextView) findViewById(R.id.login_error);
         //textViewForgotPassword = (TextView) findViewById(R.id.textViewForgotPassword);
 
         // Login button Click Event

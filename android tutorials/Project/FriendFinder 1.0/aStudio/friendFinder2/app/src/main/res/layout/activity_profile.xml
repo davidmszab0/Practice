@@ -9,18 +9,33 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="4sp"
+        android:text="Your Profile"
         android:textAlignment="center"
-        android:text="Your Interests: " />
+        android:textSize="18sp" />
 
-    <TextView android:id="@+id/movie_genres_textView"
+    <EditText
+        android:id="@+id/name_profile_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="20"
+        android:hint="@string/register_activity_hint_name" />
+
+    <TextView
+        android:id="@+id/movie_genres_textView"
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="4sp"
         android:text="MovieGenres: "
-        android:layout_height="wrap_content"  />
+        android:textSize="16sp" />
 
-    <TextView android:id="@+id/music_genres_textView"
+    <TextView
+        android:id="@+id/music_genres_textView"
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="4sp"
         android:text="MusicGenres: "
-        android:layout_height="wrap_content"  />
+        android:textSize="16sp" />
 
     <TextView
         android:layout_width="fill_parent"

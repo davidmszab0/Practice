@@ -19,14 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import grace.friendfinder.utils.DatabaseHandler;
@@ -96,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.add_interest:
-                Log.d(TAG, "Adding Interests.");
+                Log.d(TAG, "Update Profile");
 
-                Intent interestIntent = new Intent(this, InterestActivity.class);
+                Intent interestIntent = new Intent(this, ProfileActivity.class);
                 interestIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(interestIntent);
                 finish();
@@ -134,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View rowView = inflater.inflate(R.layout.list_item, parent, false);
-            Log.d("getView ", String.valueOf(position));
 
             TextView nameLine = (TextView) rowView.findViewById(R.id.nameId);
             TextView genderLine = (TextView) rowView.findViewById(R.id.genderId);
@@ -171,10 +167,10 @@ public class MainActivity extends AppCompatActivity {
 
                         JSONArray listMovieGenres = userObject.getJSONArray("movieGenres");
                         if(listMovieGenres != null){
-                            Log.d(TAG, "listMovieGenresObject: "  + listMovieGenres);
+                            //Log.d(TAG, "listMovieGenresObject: "  + listMovieGenres);
                             for(int j = 0; j < listMovieGenres.length(); j++){
                                 JSONObject elemMovieGenres = listMovieGenres.getJSONObject(j);
-                                Log.d(TAG, "elemMovieGenresObject i: " + i +",j: " + j + " - " + elemMovieGenres);
+                               // Log.d(TAG, "elemMovieGenresObject i: " + i +",j: " + j + " - " + elemMovieGenres);
                                 if(elemMovieGenres != null){
                                     moviesArray.get(i).add(elemMovieGenres.getString("name"));
                                 }
@@ -184,10 +180,10 @@ public class MainActivity extends AppCompatActivity {
 
                         JSONArray listMusicGenres = userObject.getJSONArray("musicGenres");
                         if(listMusicGenres != null){
-                            Log.d(TAG, "listMusicGenresObject: "  + listMusicGenres);
+                            //Log.d(TAG, "listMusicGenresObject: "  + listMusicGenres);
                             for(int j = 0; j < listMusicGenres.length(); j++){
                                 JSONObject elemMusicGenres = listMusicGenres.getJSONObject(j);
-                                Log.d(TAG, "elemMovieGenresObject i: " + i +",j: " + j + " - " + elemMusicGenres);
+                                //Log.d(TAG, "elemMovieGenresObject i: " + i +",j: " + j + " - " + elemMusicGenres);
                                 if(elemMusicGenres != null){
                                     musicArray.get(i).add(elemMusicGenres.getString("name"));
                                 }
@@ -218,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
