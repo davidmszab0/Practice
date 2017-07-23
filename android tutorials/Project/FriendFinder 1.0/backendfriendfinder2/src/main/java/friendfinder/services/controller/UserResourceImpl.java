@@ -189,7 +189,7 @@ public class UserResourceImpl {
         return musicGenres;
     }
 
-    // Fixme - do the POST new genres with POST, not GET!
+    // Fixme - you POST new genres, but only update the user
     @GetMapping(value = "/{id}/genre")
     public User postGenres (@PathVariable(value = "id") Integer id,
                               @RequestParam(value = "movieGenre") String movieGenre,
