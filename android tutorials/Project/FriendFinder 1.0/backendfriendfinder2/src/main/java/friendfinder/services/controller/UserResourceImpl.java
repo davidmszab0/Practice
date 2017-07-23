@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import static friendfinder.api.domain.User.getGenderEnums;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.util.HashSet;
 import java.util.List;
@@ -166,23 +167,6 @@ public class UserResourceImpl {
         return movieGenres;
     }
 
-    @PutMapping(value = "/{id}/genre")
-    public User updateEntity (@PathVariable(value = "id") Integer id,
-                              @RequestParam(value = "movieGenre") String movieGenre,
-                              @RequestBody User entity) {
-        log.debug("Updating the entity with movieGenres.");
-        User entityBefore = userRepository.findUserById(id);
-        if (entityBefore == null) {
-            throw new HttpNotFoundException("The Entity was not found");
-        }
-        entity.setId(id);
-        MovieGenres mvG = new MovieGenres(movieGenre);
-        entity.addMovieGenres(mvG);
-
-        userRepository.save(entity);
-        return entity;
-    }
-
     // ------------------------  Operations on MusicGenres ------------------------
 
     @GetMapping(value = "/{id}/musicGenres")
@@ -203,5 +187,29 @@ public class UserResourceImpl {
         Set<MusicGenres> musicGenres = searchedEntity.getMusicGenres();
 
         return musicGenres;
+    }
+
+    // Fixme - do the POST new genres with POST, not GET!
+    @GetMapping(value = "/{id}/genre")
+    public User postGenres (@PathVariable(value = "id") Integer id,
+                              @RequestParam(value = "movieGenre") String movieGenre,
+                              @RequestParam(value = "musicGenre") String musicGenre) {
+        log.debug("Updating the entity with genres.");
+        User entityBefore = userRepository.findUserById(id);
+        if (entityBefore == null) {
+            throw new HttpNotFoundException("The Entity was not found.");
+        }
+
+        if (isNotBlank(movieGenre)) {
+            MovieGenres mvG = new MovieGenres(movieGenre);
+            entityBefore.addMovieGenres(mvG);
+        }
+        if (isNotBlank(musicGenre)) {
+            MusicGenres msG = new MusicGenres(musicGenre);
+            entityBefore.addMusicGenres(msG);
+        }
+
+        userRepository.save(entityBefore);
+        return entityBefore;
     }
 }

@@ -61,4 +61,8 @@ public class MusicGenres {
     public void setUser(Set<User>  user) {
         this.users = user;
     }
+
+    public Set<User> getUsers() {
+        return users;
+    }
 }

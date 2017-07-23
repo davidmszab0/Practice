@@ -89,11 +89,10 @@ public class UserServiceTests {
         System.out.println("baba is: " + baba.toString());
 
         Response response = given().
-                body(new User("Peter", User.Gender.Male, postedAcc)).
                 contentType(ContentType.JSON).
                 accept("application/json").
                 when().
-                put("user/" + Integer.toString(postedAcc.getId()) + "/genre?movieGenre=Scifi").
+                get("user/" + Integer.toString(postedAcc.getId()) + "/genre?movieGenre=Scifi&musicGenre=hallod").
                 then().
                 statusCode(200)
                 .extract().response();

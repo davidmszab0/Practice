@@ -130,6 +130,11 @@ public class User implements Serializable {
         mvG.getUsers().add(this);
     }
 
+    public void addMusicGenres(MusicGenres msG) {
+        musicGenres.add(msG);
+        msG.getUsers().add(this);
+    }
+
     public void removeMovieGenre(MovieGenres mvG) {
         movieGenres.remove(mvG);
         mvG.getUsers().remove(this);
