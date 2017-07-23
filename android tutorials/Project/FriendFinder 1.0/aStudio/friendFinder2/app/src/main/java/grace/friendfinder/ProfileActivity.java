@@ -90,6 +90,7 @@ public class ProfileActivity extends Activity {
             String name = nameEditText.getText().toString();
             Log.d(TAG, "user name: " + name);
 
+            // TODO - update name on the stringEntity user
             if (isBlank(name)) {
                 name = userName;
             } else {
@@ -97,7 +98,7 @@ public class ProfileActivity extends Activity {
             }
 
             if (isNetworkAvailable() == true) {
-                // Fixme check if the music/movieGenres already exists, then don't add interest
+                // Fixme check if the music/movieGenres already exist in the db, then don't add interest
                 //StringEntity userUpdate = userJson(userName, userGender, movieGenres, musicGenres);
 
                 try {
