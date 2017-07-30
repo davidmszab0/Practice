@@ -92,7 +92,7 @@ public class UserServiceTests {
                 contentType(ContentType.JSON).
                 accept("application/json").
                 when().
-                get("user/" + Integer.toString(postedAcc.getId()) + "/genre?movieGenre=Scifi&musicGenre=hallod").
+                get("user/" + Integer.toString(postedAcc.getId()) + "/profile?name=Zoltan&movieGenre=Scifi&musicGenre=hallod").
                 then().
                 statusCode(200)
                 .extract().response();

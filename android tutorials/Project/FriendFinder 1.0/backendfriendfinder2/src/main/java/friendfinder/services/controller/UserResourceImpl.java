@@ -123,7 +123,7 @@ public class UserResourceImpl {
     }
 
     @PutMapping(value = "/{id}")
-    public User updateEntity (@PathVariable(value = "id") Integer id,
+    public User updateUser (@PathVariable(value = "id") Integer id,
                                  @RequestBody User entity) {
         log.debug("Updating the entity.");
             User entityBefore = userRepository.findUserById(id);
@@ -189,15 +189,23 @@ public class UserResourceImpl {
         return musicGenres;
     }
 
+    // ------------------------  Update Profile ------------------------
+
     // Fixme - you POST new genres, but only update the user
-    @GetMapping(value = "/{id}/genre")
+    // Fixme - frontEnd I would need to remove the JSON Identity json parts when I update the user
+    @GetMapping(value = "/{id}/profile")
     public User postGenres (@PathVariable(value = "id") Integer id,
+                              @RequestParam(value = "name") String name,
                               @RequestParam(value = "movieGenre") String movieGenre,
                               @RequestParam(value = "musicGenre") String musicGenre) {
         log.debug("Updating the entity with genres.");
         User entityBefore = userRepository.findUserById(id);
         if (entityBefore == null) {
             throw new HttpNotFoundException("The Entity was not found.");
+        }
+
+        if (isNotBlank(name)) {
+            entityBefore.setName(name);
         }
 
         if (isNotBlank(movieGenre)) {
