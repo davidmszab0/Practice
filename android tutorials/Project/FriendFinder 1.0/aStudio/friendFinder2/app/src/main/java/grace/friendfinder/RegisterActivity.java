@@ -132,7 +132,6 @@ public class RegisterActivity extends Activity {
                                     db.updateUser(serverResp2.getString("name"), serverResp2.getString("gender"),
                                             null, null, null);
 
-                                    // Fixme when you register a user the user_id is not correct, registered
                                     HashMap hm = db.getUserDetails();
                                     String name2 = (String) hm.get("name");
                                     String gender2 = (String) hm.get("gender");
