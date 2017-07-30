@@ -90,11 +90,8 @@ public class ProfileActivity extends Activity {
             String name = nameEditText.getText().toString();
             Log.d(TAG, "user name: " + name);
 
-            // TODO - update name on the stringEntity user
             if (isBlank(name)) {
                 name = userName;
-            } else {
-                name = nameEditText.getText().toString();
             }
 
             if (isNetworkAvailable() == true) {
@@ -108,7 +105,7 @@ public class ProfileActivity extends Activity {
                 }
 
                 //updateUser(getApplicationContext(), userUpdate);
-                postGenres(getApplicationContext(), movieGenres, musicGenres);
+                postGenres(getApplicationContext(), name, movieGenres, musicGenres);
             } else {
                 Toast.makeText(ProfileActivity.this,"The app couldn't connect to the internet. " +
                         "Please connect to the internet and " +
@@ -204,11 +201,12 @@ public class ProfileActivity extends Activity {
         return entityUser;
     }
 
-    private void postGenres(final Context context, String movieGenre, String musicGenre) {
+    private void postGenres(final Context context, String name, String movieGenre, String musicGenre) {
         RequestParams rp = new RequestParams();
+        rp.add("name", name);
         rp.add("movieGenre", movieGenre);
         rp.add("musicGenre", musicGenre);
-        HttpUtils.get("/user/" + user_id2 + "/genre", rp, new JsonHttpResponseHandler() {
+        HttpUtils.get("/user/" + user_id2 + "/profile", rp, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
                 Log.d(TAG, "------- put user response2 : " + response2);
@@ -248,6 +246,7 @@ public class ProfileActivity extends Activity {
         });
     }
 
+    // Fixme - I would need to remove the JSON Identity json parts when I update the user, e.g.: "users":[1] and "user":[1] to make this work
     private void updateUser (final Context context, StringEntity entityUser) {
         HttpUtils.put(context, "/user/" + user_id2, entityUser, "application/json", new JsonHttpResponseHandler() {
             @Override
