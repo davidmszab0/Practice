@@ -17,14 +17,14 @@
         android:text="Gender"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     <TextView
-        android:id="@+id/moviesId"
+        android:id="@+id/moviesGenresId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:text="Movie: "
         android:textAppearance="?android:attr/textAppearanceMedium" />
     <TextView
-        android:id="@+id/musicId"
+        android:id="@+id/musicGenresId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"

@@ -1,5 +1,6 @@
 package grace.friendfinder;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +31,11 @@ import cz.msebera.android.httpclient.Header;
 import grace.friendfinder.utils.DatabaseHandler;
 import grace.friendfinder.utils.HttpUtils;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * @author David M Szabo.
+ */
+
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private String TAG = "Main";
     private DatabaseHandler db = null;
@@ -38,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<ArrayList<String>> moviesArray = new ArrayList<ArrayList<String>>();
     private ArrayList<ArrayList<String>> musicArray = new ArrayList<ArrayList<String>>();
     private FriendsAdapter friendsAdapter;
+    private SearchManager searchManager;
+    private MenuItem searchMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +65,13 @@ public class MainActivity extends AppCompatActivity {
                         "Please connect to the internet and " +
                         "resume the application!", Toast.LENGTH_LONG).show();
             }
+            handleIntent(getIntent());
 
             ListView listView = (ListView) findViewById(R.id.listView);
             friendsAdapter = new FriendsAdapter(this, R.layout.list_item,
                     namesArray, gendersArray, moviesArray, musicArray);
             listView.setAdapter(friendsAdapter);
+
 
         } else {
             // user is not logged in show login screen
@@ -76,6 +86,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // An XML based main_menu specification.
         getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        searchManager = (SearchManager)
+                getSystemService(Context.SEARCH_SERVICE);
+        searchMenuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+
+        searchView.setSearchableInfo(searchManager.
+                getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(this);
+
         return true;
     }
 
@@ -108,6 +129,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+
+        // Get the intent, verify the action and get the query
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            //use the query to activity_search your data somehow
+            doSearch(query);
+        }
+    }
+
+    private void doSearch(String queryStr) {
+        Log.d(TAG, "Your search: " + queryStr);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
     // ------------ ARRAY ADAPTER ---------------
     public class FriendsAdapter extends ArrayAdapter<String> {
         private Context context;
@@ -134,8 +184,8 @@ public class MainActivity extends AppCompatActivity {
 
             TextView nameLine = (TextView) rowView.findViewById(R.id.nameId);
             TextView genderLine = (TextView) rowView.findViewById(R.id.genderId);
-            TextView moviesLine = (TextView) rowView.findViewById(R.id.moviesId);
-            TextView musicLine = (TextView) rowView.findViewById(R.id.musicId);
+            TextView moviesLine = (TextView) rowView.findViewById(R.id.moviesGenresId);
+            TextView musicLine = (TextView) rowView.findViewById(R.id.musicGenresId);
 
             nameLine.setText("Name: " + name.get(position));
             genderLine.setText("Gender: " + gender.get(position));

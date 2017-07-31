@@ -78,11 +78,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             values.put(KEY_USER_ID, user_id); // user_id
         }
 
-//        values.put(KEY_NAME, name); // Name
-//        values.put(KEY_GENDER, gender); // Gender
-//        values.put(KEY_EMAIL, email); // Email
-//        values.put(KEY_CREATED_AT, created_at); // Created At
-
         // Inserting Row
         db.insert(TABLE_LOGIN, null, values);
         db.close(); // Closing database connection

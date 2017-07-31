@@ -1,7 +1,7 @@
 package grace.friendfinder;
 
 /**
- * Created by grace on 14/07/17.
+ * Created by David M Szabo on 14/07/17.
  */
 
 import android.app.Activity;
@@ -74,6 +74,8 @@ public class ProfileActivity extends Activity {
         musicArray.clear();
 
         if (isNetworkAvailable() == true) {
+
+            // TODO implement delete functions
             fillTextViews();
         } else {
             Toast.makeText(ProfileActivity.this,"The app couldn't connect to the internet. " +
