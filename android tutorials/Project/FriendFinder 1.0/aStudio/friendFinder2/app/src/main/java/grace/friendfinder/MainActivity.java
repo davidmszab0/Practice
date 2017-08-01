@@ -9,26 +9,18 @@ import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-
 import cz.msebera.android.httpclient.Header;
 import grace.friendfinder.utils.DatabaseHandler;
+import grace.friendfinder.utils.FriendsAdapter;
 import grace.friendfinder.utils.HttpUtils;
 
 /**
@@ -41,8 +33,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private DatabaseHandler db = null;
     private ArrayList<String> namesArray = new ArrayList<>();
     private ArrayList<String> gendersArray = new ArrayList<>();
-    private ArrayList<ArrayList<String>> moviesArray = new ArrayList<ArrayList<String>>();
-    private ArrayList<ArrayList<String>> musicArray = new ArrayList<ArrayList<String>>();
+    private ArrayList<ArrayList<String>> moviesArray = new ArrayList<>();
+    //private String [][] moviesArray;
+    private ArrayList<ArrayList<String>> musicArray = new ArrayList<>();
     private FriendsAdapter friendsAdapter;
     private SearchManager searchManager;
     private MenuItem searchMenuItem;
@@ -65,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         "Please connect to the internet and " +
                         "resume the application!", Toast.LENGTH_LONG).show();
             }
-            handleIntent(getIntent());
 
             ListView listView = (ListView) findViewById(R.id.listView);
             friendsAdapter = new FriendsAdapter(this, R.layout.list_item,
@@ -155,49 +147,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        friendsAdapter.getFilter().filter(newText);
         return false;
-    }
-
-    // ------------ ARRAY ADAPTER ---------------
-    public class FriendsAdapter extends ArrayAdapter<String> {
-        private Context context;
-        private ArrayList<String> name;
-        private ArrayList<String> gender;
-        private ArrayList<ArrayList<String>> movies;
-        private ArrayList<ArrayList<String>> music;
-
-        public FriendsAdapter(Context context, int textViewResourceId, ArrayList<String> name, ArrayList<String> gender,
-                              ArrayList<ArrayList<String>> movies, ArrayList<ArrayList<String>> music) {
-            super(context, textViewResourceId, name);
-            this.context = context;
-            this.name = name;
-            this.gender = gender;
-            this.movies = movies;
-            this.music = music;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.list_item, parent, false);
-
-            TextView nameLine = (TextView) rowView.findViewById(R.id.nameId);
-            TextView genderLine = (TextView) rowView.findViewById(R.id.genderId);
-            TextView moviesLine = (TextView) rowView.findViewById(R.id.moviesGenresId);
-            TextView musicLine = (TextView) rowView.findViewById(R.id.musicGenresId);
-
-            nameLine.setText("Name: " + name.get(position));
-            genderLine.setText("Gender: " + gender.get(position));
-            for (int i = 0; i < movies.get(position).size(); i++) {
-                moviesLine.append(movies.get(position).get(i) + ", ");
-            }
-            for (int j = 0; j < music.get(position).size(); j++) {
-                musicLine.append(music.get(position).get(j) + ", ");
-            }
-
-            return rowView;
-        }
     }
 
     private void fillArrays() {
@@ -219,9 +170,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         if(listMovieGenres != null){
                             //Log.d(TAG, "listMovieGenresObject: "  + listMovieGenres);
                             for(int j = 0; j < listMovieGenres.length(); j++){
+                                //moviesArray = new String[response.length()][listMovieGenres.length()];
                                 JSONObject elemMovieGenres = listMovieGenres.getJSONObject(j);
                                // Log.d(TAG, "elemMovieGenresObject i: " + i +",j: " + j + " - " + elemMovieGenres);
                                 if(elemMovieGenres != null){
+                                    //moviesArray[i][j] = elemMovieGenres.getString("name");
                                     moviesArray.get(i).add(elemMovieGenres.getString("name"));
                                 }
                             }
