@@ -46,6 +46,7 @@
             android:label="@string/interest_activity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity android:name="grace.friendfinder.preferences.SimplePreferenceActivity"/>
     </application>
 
 </manifest>

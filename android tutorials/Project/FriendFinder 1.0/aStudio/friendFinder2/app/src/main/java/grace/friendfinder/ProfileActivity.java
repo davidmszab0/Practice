@@ -1,7 +1,7 @@
 package grace.friendfinder;
 
 /**
- * Created by David M Szabo on 14/07/17.
+ * @author David M Szabo on 14/07/2017.
  */
 
 import android.app.Activity;

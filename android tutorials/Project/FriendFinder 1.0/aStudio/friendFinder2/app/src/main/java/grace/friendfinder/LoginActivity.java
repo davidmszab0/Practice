@@ -21,7 +21,7 @@ import grace.friendfinder.utils.DatabaseHandler;
 import grace.friendfinder.utils.HttpUtils;
 
 /**
- * @author David M Szabo
+ * @author David M Szabo on 11/06/2017.
  */
 public class LoginActivity extends Activity {
 

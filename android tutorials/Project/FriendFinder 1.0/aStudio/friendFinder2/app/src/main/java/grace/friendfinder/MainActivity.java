@@ -20,12 +20,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import cz.msebera.android.httpclient.Header;
 import grace.friendfinder.domain.User;
+import grace.friendfinder.preferences.SimplePreferenceActivity;
 import grace.friendfinder.utils.DatabaseHandler;
 import grace.friendfinder.utils.FriendsAdapter;
 import grace.friendfinder.utils.HttpUtils;
+import grace.friendfinder.utils.SharedPreference;
 
 /**
- * @author David M Szabo.
+ * @author David M Szabo on 05/06/2017.
  */
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
@@ -38,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private MenuItem searchMenuItem;
     private User user;
     private ArrayList<User> userArray = new ArrayList<>();
+    // TODO look at assingment 2 how I used sharedPrefs
+    private SharedPreference sharedPreference;
+    private String searchPref = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         if (db.getRowCount()) {
             setContentView(R.layout.list_view);
             Log.d(TAG, "on the mainActivity screen");
+
+            // TODO find a meaningful need for shared preferences!
+            sharedPreference = new SharedPreference();
 
             if (isNetworkAvailable() == true) {
                 userArray.clear();
@@ -112,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 finish();
                 return true;
             case R.id.settings:
+                startActivity(new Intent(this, SimplePreferenceActivity.class));
                 return true;
 
             default:
