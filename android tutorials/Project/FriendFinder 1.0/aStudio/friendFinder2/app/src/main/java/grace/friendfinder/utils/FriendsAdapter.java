@@ -1,47 +1,74 @@
 package grace.friendfinder.utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import grace.friendfinder.R;
+import grace.friendfinder.domain.User;
 
 /**
  * Created by grace on 01/08/17.
+ *
+ * Reference: https://coderwall.com/p/zpwrsg/add-search-function-to-list-view-in-android, 2017.08.01.
  */
 
-public class FriendsAdapter extends ArrayAdapter<String> implements Filterable {
+public class FriendsAdapter extends BaseAdapter implements Filterable {
+    private String TAG = "FriendsAdapter";
     private Context context;
-    private ArrayList<String> nameList;
-    private ArrayList<String> genderList;
-    private ArrayList<ArrayList<String>> movieGenresList;
-    private ArrayList<ArrayList<String>> musicGenresList;
-    private ArrayList<String> filteredNameList;
-    private NameFilter nameFilter;
+    private ArrayList<User> userList;
+    private ArrayList<User> filteredUserList;
+    private UserFilter userFilter;
 
-    public FriendsAdapter(Context context, int textViewResourceId, ArrayList<String> name, ArrayList<String> gender,
-                          ArrayList<ArrayList<String>> movies, ArrayList<ArrayList<String>> music) {
-        super(context, textViewResourceId, name);
+    public FriendsAdapter(Context context, ArrayList<User> users) {
         this.context = context;
-        this.nameList = name;
-        this.genderList = gender;
-        this.movieGenresList = movies;
-        this.musicGenresList = music;
-        this.filteredNameList = name;
+        this.userList = users;
+        this.filteredUserList =users;
+
+        getFilter();
+    }
+
+    /**
+     * Get size of user list
+     * @return userList size
+     */
+    @Override
+    public int getCount() {
+        return filteredUserList.size();
+    }
+
+    /**
+     * Get specific item from user list
+     * @param i item index
+     * @return list item
+     */
+    @Override
+    public Object getItem(int i) {
+        return filteredUserList.get(i);
+    }
+
+    /**
+     * Get user list item id
+     * @param i item index
+     * @return current item id
+     */
+    @Override
+    public long getItemId(int i) {
+        return i;
     }
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
 
         final ViewHolder holder;
+        final User user = (User) getItem(position);
 
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context
@@ -60,19 +87,19 @@ public class FriendsAdapter extends ArrayAdapter<String> implements Filterable {
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.nameLine.setText("Name: " + nameList.get(position));
-        holder.genderLine.setText("Gender: " + genderList.get(position));
+        holder.nameLine.setText("Name: " + user.getName());
+        holder.genderLine.setText("Gender: " + user.getGender());
 
-        String[] tempArray0 = new String[movieGenresList.get(position).size()];
-        for (int i = 0; i < movieGenresList.get(position).size(); i++) {
-            tempArray0[i] = movieGenresList.get(position).get(i);
-            //holder.moviesLine.append(movieGenresList.get(position).get(i) + ", ");
+        int tempArray0Size = user.getMovieGenres().size();
+        String[] tempArray0 = new String[tempArray0Size];
+        for (int i = 0; i < tempArray0Size; i++) {
+            tempArray0[i] = user.getMovieGenres().get(i);
             holder.moviesLine.setText(Arrays.toString(tempArray0).replaceAll("\\[|\\]", ""));
         }
-        String[] tempArray1 = new String[musicGenresList.get(position).size()];
-        for (int j = 0; j < musicGenresList.get(position).size(); j++) {
-            tempArray1[j] = musicGenresList.get(position).get(j);
-            //holder.musicLine.append(musicGenresList.get(position).get(j) + ", ");
+        int tempArray1Size = user.getMusicGenres().size();
+        String[] tempArray1 = new String[tempArray1Size];
+        for (int j = 0; j < tempArray1Size; j++) {
+            tempArray1[j] = user.getMusicGenres().get(j);
             holder.musicLine.setText(Arrays.toString(tempArray1).replaceAll("\\[|\\]", ""));
         }
 
@@ -94,17 +121,17 @@ public class FriendsAdapter extends ArrayAdapter<String> implements Filterable {
      */
     @Override
     public Filter getFilter() {
-        if (nameFilter == null) {
-            nameFilter = new NameFilter();
+        if (userFilter == null) {
+            userFilter = new UserFilter();
         }
-        return nameFilter;
+        return userFilter;
     }
 
     /**
      * Custom filter for friend list
      * Filter content in friend list according to the search text
      */
-    private class NameFilter extends Filter {
+    private class UserFilter extends Filter {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -112,20 +139,20 @@ public class FriendsAdapter extends ArrayAdapter<String> implements Filterable {
 
             if (constraint!=null && constraint.length()>0) {
 
-                ArrayList<String> tempList = new ArrayList<>();
+                ArrayList<User> tempList = new ArrayList<>();
 
                 // search content in friend list
-                for (String name : nameList) {
-                    if (name.toLowerCase().contains(constraint.toString().toLowerCase())) {
-                        tempList.add(name);
+                for (User user : userList) {
+                    if (user.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                        tempList.add(user);
                     }
                 }
 
                 filterResults.count = tempList.size();
                 filterResults.values = tempList;
             } else {
-                filterResults.count = nameList.size();
-                filterResults.values = nameList;
+                filterResults.count = userList.size();
+                filterResults.values = userList;
             }
 
             return filterResults;
@@ -139,7 +166,8 @@ public class FriendsAdapter extends ArrayAdapter<String> implements Filterable {
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredNameList = (ArrayList<String>) results.values;
+            filteredUserList = (ArrayList<User>) results.values;
+            Log.d(TAG, "results: " + results.values.toString());
             notifyDataSetChanged();
         }
     }

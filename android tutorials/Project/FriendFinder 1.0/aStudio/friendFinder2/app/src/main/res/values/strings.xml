@@ -16,7 +16,7 @@
     <string name="register_activity_hint_password">Password</string>
     <string name="gender1">Male</string>
     <string name="gender2">Female</string>
-    <string name="search_hint">Search users</string>
+    <string name="search_hint">Search name</string>
     <string name="register_activity_button_sign_up">Sign up</string>
     <string name="action_settings">Settings</string>
 </resources>

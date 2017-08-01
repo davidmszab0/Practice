@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import cz.msebera.android.httpclient.Header;
+import grace.friendfinder.domain.User;
 import grace.friendfinder.utils.DatabaseHandler;
 import grace.friendfinder.utils.FriendsAdapter;
 import grace.friendfinder.utils.HttpUtils;
@@ -31,14 +32,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private String TAG = "Main";
     private DatabaseHandler db = null;
-    private ArrayList<String> namesArray = new ArrayList<>();
-    private ArrayList<String> gendersArray = new ArrayList<>();
-    private ArrayList<ArrayList<String>> moviesArray = new ArrayList<>();
-    //private String [][] moviesArray;
-    private ArrayList<ArrayList<String>> musicArray = new ArrayList<>();
+    // TODO create a UserManager class to manage the array of users
     private FriendsAdapter friendsAdapter;
     private SearchManager searchManager;
     private MenuItem searchMenuItem;
+    private User user;
+    private ArrayList<User> userArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             Log.d(TAG, "on the mainActivity screen");
 
             if (isNetworkAvailable() == true) {
+                userArray.clear();
                 fillArrays();
             } else {
                 Toast.makeText(MainActivity.this,"The app couldn't connect to the internet. " +
@@ -60,10 +60,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             }
 
             ListView listView = (ListView) findViewById(R.id.listView);
-            friendsAdapter = new FriendsAdapter(this, R.layout.list_item,
-                    namesArray, gendersArray, moviesArray, musicArray);
+            friendsAdapter = new FriendsAdapter(this, userArray);
             listView.setAdapter(friendsAdapter);
-
 
         } else {
             // user is not logged in show login screen
@@ -164,22 +162,21 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         Log.d(TAG, "userObject: " + i + ": " + userObject);
                         String name = userObject.getString("name");
                         String gender = userObject.getString("gender");
-                        moviesArray.add(new ArrayList<String>());
+                        user = new User();
+                        user.setName(name);
+                        user.setGender(gender);
 
                         JSONArray listMovieGenres = userObject.getJSONArray("movieGenres");
                         if(listMovieGenres != null){
                             //Log.d(TAG, "listMovieGenresObject: "  + listMovieGenres);
                             for(int j = 0; j < listMovieGenres.length(); j++){
-                                //moviesArray = new String[response.length()][listMovieGenres.length()];
                                 JSONObject elemMovieGenres = listMovieGenres.getJSONObject(j);
                                // Log.d(TAG, "elemMovieGenresObject i: " + i +",j: " + j + " - " + elemMovieGenres);
                                 if(elemMovieGenres != null){
-                                    //moviesArray[i][j] = elemMovieGenres.getString("name");
-                                    moviesArray.get(i).add(elemMovieGenres.getString("name"));
+                                    user.addMovieGenresArray(elemMovieGenres.getString("name"));
                                 }
                             }
                         }
-                        musicArray.add(new ArrayList<String>());
 
                         JSONArray listMusicGenres = userObject.getJSONArray("musicGenres");
                         if(listMusicGenres != null){
@@ -188,12 +185,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                                 JSONObject elemMusicGenres = listMusicGenres.getJSONObject(j);
                                 //Log.d(TAG, "elemMovieGenresObject i: " + i +",j: " + j + " - " + elemMusicGenres);
                                 if(elemMusicGenres != null){
-                                    musicArray.get(i).add(elemMusicGenres.getString("name"));
+                                    user.addMusicGenresArray(elemMusicGenres.getString("name"));
                                 }
                             }
                         }
-                        namesArray.add(name);
-                        gendersArray.add(gender);
+                        userArray.add(user);
                     }
                     friendsAdapter.notifyDataSetChanged();
 
