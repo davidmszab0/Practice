@@ -146,6 +146,18 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
                     if (user.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         tempList.add(user);
                     }
+                    ArrayList<String> movieGenres = user.getMovieGenres();
+                    for (int i = 0; i < movieGenres.size(); i++) {
+                        if (user.getMovieGenres().get(i).toLowerCase().contains(constraint.toString().toLowerCase())) {
+                            tempList.add(user);
+                        }
+                    }
+                    ArrayList<String> musicGenres = user.getMusicGenres();
+                    for (int i = 0; i < musicGenres.size(); i++) {
+                        if (user.getMusicGenres().get(i).toLowerCase().contains(constraint.toString().toLowerCase())) {
+                            tempList.add(user);
+                        }
+                    }
                 }
 
                 filterResults.count = tempList.size();

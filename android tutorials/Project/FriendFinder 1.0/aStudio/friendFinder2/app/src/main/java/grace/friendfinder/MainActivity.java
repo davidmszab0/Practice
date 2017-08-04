@@ -214,7 +214,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     /**
-     * get all the users
+     * To get all the users.
+     * It also fills the User Array
      */
     private void fillArrays() {
 
