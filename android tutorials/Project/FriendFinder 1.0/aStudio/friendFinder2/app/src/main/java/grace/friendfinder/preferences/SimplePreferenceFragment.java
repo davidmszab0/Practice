@@ -2,11 +2,15 @@ package grace.friendfinder.preferences;
 
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import grace.friendfinder.R;
 
@@ -16,44 +20,36 @@ import grace.friendfinder.R;
 
 public class SimplePreferenceFragment extends PreferenceFragment {
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.simple_prefs);
 
-        final CheckBoxPreference checkboxPref = (CheckBoxPreference) getPreferenceManager().findPreference("checkbox_preference");
-        final CheckBoxPreference checkboxPrefColor = (CheckBoxPreference) getPreferenceManager().findPreference("checkbox_preference_color");
+        final ListPreference listPreference = (ListPreference) getPreferenceManager().findPreference("list_color_preference");
 
-
-        checkboxPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        listPreference.setOnPreferenceChangeListener((new Preference.OnPreferenceChangeListener() {
+            @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (newValue.toString().equals("true")) {
-                    Toast.makeText(getActivity(), "Checkbox: " + "true",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "Checkbox: " + "false",
-                            Toast.LENGTH_SHORT).show();
-                }
-                Log.d("MyApp", "Pref " + preference.getKey() + " changed to " + newValue.toString());
-                return true;
-            }
-        });
+                if (newValue.toString().equals("1")) {
+                    View v = getView();
+                    int backgroundColor = ContextCompat.getColor(v.getContext(), R.color.colorGrey);
+                    v.setBackgroundColor(backgroundColor);
 
-        checkboxPrefColor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (newValue.toString().equals("true")) {
+                } else if (newValue.toString().equals("2")) {
                     View v = getView();
                     int backgroundColor = ContextCompat.getColor(v.getContext(), R.color.colorPrimary);
                     v.setBackgroundColor(backgroundColor);
-                } else {
+                } else if (newValue.toString().equals("3")){
                     View v = getView();
                     int backgroundColor = ContextCompat.getColor(v.getContext(), R.color.colorAccent);
                     v.setBackgroundColor(backgroundColor);
+                } else {
+                    View v = getView();
+                    int backgroundColor = ContextCompat.getColor(v.getContext(), R.color.colorWhite);
+                    v.setBackgroundColor(backgroundColor);
                 }
-                Log.d("MyApp", "Pref " + preference.getKey() + " changed to " + newValue.toString());
                 return true;
             }
-        });
+        }));
     }
 }

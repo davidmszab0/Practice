@@ -1,36 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference android:title="Your Name"
+    <EditTextPreference
         android:key="username"
+        android:title="Your Name"
         android:summary="Please provide your username">
     </EditTextPreference>
     <PreferenceCategory
-        android:title="@string/pref_checkbox_title"
-        android:key="pref_key_checkbox_settings">
-        <CheckBoxPreference
-            android:key="checkbox_preference"
-            android:title="Checkbox Toast Message"
-            android:defaultValue="true"
-            android:summary="Check it on, check it off and you get a toast" />
-        <CheckBoxPreference
-            android:key="checkbox_preference_color"
-            android:title="Checkbox Color Settings"
-            android:defaultValue="true"
-            android:summary="Check it on, check it off and the background color changes" />
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/pref_ringtone_title"
-        android:key="pref_key_ringtone_settings">
-        <RingtonePreference
-            android:key="ringtone"
-            android:title="Ringtone Preference"
-            android:showDefault="true"
-            android:showSilent="true"
-            android:summary="Pick a tone, any tone" />
+        android:title="@string/pref_background_title" >
         <ListPreference
-            android:title="Download Details"
-            android:summary="Select the kind of data that you would like to download"
-            android:key="downloadType"
+            android:key="list_color_preference"
+            android:title="@string/pref_list_title"
+            android:summary="Select the kind of background you want for your app"
             android:defaultValue="1"
             android:entries="@array/listArray"
             android:entryValues="@array/listValues" />

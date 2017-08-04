@@ -3,10 +3,13 @@ package grace.friendfinder;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -25,12 +28,15 @@ import grace.friendfinder.utils.DatabaseHandler;
 import grace.friendfinder.utils.FriendsAdapter;
 import grace.friendfinder.utils.HttpUtils;
 import grace.friendfinder.utils.SharedPreference;
+import static org.apache.commons.lang3.StringUtils.*;
 
 /**
  * @author David M Szabo on 05/06/2017.
  */
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+
+    // TODO clean up the @strings
 
     private String TAG = "Main";
     private DatabaseHandler db = null;
@@ -40,9 +46,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private MenuItem searchMenuItem;
     private User user;
     private ArrayList<User> userArray = new ArrayList<>();
-    // TODO look at assingment 2 how I used sharedPrefs
+    ListView listView;
+
+    // search queries will be saved to shared Prefs
     private SharedPreference sharedPreference;
-    private String searchPref = "";
+    private String searchQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,23 +59,24 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         db = new DatabaseHandler(getApplicationContext());
 
+        // if the number of rows in the SQLite db is less than 1, then there is no user added to the db
         if (db.getRowCount()) {
             setContentView(R.layout.list_view);
             Log.d(TAG, "on the mainActivity screen");
 
-            // TODO find a meaningful need for shared preferences!
-            sharedPreference = new SharedPreference();
-
             if (isNetworkAvailable() == true) {
-                userArray.clear();
-                fillArrays();
+                userArray.clear(); // the array is loaded in the fillArrays every time the mainActivity is loaded
+                fillArrays(); // gets all the users
             } else {
                 Toast.makeText(MainActivity.this,"The app couldn't connect to the internet. " +
                         "Please connect to the internet and " +
                         "resume the application!", Toast.LENGTH_LONG).show();
             }
 
-            ListView listView = (ListView) findViewById(R.id.listView);
+            // sharedPref is used for searchQuery, which is used on onResume()
+            sharedPreference = new SharedPreference();
+
+            listView = (ListView) findViewById(R.id.listView);
             friendsAdapter = new FriendsAdapter(this, userArray);
             listView.setAdapter(friendsAdapter);
 
@@ -85,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         // An XML based main_menu specification.
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
+        // putting the search service to the toolbar widget
         searchManager = (SearchManager)
                 getSystemService(Context.SEARCH_SERVICE);
         searchMenuItem = menu.findItem(R.id.search);
@@ -128,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
+    // for the SearchView query intents
     @Override
     protected void onNewIntent(Intent intent) {
         handleIntent(intent);
@@ -145,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private void doSearch(String queryStr) {
         Log.d(TAG, "Your search: " + queryStr);
+        sharedPreference.save(this, queryStr);
+        // to get it: searchQuery = sharedPreference.getValue(context);
     }
 
     @Override
@@ -153,12 +166,59 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     @Override
-    public boolean onQueryTextChange(String newText) {
-        friendsAdapter.getFilter().filter(newText);
+    public boolean onQueryTextChange(String queryStr) {
+        // using the baseAdapter that implements the filtering
+        friendsAdapter.getFilter().filter(queryStr);
+        sharedPreference.save(this, queryStr);
         return false;
     }
 
+    // set the Background color from Settings
+    // set the latest search Query
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String value = sharedPref.getString("list_color_preference", "1");
+        Log.d(TAG, "preferences: " + value);
+        switch (value) {
+            case "1":
+                listView.setBackgroundColor(ContextCompat.getColor(listView.getContext(), R.color.colorGrey));
+                break;
+            case "2":
+                listView.setBackgroundColor(ContextCompat.getColor(listView.getContext(), R.color.colorPrimary));
+                break;
+            case "3":
+                listView.setBackgroundColor(ContextCompat.getColor(listView.getContext(), R.color.colorAccent));
+                break;
+            default:
+                listView.setBackgroundColor(ContextCompat.getColor(listView.getContext(), R.color.colorWhite));
+        }
+
+        searchQuery = sharedPreference.getValue(this);
+        if (isNotBlank(searchQuery)) {
+            // get the latest search results
+            Log.d(TAG, "queryStr2: " + searchQuery);
+            friendsAdapter.getFilter().filter(searchQuery);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    /**
+     * get all the users
+     */
     private void fillArrays() {
+
+        // REST call to get all users
         HttpUtils.get("/user/all", null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -166,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
                 try {
 
+                    // Parsing the REST response
                     for (int i = 0; i < response.length(); i++){
                         JSONObject userObject = response.getJSONObject(i);
                         Log.d(TAG, "userObject: " + i + ": " + userObject);
