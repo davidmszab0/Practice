@@ -139,38 +139,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-    /**
-     * For the SearchView query intents, submit a query
-     * @param intent
-     */
     @Override
-    protected void onNewIntent(Intent intent) {
-        handleIntent(intent);
-    }
+    public boolean onQueryTextSubmit(String queryStr) {
 
-    // get submitted query string
-    private void handleIntent(Intent intent) {
-
-        // Get the intent, verify the action and get the query
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to activity_search your data somehow
-            doSearch(query);
-        }
-    }
-
-    /**
-     * To get the search string and do something with it
-     * @param queryStr
-     */
-    private void doSearch(String queryStr) {
-        Log.d(TAG, "Your search: " + queryStr);
+        Log.d(TAG, "onQueryTextSubmit: " + queryStr);
         sharedPreference.save(this, queryStr);
-        // to get it: searchQuery = sharedPreference.getValue(context);
-    }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
         return false;
     }
 
