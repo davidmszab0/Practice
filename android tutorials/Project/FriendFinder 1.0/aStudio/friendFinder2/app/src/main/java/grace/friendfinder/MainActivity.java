@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import cz.msebera.android.httpclient.Header;
 import grace.friendfinder.domain.User;
+import grace.friendfinder.domain.UserManager;
 import grace.friendfinder.preferences.SimplePreferenceActivity;
 import grace.friendfinder.utils.DatabaseHandler;
 import grace.friendfinder.utils.FriendsAdapter;
@@ -45,8 +46,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private MenuItem searchMenuItem;
     private User user;
     private FriendsAdapter friendsAdapter;
-    // TODO create a UserManager class to manage the array of users
-    private ArrayList<User> userArray = new ArrayList<>();
+    // UserManager class to manage the array of users
+    private UserManager userManager = new UserManager();
     ListView listView;
 
     // search queries will be saved to shared Prefs
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             Log.d(TAG, "on the mainActivity screen");
 
             if (isNetworkAvailable() == true) {
-                userArray.clear(); // the array is loaded in the fillArrays every time the mainActivity is loaded
+                userManager.getUsers().clear(); // the array is loaded in the fillArrays every time the mainActivity is loaded
                 fillArrays(); // gets all the users
             } else {
                 Toast.makeText(MainActivity.this,"The app couldn't connect to the internet. " +
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             sharedPreference = new SharedPreference();
 
             listView = (ListView) findViewById(R.id.listView);
-            friendsAdapter = new FriendsAdapter(this, userArray);
+            friendsAdapter = new FriendsAdapter(this, userManager.getUsers());
             listView.setAdapter(friendsAdapter);
 
         } else {
@@ -251,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                                 }
                             }
                         }
-                        userArray.add(user);
+                        userManager.getUsers().add(user);
                     }
                     friendsAdapter.notifyDataSetChanged();
 

@@ -35,6 +35,12 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
         getFilter();
     }
 
+    void searchNote() {
+        // TODO count the amount of interests that matches current user with the one the search gives
+        // todo - implement an advanced search?
+        Log.d(TAG, "getting results");
+    }
+
     /**
      * Get size of user list
      * @return userList size
@@ -90,6 +96,8 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
         holder.nameLine.setText("Name: " + user.getName());
         holder.genderLine.setText("Gender: " + user.getGender());
 
+        // transform the ArrayList to Array to use Array.toString() with SetText,
+        // which prints nicer than append()
         int tempArray0Size = user.getMovieGenres().size();
         String[] tempArray0 = new String[tempArray0Size];
         for (int i = 0; i < tempArray0Size; i++) {
