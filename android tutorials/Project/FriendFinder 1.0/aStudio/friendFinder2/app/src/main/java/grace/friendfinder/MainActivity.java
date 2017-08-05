@@ -139,7 +139,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-    // for the SearchView query intents, submit a query
+    /**
+     * For the SearchView query intents, submit a query
+     * @param intent
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         handleIntent(intent);
@@ -156,7 +159,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-    // get the string and do something with it
+    /**
+     * To get the search string and do something with it
+     * @param queryStr
+     */
     private void doSearch(String queryStr) {
         Log.d(TAG, "Your search: " + queryStr);
         sharedPreference.save(this, queryStr);
@@ -168,6 +174,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         return false;
     }
 
+    /**
+     * With each key typed, the listView gets filtered.
+     * The search text is saved to Shared Preferences.
+     * @param queryStr
+     * @return
+     */
     @Override
     public boolean onQueryTextChange(String queryStr) {
         // using the baseAdapter that implements the filtering
@@ -176,8 +188,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         return false;
     }
 
-    // set the Background color from Settings
-    // set the latest search Query
+    /**
+     * Set the Background color from Settings.
+     * Set the latest search Query.
+     */
     @Override
     protected void onResume() {
         super.onResume();
