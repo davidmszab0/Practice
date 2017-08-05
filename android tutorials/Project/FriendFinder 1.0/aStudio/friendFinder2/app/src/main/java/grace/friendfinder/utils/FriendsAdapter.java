@@ -179,7 +179,7 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             filteredUserList = (ArrayList<User>) results.values;
-            Log.d(TAG, "results: " + results.values.toString());
+            //Log.d(TAG, "results: " + results.values.toString());
             notifyDataSetChanged();
         }
     }

@@ -40,11 +40,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private String TAG = "Main";
     private DatabaseHandler db = null;
-    // TODO create a UserManager class to manage the array of users
-    private FriendsAdapter friendsAdapter;
+    // TODO add options to search for more parameters
     private SearchManager searchManager;
     private MenuItem searchMenuItem;
     private User user;
+    private FriendsAdapter friendsAdapter;
+    // TODO create a UserManager class to manage the array of users
     private ArrayList<User> userArray = new ArrayList<>();
     ListView listView;
 
@@ -138,12 +139,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-    // for the SearchView query intents
+    // for the SearchView query intents, submit a query
     @Override
     protected void onNewIntent(Intent intent) {
         handleIntent(intent);
     }
 
+    // get submitted query string
     private void handleIntent(Intent intent) {
 
         // Get the intent, verify the action and get the query
@@ -154,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
+    // get the string and do something with it
     private void doSearch(String queryStr) {
         Log.d(TAG, "Your search: " + queryStr);
         sharedPreference.save(this, queryStr);
