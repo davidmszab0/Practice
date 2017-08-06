@@ -21,6 +21,8 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import cz.msebera.android.httpclient.Header;
 import grace.friendfinder.domain.User;
 import grace.friendfinder.domain.UserManager;
@@ -41,18 +43,19 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private String TAG = "Main";
     private DatabaseHandler db = null;
-    // TODO add options to search for more parameters
+    // TODO add options to search for more parameters/terms
     private SearchManager searchManager;
     private MenuItem searchMenuItem;
-    private User user;
     private FriendsAdapter friendsAdapter;
+    private User user;
     // UserManager class to manage the array of users
     private UserManager userManager = new UserManager();
-    ListView listView;
+    private ListView listView;
 
     // search queries will be saved to shared Prefs
     private SharedPreference sharedPreference;
     private String searchQuery = "";
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,22 +69,23 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             setContentView(R.layout.list_view);
             Log.d(TAG, "on the mainActivity screen");
 
+            // sharedPref is used for searchQuery, which is used on onResume()
+            sharedPreference = new SharedPreference();
+            sharedPreference.clearSharedPreference(this);
+
+            friendsAdapter = new FriendsAdapter(getApplicationContext(), userManager.getUsers());
+
             if (isNetworkAvailable() == true) {
                 userManager.getUsers().clear(); // the array is loaded in the fillArrays every time the mainActivity is loaded
                 fillArrays(); // gets all the users
+
+                listView = (ListView) findViewById(R.id.listView);
+
             } else {
                 Toast.makeText(MainActivity.this,"The app couldn't connect to the internet. " +
                         "Please connect to the internet and " +
                         "resume the application!", Toast.LENGTH_LONG).show();
             }
-
-            // sharedPref is used for searchQuery, which is used on onResume()
-            sharedPreference = new SharedPreference();
-
-            listView = (ListView) findViewById(R.id.listView);
-            friendsAdapter = new FriendsAdapter(this, userManager.getUsers());
-            listView.setAdapter(friendsAdapter);
-
         } else {
             // user is not logged in show login screen
             Intent login = new Intent(getApplicationContext(), LoginActivity.class);
@@ -140,11 +144,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
+    /**
+     *
+     * @param queryStr
+     * @return
+     */
     @Override
     public boolean onQueryTextSubmit(String queryStr) {
 
         Log.d(TAG, "onQueryTextSubmit: " + queryStr);
         sharedPreference.save(this, queryStr);
+        friendsAdapter.getFilter().filter(queryStr);
 
         return false;
     }
@@ -158,8 +168,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextChange(String queryStr) {
         // using the baseAdapter that implements the filtering
-        friendsAdapter.getFilter().filter(queryStr);
-        sharedPreference.save(this, queryStr);
+        //friendsAdapter.getFilter().filter(queryStr);
+        //sharedPreference.save(this, queryStr);
+
+        // to return the unfiltered list - onQueryTextSubmit doesn't execute on empty String
+        if (isBlank(queryStr)) {
+            friendsAdapter.getFilter().filter("");
+        }
+
         return false;
     }
 
@@ -172,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         super.onResume();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String value = sharedPref.getString("list_color_preference", "1");
-        Log.d(TAG, "preferences: " + value);
+        Log.d(TAG, "color preferences: " + value);
         switch (value) {
             case "1":
                 listView.setBackgroundColor(ContextCompat.getColor(listView.getContext(), R.color.colorGrey));
@@ -223,9 +239,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     for (int i = 0; i < response.length(); i++){
                         JSONObject userObject = response.getJSONObject(i);
                         Log.d(TAG, "userObject: " + i + ": " + userObject);
+                        Integer id = userObject.getInt("id");
                         String name = userObject.getString("name");
                         String gender = userObject.getString("gender");
                         user = new User();
+                        user.setId(id);
                         user.setName(name);
                         user.setGender(gender);
 
@@ -254,8 +272,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         }
                         userManager.getUsers().add(user);
                     }
-                    friendsAdapter.notifyDataSetChanged();
 
+                    // need to attach the adapter to the listView here, because of the AsYnc call
+                    listView.setAdapter(friendsAdapter);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

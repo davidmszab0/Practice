@@ -19,10 +19,8 @@ import android.widget.Toast;
 import static org.apache.commons.lang3.StringUtils.*;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import cz.msebera.android.httpclient.Header;
@@ -43,8 +41,8 @@ public class ProfileActivity extends Activity {
     private String userGender = "";
     private JSONArray listMovieGenres;
     private JSONArray listMusicGenres;
-    Integer user_id2 = null;
-    StringEntity user;
+    private Integer user_id2 = null;
+    private StringEntity user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

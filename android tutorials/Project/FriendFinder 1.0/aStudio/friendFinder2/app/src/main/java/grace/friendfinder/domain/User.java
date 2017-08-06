@@ -8,10 +8,19 @@ import java.util.ArrayList;
 
 public class User {
 
+    Integer id;
     String name = "";
     String gender= "";
     ArrayList<String> movieGenres = new ArrayList<>();
     ArrayList<String> musicGenres = new ArrayList<>();
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -48,6 +57,7 @@ public class User {
     public void addMovieGenresArray (String movieGenre) {
         this.movieGenres.add(movieGenre);
     }
+
     public void addMusicGenresArray (String musicGenre) {
         this.musicGenres.add(musicGenre);
     }

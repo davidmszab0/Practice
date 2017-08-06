@@ -9,10 +9,19 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+
 import grace.friendfinder.R;
 import grace.friendfinder.domain.User;
+
+import static android.os.Looper.getMainLooper;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Created by grace on 01/08/17.
@@ -33,12 +42,6 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
         this.filteredUserList =users;
 
         getFilter();
-    }
-
-    void searchNote() {
-        // TODO count the amount of interests that matches current user with the one the search gives
-        // todo - implement an advanced search?
-        Log.d(TAG, "getting results");
     }
 
     /**
@@ -135,6 +138,17 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
         return userFilter;
     }
 
+    public void searchNote() {
+        // TODO count the amount of interests that matches current user with the one the search gives
+        // todo - implement an advanced search?
+        // todo - Parse your string and split it into words and store in an array.
+        // todo - I need to know which user is doing the search
+        // implement it in a dialog?
+        Log.d(TAG, "getting results");
+    }
+
+
+
     /**
      * Custom filter for friend list
      * Filter content in friend list according to the search text
@@ -145,7 +159,7 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults filterResults = new FilterResults();
 
-            if (constraint!=null && constraint.length()>0) {
+            if (isNotBlank(constraint)) {
 
                 ArrayList<User> tempList = new ArrayList<>();
 
@@ -178,6 +192,63 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
             return filterResults;
         }
 
+        private User getCurrentUser () {
+            DatabaseHandler db = new DatabaseHandler(context);
+            Integer user_id2 = null;
+            User currentUser = null;
+
+            HashMap hm = db.getUserDetails();
+            user_id2 =  Integer.parseInt((String) hm.get("user_id"));
+
+            for (int i = 0; i < userList.size(); i++) {
+                currentUser = userList.get(i);
+                if (currentUser.getId() == user_id2) {
+                    return currentUser;
+                }
+            }
+            return null;
+        }
+
+        private String matchMsg (ArrayList<User> tempList) {
+
+            User currentUser = getCurrentUser();
+            Log.d(TAG, "currentUser: " + currentUser.toString());
+
+            Integer countMovieGenres = 0;
+            Integer countMusicGenres = 0;
+            String match = "";
+            ArrayList<String> matchList = new ArrayList<>();
+
+            for (User user : tempList) {
+                for (int i = 0; i < user.getMovieGenres().size(); i++) {
+                    for (int j = 0; j < currentUser.getMovieGenres().size(); j++) {
+                        if (user.getMovieGenres().get(i).equals(currentUser.getMovieGenres().get(j))) {
+                            countMovieGenres++;
+                        }
+                    }
+                }
+                for (int i = 0; i < user.getMusicGenres().size(); i++) {
+                    for (int j = 0; j < currentUser.getMusicGenres().size(); j++) {
+                        if (user.getMusicGenres().get(i).equals(currentUser.getMusicGenres().get(j))) {
+                            countMusicGenres++;
+                        }
+                    }
+                }
+                match = "I have matched " + user.getName() + " with " + countMovieGenres +
+                        " similar movieGenres interests and "
+                        + countMusicGenres + " similar musicGenres interests. \n";
+                matchList.add(match);
+            }
+
+            Log.d(TAG, match);
+            match = "";
+            for (int i = 0; i < matchList.size(); i++) {
+                match += matchList.get(i);
+            }
+
+            return match;
+        }
+
         /**
          * Notify about filtered list to ui
          * @param constraint text
@@ -187,7 +258,14 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             filteredUserList = (ArrayList<User>) results.values;
-            //Log.d(TAG, "results: " + results.values.toString());
+
+            // don't display the toast message when the search query is empty
+            if (isNotBlank(constraint)) {
+                String match = matchMsg(filteredUserList);
+                Toast.makeText(context, match, Toast.LENGTH_SHORT).show();
+            }
+
+            Log.d(TAG, "results: " + results.values.toString());
             notifyDataSetChanged();
         }
     }
