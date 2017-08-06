@@ -167,6 +167,8 @@ public class LoginActivity extends Activity {
                     Log.d(TAG , "onFailure headers: "+ headers);
                     Log.d(TAG , "onFailure responseString: "+ responseString);
                     Log.d(TAG , "onFailure throwable: "+ throwable);
+
+                    Toast.makeText(LoginActivity.this,"The email or password was incorrect! Please try again.", Toast.LENGTH_SHORT).show();
                 }
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject object) {
@@ -174,6 +176,9 @@ public class LoginActivity extends Activity {
                     Log.d(TAG , "onFailure headers: "+ headers);
                     Log.d(TAG , "onFailure throwable: "+ throwable);
                     Log.d(TAG , "onFailure object: "+ object);
+
+                    // Fixme - limit login attempts
+                    Toast.makeText(LoginActivity.this,"The email or password was incorrect! Please try again.", Toast.LENGTH_SHORT).show();
                 }
 
             });
