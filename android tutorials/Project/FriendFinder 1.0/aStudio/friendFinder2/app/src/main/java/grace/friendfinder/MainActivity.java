@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 userManager.getUsers().clear(); // the array is loaded in the fillArrays every time the mainActivity is loaded
                 fillArrays(); // gets all the users
 
+                // Todo - add context Menu when there are more interests to each User
                 listView = (ListView) findViewById(R.id.listView);
 
             } else {

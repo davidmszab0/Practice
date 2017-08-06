@@ -8,9 +8,6 @@ import android.preference.PreferenceFragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 import grace.friendfinder.R;
 
