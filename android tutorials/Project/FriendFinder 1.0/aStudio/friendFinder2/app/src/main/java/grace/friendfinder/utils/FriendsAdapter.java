@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -80,9 +81,9 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
             holder = new ViewHolder();
 
             holder.nameLine = (TextView) view.findViewById(R.id.nameId);
-            holder.genderLine = (TextView) view.findViewById(R.id.genderId);
             holder.moviesLine = (TextView) view.findViewById(R.id.moviesGenresId);
             holder.musicLine = (TextView) view.findViewById(R.id.musicGenresId);
+            holder.imageView = (ImageView) view.findViewById(R.id.person_icon);
 
             view.setTag(holder);
         } else {
@@ -91,7 +92,6 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
         }
 
         holder.nameLine.setText("Name: " + user.getName());
-        holder.genderLine.setText("Gender: " + user.getGender());
 
         // transform the ArrayList to Array to use Array.toString() with SetText,
         // which prints nicer than append()
@@ -108,6 +108,12 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
             holder.musicLine.setText(Arrays.toString(tempArray1).replaceAll("\\[|\\]", ""));
         }
 
+        if (user.getGender().equals("Male")) {
+            holder.imageView.setImageResource(R.drawable.icons8_person_48);
+        } else {
+            holder.imageView.setImageResource(R.drawable.icons8_person_female_48);
+        }
+
         return view;
     }
 
@@ -116,9 +122,9 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
      */
     static class ViewHolder {
         TextView nameLine;
-        TextView genderLine;
         TextView moviesLine;
         TextView musicLine;
+        ImageView imageView;
     }
     /**
      * Get custom filter
