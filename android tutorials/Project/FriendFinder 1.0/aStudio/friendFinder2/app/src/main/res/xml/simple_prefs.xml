@@ -6,6 +6,14 @@
         android:summary="Please provide your username">
     </EditTextPreference>
     <PreferenceCategory
+        android:title="@string/pref_notification_title" >
+        <CheckBoxPreference
+            android:key="checkbox_preference_notify"
+            android:title="@string/pref_checkbox_title"
+            android:defaultValue="true"
+            android:summary="Check it on if you want to receive notifications" />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:title="@string/pref_background_title" >
         <ListPreference
             android:key="list_color_preference"

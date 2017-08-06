@@ -26,6 +26,7 @@ public class SimplePreferenceFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.simple_prefs);
 
         final ListPreference listPreference = (ListPreference) getPreferenceManager().findPreference("list_color_preference");
+        final CheckBoxPreference checkBoxPreference = (CheckBoxPreference) getPreferenceManager().findPreference("checkbox_preference_notify");
 
         listPreference.setOnPreferenceChangeListener((new Preference.OnPreferenceChangeListener() {
             @Override
@@ -51,5 +52,20 @@ public class SimplePreferenceFragment extends PreferenceFragment {
                 return true;
             }
         }));
+
+        checkBoxPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                if (newValue.toString().equals("true")) {
+                    Toast.makeText(getActivity(), "CheckBox is set to: " + "true",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "CheckBox is set to: " + "false",
+                            Toast.LENGTH_SHORT).show();
+                }
+                Log.d("MyApp", "Pref " + preference.getKey() + " changed to " + newValue.toString());
+                return true;
+            }
+        });
     }
 }

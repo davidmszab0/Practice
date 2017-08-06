@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     // search queries will be saved to shared Prefs
     private SharedPreference sharedPreference;
     private String searchQuery = "";
-    private User currentUser;
+    private Boolean notifyCheckbox = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +185,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         Log.d(TAG, "onQueryTextSubmit: " + queryStr);
         sharedPreference.save(this, queryStr);
         friendsAdapter.getFilter().filter(queryStr);
-        sendNotification();
+
+        if (notifyCheckbox == true) {
+            sendNotification();
+        }
 
         return false;
     }
@@ -233,6 +236,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             default:
                 listView.setBackgroundColor(ContextCompat.getColor(listView.getContext(), R.color.colorWhite));
         }
+
+        // Fixme - get the default
+        notifyCheckbox = sharedPref.getBoolean("checkbox_preference_notify", false);
 
         searchQuery = sharedPreference.getValue(this);
         if (isNotBlank(searchQuery)) {
