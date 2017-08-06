@@ -24,12 +24,12 @@
     <item>        
         <shape>
             <gradient
-                android:endColor="#700000"
-                android:startColor="#700000"
+                android:endColor="#1aa3ff"
+                android:startColor="#1aa3ff"
                 android:angle="270" />
             <stroke
                 android:width="3dp"
-                android:color="#700000" />
+                android:color="#1aa3ff" />
             <corners
                 android:radius="3dp" />
             <padding
