@@ -138,17 +138,6 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
         return userFilter;
     }
 
-    public void searchNote() {
-        // TODO count the amount of interests that matches current user with the one the search gives
-        // todo - implement an advanced search?
-        // todo - Parse your string and split it into words and store in an array.
-        // todo - I need to know which user is doing the search
-        // implement it in a dialog?
-        Log.d(TAG, "getting results");
-    }
-
-
-
     /**
      * Custom filter for friend list
      * Filter content in friend list according to the search text
