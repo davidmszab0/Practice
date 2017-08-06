@@ -1,5 +1,7 @@
 package grace.friendfinder;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +13,11 @@ import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -142,6 +146,34 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
+    public void sendNotification() {
+
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        // Because clicking the notification opens a new ("special") activity, there's
+        // no need to create an artificial back stack.
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //Get an instance of NotificationManager
+        NotificationCompat.Builder mBuilder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setContentTitle("Filtering is done")
+                        .setSmallIcon(R.drawable.ic_stat_crop)
+                        .setContentIntent(resultPendingIntent)
+                        .setContentText("Come and see your matches!");
+
+        // Gets an instance of the NotificationManager service
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        int mNotificationId = 001;
+        // // Builds the notification and issues it.
+        mNotificationManager.notify(mNotificationId, mBuilder.build());
+    }
+
     /**
      *
      * @param queryStr
@@ -153,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         Log.d(TAG, "onQueryTextSubmit: " + queryStr);
         sharedPreference.save(this, queryStr);
         friendsAdapter.getFilter().filter(queryStr);
+        sendNotification();
 
         return false;
     }

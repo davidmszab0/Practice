@@ -5,11 +5,13 @@ package grace.friendfinder;
  */
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -113,6 +115,7 @@ public class ProfileActivity extends Activity {
             }
         }
     }
+
     private void fillTextViews() {
         HttpUtils.get("/user/" + user_id2, null, new JsonHttpResponseHandler() {
             @Override
