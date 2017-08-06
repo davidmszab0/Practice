@@ -52,6 +52,7 @@ public class LoginActivity extends Activity {
                 String password = inputPassword.getText().toString();
 
                 if (isNetworkAvailable() == true) {
+                    // Fixme - input field validation!
                     loginRequests(email, password);
                 } else {
                     Toast.makeText(LoginActivity.this,"The app couldn't connect to the internet. " +

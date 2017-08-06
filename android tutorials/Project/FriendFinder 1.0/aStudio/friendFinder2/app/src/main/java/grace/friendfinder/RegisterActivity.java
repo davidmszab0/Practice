@@ -62,6 +62,7 @@ public class RegisterActivity extends Activity {
                 emailInput = emailEditText.getText().toString();
                 passwordInput = passwordEditText.getText().toString();
 
+                // Fixme - validate the input field
                 if (passwordInput.length() < 0) {
                     Toast.makeText(getApplicationContext(), "Password needs to be at least 1 character long", Toast.LENGTH_SHORT).show();
                     passwordEditText.setText("");
