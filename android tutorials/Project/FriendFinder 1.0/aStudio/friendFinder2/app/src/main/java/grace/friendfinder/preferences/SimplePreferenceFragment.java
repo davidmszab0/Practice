@@ -1,5 +1,6 @@
 package grace.friendfinder.preferences;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -35,12 +36,10 @@ public class SimplePreferenceFragment extends PreferenceFragment {
 
                 } else if (newValue.toString().equals("2")) {
                     View v = getView();
-                    int backgroundColor = ContextCompat.getColor(v.getContext(), R.color.colorPrimary);
-                    v.setBackgroundColor(backgroundColor);
+                    v.setBackgroundColor(Color.parseColor("#79ff4d"));
                 } else if (newValue.toString().equals("3")){
                     View v = getView();
-                    int backgroundColor = ContextCompat.getColor(v.getContext(), R.color.colorAccent);
-                    v.setBackgroundColor(backgroundColor);
+                    v.setBackgroundColor(Color.parseColor("#ffff00"));
                 } else {
                     View v = getView();
                     int backgroundColor = ContextCompat.getColor(v.getContext(), R.color.colorWhite);

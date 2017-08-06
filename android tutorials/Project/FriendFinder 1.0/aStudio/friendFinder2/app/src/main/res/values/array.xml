@@ -2,8 +2,8 @@
 <resources>
     <string-array name="listArray">
         <item>Grey</item>
-        <item>Blue</item>
-        <item>Pink</item>
+        <item>Green</item>
+        <item>Yellow</item>
         <item>White</item>
     </string-array>
 

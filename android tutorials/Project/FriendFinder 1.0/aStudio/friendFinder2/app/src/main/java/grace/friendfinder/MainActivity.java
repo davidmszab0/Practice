@@ -6,6 +6,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -229,10 +230,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 listView.setBackgroundColor(ContextCompat.getColor(listView.getContext(), R.color.colorGrey));
                 break;
             case "2":
-                listView.setBackgroundColor(ContextCompat.getColor(listView.getContext(), R.color.colorPrimary));
+                listView.setBackgroundColor(Color.parseColor("#79ff4d"));
                 break;
             case "3":
-                listView.setBackgroundColor(ContextCompat.getColor(listView.getContext(), R.color.colorAccent));
+                listView.setBackgroundColor(Color.parseColor("#ffff00"));
                 break;
             default:
                 listView.setBackgroundColor(ContextCompat.getColor(listView.getContext(), R.color.colorWhite));
