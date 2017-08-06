@@ -20,9 +20,6 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import cz.msebera.android.httpclient.Header;
 import grace.friendfinder.domain.User;
 import grace.friendfinder.domain.UserManager;
@@ -31,7 +28,8 @@ import grace.friendfinder.utils.DatabaseHandler;
 import grace.friendfinder.utils.FriendsAdapter;
 import grace.friendfinder.utils.HttpUtils;
 import grace.friendfinder.utils.SharedPreference;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author David M Szabo on 05/06/2017.

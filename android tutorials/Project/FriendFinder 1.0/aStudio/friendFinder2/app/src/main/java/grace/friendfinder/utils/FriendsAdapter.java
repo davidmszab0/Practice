@@ -10,17 +10,11 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
-
 import grace.friendfinder.R;
 import grace.friendfinder.domain.User;
-
-import static android.os.Looper.getMainLooper;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
