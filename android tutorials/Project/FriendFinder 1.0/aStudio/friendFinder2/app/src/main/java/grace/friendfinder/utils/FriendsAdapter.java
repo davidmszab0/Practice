@@ -252,6 +252,8 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
                         " similar movieGenres interests and "
                         + countMusicGenres + " similar musicGenres interests. \n";
                 matchList.add(match);
+                countMovieGenres = 0;
+                countMusicGenres = 0;
             }
 
             Log.d(TAG, match);
