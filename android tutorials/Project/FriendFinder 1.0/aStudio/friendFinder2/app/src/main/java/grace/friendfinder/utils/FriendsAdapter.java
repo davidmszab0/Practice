@@ -14,6 +14,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+
 import grace.friendfinder.R;
 import grace.friendfinder.domain.User;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -198,17 +200,40 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
             return null;
         }
 
+        private int getCurrentUserId (ArrayList<User> tempList) {
+            DatabaseHandler db = new DatabaseHandler(context);
+            Integer user_id2 = null;
+            User currentUser = null;
+
+            HashMap hm = db.getUserDetails();
+            user_id2 =  Integer.parseInt((String) hm.get("user_id"));
+
+            for (int i = 0; i < tempList.size(); i++) {
+                currentUser = tempList.get(i);
+                if (currentUser.getId() == user_id2) {
+                    return i;
+                }
+            }
+            return 0;
+        }
+
         private String matchMsg (ArrayList<User> tempList) {
 
             User currentUser = getCurrentUser();
             Log.d(TAG, "currentUser: " + currentUser.toString());
+
+            // copy templist to correctList
+            ArrayList<User> correctList = new ArrayList<>(tempList);
+            int curerntUserIndex = getCurrentUserId(tempList);
+            Log.d(TAG, "curerntUserIndex: " + curerntUserIndex);
+            correctList.remove(curerntUserIndex);
 
             Integer countMovieGenres = 0;
             Integer countMusicGenres = 0;
             String match = "";
             ArrayList<String> matchList = new ArrayList<>();
 
-            for (User user : tempList) {
+            for (User user : correctList) {
                 for (int i = 0; i < user.getMovieGenres().size(); i++) {
                     for (int j = 0; j < currentUser.getMovieGenres().size(); j++) {
                         if (user.getMovieGenres().get(i).equals(currentUser.getMovieGenres().get(j))) {
