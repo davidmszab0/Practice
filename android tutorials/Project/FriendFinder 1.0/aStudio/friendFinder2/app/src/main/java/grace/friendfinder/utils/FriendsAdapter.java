@@ -99,14 +99,14 @@ public class FriendsAdapter extends BaseAdapter implements Filterable {
         String[] tempArray0 = new String[tempArray0Size];
         for (int i = 0; i < tempArray0Size; i++) {
             tempArray0[i] = user.getMovieGenres().get(i);
-            holder.moviesLine.setText(Arrays.toString(tempArray0).replaceAll("\\[|\\]", ""));
         }
+        holder.moviesLine.setText(Arrays.toString(tempArray0).replaceAll("\\[|\\]", ""));
         int tempArray1Size = user.getMusicGenres().size();
         String[] tempArray1 = new String[tempArray1Size];
         for (int j = 0; j < tempArray1Size; j++) {
             tempArray1[j] = user.getMusicGenres().get(j);
-            holder.musicLine.setText(Arrays.toString(tempArray1).replaceAll("\\[|\\]", ""));
         }
+        holder.musicLine.setText(Arrays.toString(tempArray1).replaceAll("\\[|\\]", ""));
 
         if (user.getGender().equals("Male")) {
             holder.imageView.setImageResource(R.drawable.icons8_person_48);
